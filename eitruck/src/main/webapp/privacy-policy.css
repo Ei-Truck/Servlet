@@ -1,0 +1,124 @@
+:root {
+    --brand-blue: #022B3A;
+    --brand-blue-2: #00546B;
+    --brand-green: #00b377;
+    --ink-900: #3BA9A9;
+    --ink-700: #243b6b;
+    --ink-500: #4b5f8a;
+    --ink-300: #8aa0c9;
+    --bg-100: #f7f9ff;
+    --white: #ffffff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .12);
+    --radius-2xl: 24px;
+    --radius-xl: 16px;
+    --radius-lg: 12px;
+    --radius-md: 10px;
+    --radius-sm: 8px;
+    --container: 1200px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+header {
+    background: var(--brand-blue-2);
+    color: #fff;
+    padding: 15px 0;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    user-select: none;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover,
+nav a.ativo {
+    text-decoration: underline;
+}
+
+main h2 {
+    margin-bottom: 15px;
+    color: var(--ink-500);
+}
+
+main h3 {
+    margin: 20px 0 10px;
+    color: var(--ink-500);
+}
+
+main p, main li {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+footer {
+    background: var(--brand-blue-2);
+    color: #fff;
+    text-align: center;
+    padding: 35px 0;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    user-select: none;
+}
+
+footer p:hover {
+    cursor: default;
+    color: rgb(222, 214, 214);
+}
+
+.back {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background-color: var(--brand-blue-2);
+    color: var(--white);
+    border-radius: var(--radius-md);
+    padding: 12px 18px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: var(--shadow);
+    transition: background 0.3s ease, transform 0.2s ease;
+    z-index: 1000;
+}
+
+.back:hover {
+    background-color: var(--ink-500);
+    transform: translateY(-3px);
+}
