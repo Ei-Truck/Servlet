@@ -71,8 +71,10 @@ window.addEventListener('load', updateHeader);
 // Tabs de "Transforme os dados"
 function initTabs(section) {
     const tabs = section.querySelectorAll('.tab');
-    const panelVideo = section.querySelector('#panel-video');
-    const panelTele = section.querySelector('#panel-tele');
+
+    // Encontrar os painéis específicos desta seção
+    const panelVideo = section.querySelector('[id^="panel-video"]');
+    const panelTele = section.querySelector('[id^="panel-tele"]');
 
     if (!tabs.length || !panelVideo || !panelTele) return;
 
@@ -89,6 +91,7 @@ function initTabs(section) {
         }
     }));
 }
+
 
 // Abas grandes dos produtos
 const bigTabs = document.querySelectorAll('.big-tab');
@@ -145,6 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
         observer.observe(section);
     });
 
+    // Atualizar os event listeners para funcionar com qualquer seção transform
     document.querySelectorAll('.transform .tab').forEach(tab => {
         tab.addEventListener('click', function () {
             const tabType = this.dataset.tab;
@@ -160,11 +164,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 panel.classList.remove('active-panel');
             });
 
-            const targetPanel = transformSection.querySelector(`#panel-${tabType}`);
-            targetPanel.classList.remove('hide');
+            // Usar seletor que funciona para qualquer página
+            const targetPanel = transformSection.querySelector(`[id^="panel-${tabType}"]`);
+            if (targetPanel) {
+                targetPanel.classList.remove('hide');
+            }
 
             setTimeout(() => {
-                targetPanel.classList.add('active-panel');
+                if (targetPanel) {
+                    targetPanel.classList.add('active-panel');
+                }
             }, 50);
         });
     });
