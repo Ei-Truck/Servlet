@@ -1,14 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Administrativo - Ei Truck</title>
-    <link rel="stylesheet" href="../../StyleCss/Restricted-area/login.css">
-    <link rel="icon" type="image/png" href="../../image/Group 36941.png">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/StyleCss/Restricted-area/login.css">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/image/Group%2036941.png">
 </head>
-
 <body>
 <div class="login-container">
     <div class="login-header">
@@ -17,9 +16,22 @@
     </div>
 
     <div class="login-form">
-        <div id="errorMessage" class="error-message"></div>
+        <!-- Mensagem de erro vinda do servlet -->
+        <%
+            String erro = (String) request.getAttribute("erroLogin");
+            if (erro != null) {
+        %>
+        <div id="errorMessage" class="error-message" style="display:block;"><%= erro %></div>
+        <%
+        } else {
+        %>
+        <div id="errorMessage" class="error-message" style="display:none;"></div>
+        <%
+            }
+        %>
 
-        <form id="loginForm" method="algo">
+        <!-- Formulário envia via POST para o servlet /login -->
+        <form id="loginForm" method="post" action="${pageContext.request.contextPath}/login">
             <div class="form-group">
                 <label for="email">E-mail:</label>
                 <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
@@ -41,50 +53,25 @@
 </div>
 
 <div class="back-link">
-    <a href="../../index.html">Voltar</a>
+    <a href="${pageContext.request.contextPath}/Landing-page/index.html">Voltar</a>
 </div>
 
 <script>
+    // Mostrar/ocultar senha
     document.getElementById("mostrarSenha").addEventListener("change", function () {
         const senhaInput = document.getElementById("senha");
         senhaInput.type = this.checked ? "text" : "password";
     });
 
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
-        const errorMessage = document.getElementById('errorMessage');
-
-        // Validação básica do email
-        if (!email || !email.includes('@')) {
-            showError('Por favor, insira um e-mail válido');
-            return;
-        }
-
-        // Simular loading
+    // Efeito visual de autenticação no botão (sem bloquear o envio)
+    document.getElementById('loginForm').addEventListener('submit', function () {
         const btn = document.querySelector('.login-btn');
         btn.textContent = 'Autenticando...';
         btn.classList.add('login-btn-autentication');
         btn.disabled = true;
-
-        // Após 2 segundos, redireciona para outra página
-        setTimeout(() => {
-            window.location.href = 'loading-screen.html';
-        }, 2000);
     });
 
-    function showError(message) {
-        const errorDiv = document.getElementById('errorMessage');
-        errorDiv.textContent = message;
-        errorDiv.style.display = 'block';
-
-        setTimeout(() => {
-            errorDiv.style.display = 'none';
-        }, 5000);
-    }
-
+    // Ao voltar à página (ex: depois de erro), restaura o botão
     window.addEventListener('pageshow', function () {
         const btn = document.querySelector('.login-btn');
         if (btn) {
@@ -92,14 +79,7 @@
             btn.classList.remove('login-btn-autentication');
             btn.disabled = false;
         }
-
-        const errorDiv = document.getElementById('errorMessage');
-        if (errorDiv) {
-            errorDiv.style.display = 'none';
-        }
     });
 </script>
 </body>
-
 </html>
-

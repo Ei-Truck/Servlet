@@ -8,7 +8,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class Conexao {
     //carrega o .env
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().load();
 
     //variáveis do .env
     String hostBd = dotenv.get("HOST_BD");

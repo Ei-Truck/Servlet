@@ -276,7 +276,7 @@ public class AdministradorDAO extends DAO {
     }
     public String ehAdimin(String email, String senha){
         conn = conexao.conectar();
-        Hash hash = new Hash();
+//        Hash hash = new Hash();
         Connection conn = null;
         PreparedStatement pstmt;
         ResultSet rs;
@@ -292,11 +292,12 @@ public class AdministradorDAO extends DAO {
             if (rs.next()){
                 senhaBanco = rs.getString("senha");
                 nome = rs.getString("nome");
-                senhaCriptografada = hash.criptografarSenha(senha);
+//                senhaCriptografada = hash.criptografarSenha(senha);
 
-                if (senhaCriptografada.equals(senhaBanco)){
-                    return nome;
-                }
+//                if (senhaCriptografada.equals(senhaBanco)){
+//                    return nome;
+//                }
+                return nome;
             } return null;
         } catch (SQLException sqle){
             sqle.printStackTrace();
