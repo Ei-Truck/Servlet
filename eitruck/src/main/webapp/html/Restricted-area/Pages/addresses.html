@@ -1,10 +1,166 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endereços - Ei Truck</title>
+    <link rel="stylesheet" href="../../../StyleCss/Restricted-area/Pages/analyst.css">
+    <link rel="icon" type="image/png" href="../../../image/Group 36941.png">
 </head>
-<body>
 
+<body>
+<div class="admin-container">
+    <!-- Menu Lateral -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Ei Truck</h2>
+            <p>Painel Administrativo</p>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="dashboard.html" class="nav-item"><span>📊</span> Dashboard</a></li>
+                <li><a href="administrator.html" class="nav-item"><span>👨‍💼</span> Gerenciar Administradores</a></li>
+                <li><a href="analyst.html" class="nav-item"><span>👥</span> Gerenciar Analistas</a></li>
+                <li><a href="segments.html" class="nav-item"><span>📁</span> Gerenciar Segmentos</a></li>
+                <li><a href="units.html" class="nav-item"><span>🏢</span> Gerenciar Unidades</a></li>
+                <li><a href="addresses.html" class="nav-item active"><span>📍</span> Gerenciar Endereços</a></li>
+                <li><a href="occurrences.html" class="nav-item"><span>⚠️</span> Gerenciar Tipos de Ocorrência</a></li>
+                <li><a href="../login.html" class="nav-item logout"><span>🚪</span> Sair</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <header class="content-header">
+            <div class="header-left">
+                <h1>Gerenciar Endereços</h1>
+                <p>Cadastre e gerencie os endereços das unidades</p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>Administração</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <div class="crud-section">
+                <div class="crud-header">
+                    <h2>Endereços</h2>
+                    <div class="crud-actions">
+                        <button class="btn btn-primary" id="add-btn">
+                            <span>➕</span> Adicionar Endereço
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <div class="filter-group1">
+                        <div class="filter-group">
+                            <label>ID</label>
+                            <input type="number" class="filter-input" id="filter-id"
+                                   placeholder="Filtrar por ID...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Bairro</label>
+                            <input type="text" class="filter-input" id="filter-bairro"
+                                   placeholder="Filtrar por bairro...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Cidade</label>
+                            <input type="text" class="filter-input" id="filter-cidade"
+                                   placeholder="Filtrar por cidade...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Estado</label>
+                            <input type="text" class="filter-input" id="filter-estado"
+                                   placeholder="Filtrar por estado...">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <button class="btn btn-secondary" id="apply-filters">
+                            <span>🔍</span> Aplicar Filtros
+                        </button>
+                        <button class="btn btn-secondary" id="clear-filters">
+                            <span>🔄</span> Limpar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="crud-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>CEP</th>
+                            <th>Rua</th>
+                            <th>Número</th>
+                            <th>Bairro</th>
+                            <th>Cidade</th>
+                            <th>Estado</th>
+                            <th>País</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        <!-- Dados carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="crud-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Adicionar Endereço</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="crud-form">
+                <div class="form-group">
+                    <label>CEP</label>
+                    <input type="text" class="form-control" name="cep" maxlength="10" required>
+                </div>
+                <div class="form-group">
+                    <label>Rua</label>
+                    <input type="text" class="form-control" name="rua" maxlength="150" required>
+                </div>
+                <div class="form-group">
+                    <label>Número</label>
+                    <input type="text" class="form-control" name="numero" maxlength="10" required>
+                </div>
+                <div class="form-group">
+                    <label>Bairro</label>
+                    <input type="text" class="form-control" name="bairro" maxlength="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Cidade</label>
+                    <input type="text" class="form-control" name="cidade" maxlength="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <input type="text" class="form-control" name="estado" maxlength="50" required>
+                </div>
+                <div class="form-group">
+                    <label>País</label>
+                    <input type="text" class="form-control" name="pais" maxlength="50" value="Brasil" required>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancel-btn">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="save-btn">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<script src="../../../JS/Restricted-area/Pages/addresses.js"></script>
 </body>
+
 </html>
