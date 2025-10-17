@@ -1,7 +1,5 @@
 package org.example.eitruck.Dao;
 
-
-
 import org.example.eitruck.model.Segmento;
 
 import java.sql.*;
@@ -9,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SegmentoDAO extends DAO {
-    public SegmentoDAO() throws SQLException, ClassNotFoundException{
+    public SegmentoDAO() {
         super();
     }
 
@@ -185,4 +183,5 @@ public class SegmentoDAO extends DAO {
         }
     }
 }
+
 

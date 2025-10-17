@@ -2,13 +2,13 @@ package org.example.eitruck.Dao;
 
 import org.example.eitruck.model.Analista;
 
-
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnalistaDAO extends DAO {
-    public AnalistaDAO() throws SQLException, ClassNotFoundException{
+    public AnalistaDAO() {
         super();
     }
 
@@ -23,9 +23,9 @@ public class AnalistaDAO extends DAO {
             pstmt.setInt(1, analista.getId());
             pstmt.setInt(2, analista.getIdUnidade());
             pstmt.setString(3, analista.getCpf());
-            pstmt.setString(4, analista.getNome());
+            pstmt.setString(4, analista.getNomeCompleto());
             pstmt.setString(5, analista.getEmail());
-            pstmt.setDate(6, analista.getDtcontratacao());
+            pstmt.setDate(6, Date.valueOf(analista.getDtContratacao()));
             pstmt.setString(7, analista.getSenha());
             pstmt.setString(8, analista.getCargo());
             int execucao = pstmt.executeUpdate();
@@ -99,7 +99,7 @@ public class AnalistaDAO extends DAO {
             pstmt.setInt(2, analista.getId());
             int execucao = pstmt.executeUpdate();
             if(execucao > 0){
-                analista.setNome(novoNome);
+                analista.setNomeCompleto(novoNome);
                 return 1;
             }
             else {
@@ -140,12 +140,12 @@ public class AnalistaDAO extends DAO {
         }
     }
 
-    public int alterarDtContratacao(Analista analista, Date novaData) {
+    public int alterarDtContratacao(Analista analista, LocalDate novaData) {
         String comando = "UPDATE analista SET dt_contratacao = ? WHERE id = ?";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setDate(1, novaData);
+            pstmt.setDate(1, Date.valueOf(novaData));
             pstmt.setInt(2, analista.getId());
             int execucao = pstmt.executeUpdate();
             if (execucao > 0){
@@ -251,8 +251,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -278,8 +277,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -305,8 +303,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while(rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -332,8 +329,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -359,8 +355,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -386,8 +381,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -413,8 +407,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -440,8 +433,7 @@ public class AnalistaDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getString("email"),
-                        rs.getDate("dt_contratacao"), rs.getString("senha"), rs.getString("cargo"));
+                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -455,4 +447,5 @@ public class AnalistaDAO extends DAO {
         }
     }
 }
+
 

@@ -11,11 +11,11 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "VerificarAdImin", value = "nove forms")
+@WebServlet(name = "VerificarAdImin", value = "/login")
 public class VerificarAdImin extends HttpServlet {
     private final AdministradorDAO admin=new AdministradorDAO();
 
-    @Override
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email=req.getParameter("email");
         String senha=req.getParameter("senha");
@@ -26,7 +26,7 @@ public class VerificarAdImin extends HttpServlet {
             req.getRequestDispatcher("/src/main/webapp/html/Restricted-area/Pages/addresses.html").forward(req, resp);//aqui vai o caminho da area restrita, no lugar vazio
 
             //todo colocar valor de recebimento = "nomeAdmin"
-            //
+
         }
 
 

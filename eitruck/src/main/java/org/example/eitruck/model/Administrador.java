@@ -1,68 +1,72 @@
 package org.example.eitruck.model;
 
+import org.example.eitruck.Util.Uteis;
+
 //Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models
 //ATENÇÃO, REVISAR O USO DE GET E DO TOSTRING NO CASO DE SENHAS (MANTER POR ENQUANTO)
 public class Administrador {
-    //atributos
+    // atributos
     private int id;
     private String cpf;
-    private String NomeCompleto;
+    private String nomeCompleto;
     private String email;
     private String senha;
 
-    //método construtor
-    public Administrador(int id, String cpf, String NomeCompleto, String email, String senha){
-        this.id = id;
-        this.cpf = cpf;
-        this.NomeCompleto = NomeCompleto;
-        this.email = email;
-        this.senha = senha;
+    // método construtor
+    public Administrador(int id, String cpf, String nomeCompleto, String email, String senha) {
+        setId(id);
+        setCpf(cpf);
+        this.nomeCompleto = nomeCompleto;
+        setEmail(email);
+        setSenha(senha);
     }
 
-    //getters e setters
+    // getters e setters
     public int getId() {
         return id;
     }
     public void setId(int id) {
-        this.id = id;
+        this.id = Uteis.validarId(id);
     }
 
     public String getCpf() {
         return cpf;
     }
     public void setCpf(String cpf) {
-        this.cpf = cpf;
+        this.cpf = Uteis.validarCpf(cpf);
     }
 
     public String getNomeCompleto() {
-        return NomeCompleto;
+        return nomeCompleto;
     }
-    public void setNomeCompleto(String NomeCompleto) {
-        this.NomeCompleto = NomeCompleto;
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
     }
 
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
-        this.email = email;
+        this.email = Uteis.validarEmail(email);
     }
 
     public String getSenha() {
         return senha;
     }
     public void setSenha(String senha) {
-        this.senha = senha;
+        this.senha = Uteis.validarSenha(senha);
     }
 
-    //toString
-    public String toSring() {
+    // toString
+    @Override
+    public String toString() {
         return String.format("""
             Administrador:
                 Id = %d
+                Cpf = %s
                 Nome = %s
                 Email = %s
-                Senha = %s""", this.id, this.NomeCompleto, this.email, this.senha);
+                Senha = %s""", this.id, this.cpf, this.nomeCompleto, this.email, this.senha);
     }
-
 }
+

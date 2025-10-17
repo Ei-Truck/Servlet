@@ -1,17 +1,21 @@
 package org.example.eitruck.model;
 
+import org.example.eitruck.Util.Uteis;
+
 //Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models
 //ATENÇÃO, REVISAR O USO DE GET E DO TOSTRING NO CASO DE SENHAS (MANTER POR ENQUANTO)
 public class TipoOcorrencia {
     //atributos
     private int id;
-    private String tipo_evento;
-    private int gravidade;
+    private String tipoEvento;
+    private int pontuacao;
+    private String gravidade;
 
     //método construtor
-    public TipoOcorrencia(int id, String tipo_evento, int gravidade) {
-        this.id = id;
-        this.tipo_evento = tipo_evento;
+    public TipoOcorrencia(int id, String tipoEvento, int pontuacao, String gravidade) {
+        setId(id);
+        this.tipoEvento = tipoEvento;
+        setPontuacao(pontuacao);
         this.gravidade = gravidade;
     }
 
@@ -20,21 +24,28 @@ public class TipoOcorrencia {
         return id;
     }
     public void setId(int id) {
-        this.id = id;
+        this.id = Uteis.validarId(id);
     }
 
-    public String getTipo_evento() {
-        return tipo_evento;
+    public String getTipoEvento() {
+        return tipoEvento;
     }
-    public void setTipo_evento(String tipo_evento) {
-        this.tipo_evento = tipo_evento;
+    public void setTipoEvento(String tipoEvento) {
+        this.tipoEvento = this.tipoEvento;
     }
 
-    public int getGravidade() {
+    public int getPontuacao() {
+        return pontuacao;
+    }
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = Uteis.validarPontuacao(pontuacao);
+    }
+
+    public String getGravidade() {
         return gravidade;
     }
-    public void setGravidade(int gravidade) {
-        this.gravidade = gravidade;
+    public void setGravidade(String gravidade) {
+        this.gravidade = this.gravidade;
     }
 
     //toString
@@ -43,6 +54,7 @@ public class TipoOcorrencia {
             Tipo de Ocorrencia:
                 Id = %d
                 Tipo de Evento = %s
-                Gravidade = %d""", this.id, this.tipo_evento, this.gravidade);
+                Pontuação = %d
+                Gravidade = %s""", this.id, this.tipoEvento, this.pontuacao, this.gravidade);
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UnidadeDAO extends DAO {
-    public UnidadeDAO() throws SQLException, ClassNotFoundException{
+    public UnidadeDAO() {
         super();
     }
 
@@ -145,8 +145,7 @@ public class UnidadeDAO extends DAO {
             pstmt.executeQuery();
             rs = pstmt.getResultSet();
             while (rs.next()){
-                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"),
-                        rs.getInt("id_endereco"), rs.getString("nome"));
+                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"), rs.getInt("id_endereco"), rs.getString("nome"));
                 listaRetorno.add(unidade);
             }
             return listaRetorno;
@@ -171,8 +170,7 @@ public class UnidadeDAO extends DAO {
             pstmt.executeQuery();
             rs = pstmt.getResultSet();
             while (rs.next()){
-                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"),
-                        rs.getInt("id_endereco"), rs.getString("nome"));
+                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"), rs.getInt("id_endereco"), rs.getString("nome"));
                 listaRetorno.add(unidade);
             }
             return listaRetorno;
@@ -197,8 +195,7 @@ public class UnidadeDAO extends DAO {
             pstmt.executeQuery();
             rs = pstmt.getResultSet();
             while (rs.next()){
-                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"),
-                        rs.getInt("id_endereco"), rs.getString("nome"));
+                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"), rs.getInt("id_endereco"), rs.getString("nome"));
                 listaRetorno.add(unidade);
             }
             return listaRetorno;
@@ -223,8 +220,7 @@ public class UnidadeDAO extends DAO {
             pstmt.executeQuery();
             rs = pstmt.getResultSet();
             while (rs.next()){
-                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"),
-                        rs.getInt("id_endereco"), rs.getString("nome"));
+                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"), rs.getInt("id_endereco"), rs.getString("nome"));
                 listaRetorno.add(unidade);
             }
             return listaRetorno;
@@ -238,3 +234,4 @@ public class UnidadeDAO extends DAO {
         }
     }
 }
+

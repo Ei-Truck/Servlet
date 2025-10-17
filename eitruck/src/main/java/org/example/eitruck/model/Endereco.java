@@ -1,9 +1,9 @@
 package org.example.eitruck.model;
 
-//Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models
-//ATENÇÃO, REVISAR O USO DE GET E DO TOSTRING NO CASO DE SENHAS (MANTER POR ENQUANTO)
+import org.example.eitruck.Util.Uteis;
+
 public class Endereco {
-    //atributos
+    // atributos
     private int id;
     private String cep;
     private String rua;
@@ -13,10 +13,10 @@ public class Endereco {
     private String estado;
     private String pais;
 
-    //método construtor
+    // construtor
     public Endereco(int id, String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
-        this.id = id;
-        this.cep = cep;
+        setId(id);
+        setCep(cep);
         this.rua = rua;
         this.numero = numero;
         this.bairro = bairro;
@@ -25,19 +25,19 @@ public class Endereco {
         this.pais = pais;
     }
 
-    //getters e setters
+    // getters e setters
     public int getId() {
         return id;
     }
     public void setId(int id) {
-        this.id = id;
+        this.id = Uteis.validarId(id);
     }
 
     public String getCep() {
         return cep;
     }
     public void setCep(String cep) {
-        this.cep = cep;
+        this.cep = Uteis.validarCep(cep);
     }
 
     public String getRua() {
@@ -82,12 +82,13 @@ public class Endereco {
         this.pais = pais;
     }
 
-    //toString
+    // toString
+    @Override
     public String toString() {
         return String.format("""
             Endereco:
                 Id = %d
-                CEP = %s
+                Cep = %s
                 Rua = %s
                 Numero = %d
                 Bairro = %s
@@ -96,4 +97,5 @@ public class Endereco {
                 Pais = %s""", this.id, this.cep, this.rua, this.numero, this.bairro, this.cidade, this.estado, this.pais);
     }
 }
+
 

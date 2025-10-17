@@ -1,7 +1,5 @@
 package org.example.eitruck.Dao;
 
-
-
 import org.example.eitruck.model.Endereco;
 
 import java.sql.*;
@@ -9,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnderecoDAO extends DAO {
-    public EnderecoDAO() throws SQLException, ClassNotFoundException{
+    public EnderecoDAO() {
         super();
     }
 
@@ -24,7 +22,7 @@ public class EnderecoDAO extends DAO {
             pstmt.setInt(1, endereco.getId());
             pstmt.setString(2, endereco.getCep());
             pstmt.setString(3, endereco.getRua());
-            pstmt.setString(4, endereco.getNumero());
+            pstmt.setInt(4, endereco.getNumero());
             pstmt.setString(5, endereco.getBairro());
             pstmt.setString(6, endereco.getCidade());
             pstmt.setString(7, endereco.getEstado());
@@ -90,12 +88,12 @@ public class EnderecoDAO extends DAO {
         }
     }
 
-    public int alterarNumero(Endereco endereco, String novoNumero) {
+    public int alterarNumero(Endereco endereco, int novoNumero) {
         String comando = "UPDATE endereco SET numero = ? WHERE id = ?";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novoNumero);
+            pstmt.setInt(1, novoNumero);
             pstmt.setInt(2, endereco.getId());
             int execucao = pstmt.executeUpdate();
             if (execucao > 0){
@@ -198,7 +196,7 @@ public class EnderecoDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
-                        rs.getString("numero"), rs.getString("bairro"), rs.getString("cidade"),
+                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
                         rs.getString("estado"), rs.getString("pais"));
                 listaRetorno.add(endereco);
             }
@@ -225,7 +223,7 @@ public class EnderecoDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
-                        rs.getString("numero"), rs.getString("bairro"), rs.getString("cidade"),
+                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
                         rs.getString("estado"), rs.getString("pais"));
                 listaRetorno.add(endereco);
             }
@@ -252,7 +250,7 @@ public class EnderecoDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
-                        rs.getString("numero"), rs.getString("bairro"), rs.getString("cidade"),
+                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
                         rs.getString("estado"), rs.getString("pais"));
                 listaRetorno.add(endereco);
             }
@@ -278,7 +276,7 @@ public class EnderecoDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
-                        rs.getString("numero"), rs.getString("bairro"), rs.getString("cidade"),
+                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
                         rs.getString("estado"), rs.getString("pais"));
                 listaRetorno.add(endereco);
             }
@@ -304,7 +302,7 @@ public class EnderecoDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
-                        rs.getString("numero"), rs.getString("bairro"), rs.getString("cidade"),
+                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
                         rs.getString("estado"), rs.getString("pais"));
                 listaRetorno.add(endereco);
             }
@@ -330,7 +328,7 @@ public class EnderecoDAO extends DAO {
             rs = pstmt.getResultSet();
             while (rs.next()){
                 Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
-                        rs.getString("numero"), rs.getString("bairro"), rs.getString("cidade"),
+                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
                         rs.getString("estado"), rs.getString("pais"));
                 listaRetorno.add(endereco);
             }
@@ -345,4 +343,5 @@ public class EnderecoDAO extends DAO {
         }
     }
 }
+
 
