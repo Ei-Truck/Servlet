@@ -181,16 +181,21 @@
 </div>
 
 <script>
+    document.getElementById("mostrarSenha").addEventListener("change", function () {
+        const senhaInput = document.getElementById("senha");
+        senhaInput.type = this.checked ? "text" : "password";
+    });
+
     document.getElementById('loginForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const cpf = document.getElementById('cpf').value;
+        const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
         const errorMessage = document.getElementById('errorMessage');
 
-        // Validação básica do CPF
-        if (cpf.length !== 11 || !/^\d+$/.test(cpf)) {
-            showError('Por favor, insira um CPF válido (11 dígitos)');
+        // Validação básica do email
+        if (!email || !email.includes('@')) {
+            showError('Por favor, insira um e-mail válido');
             return;
         }
 
@@ -199,13 +204,13 @@
         btn.textContent = 'Autenticando...';
         btn.disabled = true;
 
-        // Enviar dados para o servlet
+        // Enviar dados para o servidor (ajuste a URL conforme necessário)
         fetch('../login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `cpf=${encodeURIComponent(cpf)}&senha=${encodeURIComponent(senha)}`
+            body: `email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}`
         })
             .then(response => response.json())
             .then(data => {
@@ -234,19 +239,6 @@
             errorDiv.style.display = 'none';
         }, 5000);
     }
-
-    // Formatação do CPF
-    document.getElementById('cpf').addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.substring(0, 11);
-        e.target.value = value;
-    });
-
-    // Mostrar/ocultar senha com checkbox
-    document.getElementById("mostrarSenha").addEventListener("change", function () {
-        const senhaInput = document.getElementById("senha");
-        senhaInput.type = this.checked ? "text" : "password";
-    });
 </script>
 </body>
 
