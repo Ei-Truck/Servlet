@@ -1,8 +1,8 @@
-package Dao;
+package org.example.eitruck.Dao;
 
 
 
-import model.Segmento;
+import org.example.eitruck.model.Segmento;
 
 import java.sql.*;
 import java.util.ArrayList;

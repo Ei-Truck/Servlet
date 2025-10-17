@@ -1,5 +1,5 @@
-package Dao;
-import Conexao.Conexao;
+package org.example.eitruck.Dao;
+import org.example.eitruck.Conexao.Conexao;
 
 import java.sql.Connection;
 

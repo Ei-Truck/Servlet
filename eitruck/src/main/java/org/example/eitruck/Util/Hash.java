@@ -1,14 +1,11 @@
-package Util;
+package org.example.eitruck.Util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 public class Hash {
         private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-public static String criptografar(String senha) {
+public static String criptografarSenha(String senha) {
         return encoder.encode(senha);
         }
 
@@ -19,7 +16,7 @@ public static boolean verificarSenha(String senhaDigitada, String senhaCriptogra
 
 public static void main(String[] args) {
         String senhaOriginal = "123456";
-        String hash = criptografar(senhaOriginal);
+        String hash = criptografarSenha(senhaOriginal);
 
         System.out.println("Hash: " + hash);
         System.out.println("Verificação correta: " + verificarSenha("123456", hash)); // true

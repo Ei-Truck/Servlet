@@ -1,8 +1,8 @@
-package Dao;
+package org.example.eitruck.Dao;
 
 
 
-import model.Endereco;
+import org.example.eitruck.model.Endereco;
 
 import java.sql.*;
 import java.util.ArrayList;

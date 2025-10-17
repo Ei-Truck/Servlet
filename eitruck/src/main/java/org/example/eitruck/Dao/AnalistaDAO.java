@@ -1,6 +1,6 @@
-package Dao;
+package org.example.eitruck.Dao;
 
-import model.Analista;
+import org.example.eitruck.model.Analista;
 
 
 import java.sql.*;

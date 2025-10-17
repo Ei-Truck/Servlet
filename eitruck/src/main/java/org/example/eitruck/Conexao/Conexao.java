@@ -1,4 +1,4 @@
-package Conexao;
+package org.example.eitruck.Conexao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

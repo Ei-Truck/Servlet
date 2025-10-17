@@ -1,6 +1,5 @@
-package model;
+package org.example.eitruck.model;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 //Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models

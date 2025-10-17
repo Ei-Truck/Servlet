@@ -1,6 +1,6 @@
-package Dao;
+package org.example.eitruck.Dao;
 
-import model.Unidade;
+import org.example.eitruck.model.Unidade;
 
 import java.sql.*;
 import java.util.ArrayList;

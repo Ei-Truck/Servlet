@@ -1,6 +1,6 @@
-package Dao;
+package org.example.eitruck.Dao;
 
-import model.TipoOcorrencia;
+import org.example.eitruck.model.TipoOcorrencia;
 
 
 import java.sql.*;

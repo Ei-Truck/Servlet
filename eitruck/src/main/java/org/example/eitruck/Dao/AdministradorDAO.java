@@ -1,9 +1,9 @@
-package Dao;
+package org.example.eitruck.Dao;
 
 
 
-import Util.Hash;
-import model.Administrador;
+import org.example.eitruck.Util.Hash;
+import org.example.eitruck.model.Administrador;
 
 import java.sql.*;
 import java.util.ArrayList;

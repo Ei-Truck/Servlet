@@ -1,6 +1,6 @@
-package org.example.eitruck;
+package org.example.eitruck.Servlet;
 
-import Dao.AdministradorDAO;
+import org.example.eitruck.Dao.AdministradorDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpSession;
 
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet(name = "VerificarAdImin", value = "nove forms")
 public class VerificarAdImin extends HttpServlet {
@@ -24,7 +23,7 @@ public class VerificarAdImin extends HttpServlet {
         if (resultado!=null){
             HttpSession sessionNome= req.getSession();
             sessionNome.setAttribute("nomeAdimin", resultado);
-            req.getRequestDispatcher().forward(req, resp);//aqui vai o caminho da area restrita, no lugar vazio
+            req.getRequestDispatcher("/src/main/webapp/html/Restricted-area/Pages/addresses.html").forward(req, resp);//aqui vai o caminho da area restrita, no lugar vazio
 
             //todo trocar no forms de cpf para email
             //todo colocar valor de recebimento = "nomeAdmin"
