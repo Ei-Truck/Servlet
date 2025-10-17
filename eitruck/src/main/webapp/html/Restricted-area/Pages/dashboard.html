@@ -1,10 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ei Truck</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<div class="admin-container">
+    <!-- Menu Lateral -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Ei Truck</h2>
+            <p>Painel Administrativo</p>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="dashboard.html" class="nav-item active"><span>📊</span> Dashboard</a></li>
+                <li><a href="administradores.html" class="nav-item"><span>👨‍💼</span> Gerenciar Administradores</a></li>
+                <li><a href="analistas.html" class="nav-item"><span>👥</span> Gerenciar Analistas</a></li>
+                <li><a href="segmentos.html" class="nav-item"><span>📁</span> Gerenciar Segmentos</a></li>
+                <li><a href="unidades.html" class="nav-item"><span>🏢</span> Gerenciar Unidades</a></li>
+                <li><a href="enderecos.html" class="nav-item"><span>📍</span> Gerenciar Endereços</a></li>
+                <li><a href="ocorrencias.html" class="nav-item"><span>⚠️</span> Gerenciar Tipos de Ocorrência</a></li>
+                <li><a href="index.html" class="nav-item logout"><span>🚪</span> Sair</a></li>
+            </ul>
+        </nav>
+    </div>
 
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <header class="content-header">
+            <div class="header-left">
+                <h1>Dashboard</h1>
+                <p>Bem-vindo ao painel administrativo</p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>Administrador</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <!-- Dashboard Content -->
+            <div class="stats-grid top-row">
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍💼</div>
+                    <div class="stat-info">
+                        <h3>Administradores</h3>
+                        <span class="stat-number" id="total-administradores">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3>Analistas</h3>
+                        <span class="stat-number" id="total-analistas">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📁</div>
+                    <div class="stat-info">
+                        <h3>Segmentos</h3>
+                        <span class="stat-number" id="total-segmentos">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid bottom-row">
+                <div class="stat-card">
+                    <div class="stat-icon">🏢</div>
+                    <div class="stat-info">
+                        <h3>Unidades</h3>
+                        <span class="stat-number" id="total-unidades">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📍</div>
+                    <div class="stat-info">
+                        <h3>Endereços</h3>
+                        <span class="stat-number" id="total-enderecos">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-info">
+                        <h3>Tipos de Ocorrência</h3>
+                        <span class="stat-number" id="total-ocorrencias">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    // Script específico para o dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDashboardStats();
+        loadCharts();
+    });
+
+    function loadDashboardStats() {
+        const dados = getData();
+
+        document.getElementById('total-administradores').textContent = dados.administradores.length;
+        document.getElementById('total-analistas').textContent = dados.analistas.length;
+        document.getElementById('total-segmentos').textContent = dados.segmentos.length;
+        document.getElementById('total-unidades').textContent = dados.unidades.length;
+        document.getElementById('total-enderecos').textContent = dados.enderecos.length;
+        document.getElementById('total-ocorrencias').textContent = dados.ocorrencias.length;
+    }
+
+    function loadCharts() {
+        const dados = getData();
+
+        // Gráfico de analistas por unidade
+        const unidadesComAnalistas = dados.unidades.map(unidade => {
+            const count = dados.analistas.filter(analista => analista.id_unidade === unidade.id).length;
+            return {
+                nome: unidade.nome,
+                quantidade: count
+            };
+        }).filter(item => item.quantidade > 0);
+
+        const ctx1 = document.getElementById('analistasChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: unidadesComAnalistas.map(item => item.nome),
+                datasets: [{
+                    label: 'Número de Analistas',
+                    data: unidadesComAnalistas.map(item => item.quantidade),
+                    backgroundColor: '#022B3A',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+
+        // Gráfico de ocorrências por gravidade
+        const ocorrenciasPorGravidade = {};
+        dados.ocorrencias.forEach(ocorrencia => {
+            if (!ocorrenciasPorGravidade[ocorrencia.gravidade]) {
+                ocorrenciasPorGravidade[ocorrencia.gravidade] = 0;
+            }
+            ocorrenciasPorGravidade[ocorrencia.gravidade]++;
+        });
+
+        const ctx2 = document.getElementById('ocorrenciasChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(ocorrenciasPorGravidade),
+                datasets: [{
+                    data: Object.values(ocorrenciasPorGravidade),
+                    backgroundColor: ['#022B3A', '#00546B', '#00b377', '#ff6b6b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>
