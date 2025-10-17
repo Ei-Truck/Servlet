@@ -2398,16 +2398,6 @@ html {
     }
 }
 
-/* 19. HIGH DPI DISPLAYS */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    @media (max-width: 767px) {
-        /* Melhorar qualidade de imagens em telas retina */
-        img {
-            image-rendering: -webkit-optimize-contrast;
-        }
-    }
-}
-
 /* 20. IMPRESSÃO */
 @media print {
     @media (max-width: 767px) {
@@ -2434,18 +2424,6 @@ html {
     }
 }
 
-/* iOS Safari */
-@media (max-width: 767px) and (-webkit-touch-callout: none) {
-    .hero .actions .button {
-        -webkit-appearance: none;
-    }
-
-    input, textarea {
-        -webkit-appearance: none;
-        border-radius: 0;
-    }
-}
-
 /* 22. LOADING OTIMIZADO */
 @media (max-width: 767px) {
     .hero .visual .frame img {
@@ -2465,7 +2443,7 @@ html {
     .hero, section {
         transform: translateZ(0);
         backface-visibility: hidden;
-        perspective: 1000;
+        perspective: 1000px;
     }
 }
 
