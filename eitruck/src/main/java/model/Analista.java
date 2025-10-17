@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 //Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models
@@ -114,4 +115,5 @@ public class Analista {
                     Telefone = %s
                     Data de Contratação = %s""", this.id, this.nome, this.cpf, this.email, this.cargo, this.telefone, this.dtcontratacao);
     }
+
 }

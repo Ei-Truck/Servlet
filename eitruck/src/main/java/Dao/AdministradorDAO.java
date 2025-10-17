@@ -2,6 +2,7 @@ package Dao;
 
 
 
+import Util.Hash;
 import model.Administrador;
 
 import java.sql.*;
@@ -10,9 +11,7 @@ import java.util.List;
 
 
 public class AdministradorDAO extends DAO {
-    public AdministradorDAO() throws SQLException, ClassNotFoundException{
-        super();
-    }
+
 
     public boolean cadastrar(Administrador admin) {
         String comando = """
@@ -273,5 +272,35 @@ public class AdministradorDAO extends DAO {
         finally {
             conexao.desconectar(conn);
         }
+    }
+    public String ehAdimin(String email, String senha){
+        conn = conexao.conectar();
+        Hash hash = new Hash();
+        Connection conn = null;
+        PreparedStatement pstmt;
+        ResultSet rs;
+        String sql = "SELECT senha, nome FROM ADMINISTRADOR WHERE EMAIL = ?";
+        String senhaBanco, senhaCriptografada, nome;
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+
+//            Setando valores
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                senhaBanco = rs.getString("senha");
+                nome = rs.getString("nome");
+                senhaCriptografada = hash.criptografarSenha(senha);
+
+                if (senhaCriptografada.equals(senhaBanco)){
+                    return nome;
+                }
+            } return null;
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
+        } finally {
+            conexao.desconectar(conn);
+        } return null;
     }
 }
