@@ -30,7 +30,7 @@ public class AdministradorServlet extends HttpServlet {
             sessionNome.setAttribute("nomeAdimin", resultado);
 
             // Encaminha para a tela de carregamento (corrigido o caminho)
-            req.getRequestDispatcher("../../../webapp/html/Restricted-area/loading-screen.html").forward(req, resp);
+            req.getRequestDispatcher("src/main/webapp/html/Restricted-area/loading-screen.html").forward(req, resp);
 
         } else {
             // Login inválido → retorna à página de login com mensagem de erro

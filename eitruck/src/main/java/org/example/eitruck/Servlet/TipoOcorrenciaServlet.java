@@ -1,4 +1,4 @@
-package org.example.eitruck.Servlet;
-
-public class TipoOcorrenciaServlet {
-}
+//package org.example.eitruck.Servlet;
+//
+//public class TipoOcorrenciaServlet {
+//}
