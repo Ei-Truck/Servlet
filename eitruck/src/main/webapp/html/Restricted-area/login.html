@@ -215,7 +215,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = 'tela_carregamento.html';
+                    window.location.href = 'loading-screen.html';
                 } else {
                     showError(data.message || 'Credenciais inválidas');
                 }
