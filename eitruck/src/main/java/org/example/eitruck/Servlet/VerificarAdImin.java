@@ -25,7 +25,6 @@ public class VerificarAdImin extends HttpServlet {
             sessionNome.setAttribute("nomeAdimin", resultado);
             req.getRequestDispatcher("/src/main/webapp/html/Restricted-area/Pages/addresses.html").forward(req, resp);//aqui vai o caminho da area restrita, no lugar vazio
 
-            //todo trocar no forms de cpf para email
             //todo colocar valor de recebimento = "nomeAdmin"
             //
         }
