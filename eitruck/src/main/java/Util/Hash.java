@@ -1,33 +1,27 @@
 package Util;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 public class Hash {
+        private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    //    Comando para encriptar senha
-    public String criptografarSenha(String senha){
-        try {
-//            Instância de SHA-256
-            MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-//            Gera hash em bytes
-            byte[] hashBytes = sha256.digest(senha.getBytes());
-//            Converte bytes[] para números
-            BigInteger numHash = new BigInteger(1, hashBytes);
-
-//            Converte para String
-            return numHash.toString(16);
-
-        } catch (NoSuchAlgorithmException nsae) {
-            nsae.printStackTrace();
-            return null;
+public static String criptografar(String senha) {
+        return encoder.encode(senha);
         }
-    }
 
-    public boolean descriptografarSenha(String senhaStr, String senhaCriptografada){
-//        transforma senhaNormal em hash
-        String hash = criptografarSenha(senhaStr);
-        return hash.equals(senhaCriptografada);
-    }
-}
+// Verifica se a senha em texto puro corresponde ao hash armazenado
+public static boolean verificarSenha(String senhaDigitada, String senhaCriptografada) {
+        return encoder.matches(senhaDigitada, senhaCriptografada);
+        }
+
+public static void main(String[] args) {
+        String senhaOriginal = "123456";
+        String hash = criptografar(senhaOriginal);
+
+        System.out.println("Hash: " + hash);
+        System.out.println("Verificação correta: " + verificarSenha("123456", hash)); // true
+        System.out.println("Verificação incorreta: " + verificarSenha("654321", hash)); // false
+        }}
