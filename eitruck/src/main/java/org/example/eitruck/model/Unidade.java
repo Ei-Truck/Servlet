@@ -1,7 +1,7 @@
 package org.example.eitruck.model;
 
 
-import org.example.eitruck.Util.Uteis;
+import org.example.eitruck.util.Uteis;
 
 public class Unidade {
     // atributos

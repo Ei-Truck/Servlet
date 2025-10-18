@@ -1,4 +1,4 @@
-package org.example.eitruck.Servlet;
+package org.example.eitruck.servlet;
 //
 //public class EnderecoServlet {
 //}

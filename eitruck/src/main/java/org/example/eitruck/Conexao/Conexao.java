@@ -43,49 +43,49 @@ public class Conexao {
         return false;
     }
 //
-//    // Método auxiliar para testar a conexão com feedback
-//    public void testarConexaoComFeedback() {
-//        Connection conn = null;
-//        try {
-//            conn = conectar();
-//            if (conn != null) {
-//                System.out.println("\n*** CONEXÃO COM O BANCO DE DADOS TESTADA E BEM-SUCEDIDA! *** ✅");
-//            } else {
-//                System.out.println("\n--- FALHA NA CONEXÃO --- ❌");
-//            }
-//        } finally {
-//            // Garante que a conexão de teste será fechada
-//            desconectar(conn);
-//            System.out.println("--- TESTE DE CONEXÃO FINALIZADO ---");
-//        }
-//    }
-//
-//    // MÉTODO MAIN (PSVM) PARA TESTE
-//    public static void main(String[] args) {
-//        System.out.println("\n--- INICIANDO TESTE DA CONEXÃO ---");
-//
-//        Conexao teste = new Conexao();
-//
-//        // 1. Imprime o Diretório de Trabalho (Ajuda a depurar o problema do .env)
-//        System.out.println("Diretório de Trabalho Atual: " + new java.io.File(".").getAbsolutePath());
-//
-//        // 2. Imprime Variáveis Carregadas (Checa o .env)
-//        System.out.println("\n--- Variáveis Carregadas ---");
-//        System.out.println("HOST_BD: " + teste.hostBd);
-//        System.out.println("NOME_BD: " + teste.nomeBd);
-//        System.out.println("NOME_USUARIO_BD: " + teste.usuarioBd);
-//        System.out.println("PORTA_BD: " + teste.portaBd);
-//        System.out.println("SENHA_BD: " + (teste.senhaBd != null ? "[Censurada]" : "null")); // Evita expor a senha
-//
-//        // 3. Verifica se as Variáveis Falharam
-//        if (teste.hostBd == null || teste.nomeBd == null || teste.usuarioBd == null) {
-//            System.err.println("\nERRO: Alguma variável de ambiente retornou 'null'. 🚨");
-//            System.err.println("Verifique se o arquivo .env está na raiz do projeto onde o código está sendo EXECUTADO (Veja o 'Diretório de Trabalho Atual' acima).");
-//            return; // Para o teste se as variáveis falharem
-//        }
-//
-//        // 4. Se as variáveis carregaram, tenta a conexão
-//        System.out.println("\nVariáveis carregadas. Tentando conectar ao banco de dados...");
-//        teste.testarConexaoComFeedback();
-//    }
+    // Método auxiliar para testar a conexão com feedback
+    public void testarConexaoComFeedback() {
+        Connection conn = null;
+        try {
+            conn = conectar();
+            if (conn != null) {
+                System.out.println("\n*** CONEXÃO COM O BANCO DE DADOS TESTADA E BEM-SUCEDIDA! *** ✅");
+            } else {
+                System.out.println("\n--- FALHA NA CONEXÃO --- ❌");
+            }
+        } finally {
+            // Garante que a conexão de teste será fechada
+            desconectar(conn);
+            System.out.println("--- TESTE DE CONEXÃO FINALIZADO ---");
+        }
+    }
+
+    // MÉTODO MAIN (PSVM) PARA TESTE
+    public static void main(String[] args) {
+        System.out.println("\n--- INICIANDO TESTE DA CONEXÃO ---");
+
+        Conexao teste = new Conexao();
+
+        // 1. Imprime o Diretório de Trabalho (Ajuda a depurar o problema do .env)
+        System.out.println("Diretório de Trabalho Atual: " + new java.io.File(".").getAbsolutePath());
+
+        // 2. Imprime Variáveis Carregadas (Checa o .env)
+        System.out.println("\n--- Variáveis Carregadas ---");
+        System.out.println("HOST_BD: " + teste.hostBd);
+        System.out.println("NOME_BD: " + teste.nomeBd);
+        System.out.println("NOME_USUARIO_BD: " + teste.usuarioBd);
+        System.out.println("PORTA_BD: " + teste.portaBd);
+        System.out.println("SENHA_BD: " + (teste.senhaBd != null ? "[Censurada]" : "null")); // Evita expor a senha
+
+        // 3. Verifica se as Variáveis Falharam
+        if (teste.hostBd == null || teste.nomeBd == null || teste.usuarioBd == null) {
+            System.err.println("\nERRO: Alguma variável de ambiente retornou 'null'. 🚨");
+            System.err.println("Verifique se o arquivo .env está na raiz do projeto onde o código está sendo EXECUTADO (Veja o 'Diretório de Trabalho Atual' acima).");
+            return; // Para o teste se as variáveis falharem
+        }
+
+        // 4. Se as variáveis carregaram, tenta a conexão
+        System.out.println("\nVariáveis carregadas. Tentando conectar ao banco de dados...");
+        teste.testarConexaoComFeedback();
+    }
 }
