@@ -413,36 +413,6 @@ public class AdministradorDAO extends DAO {
         }
     }
 
-    public List<Administrador> buscarTodos()
-            throws Exception {
-        ResultSet rs;
-        List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM administrador ORDER BY nome_completo";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Administrador admin = new Administrador(
-                        rs.getInt("id"),
-                        rs.getString("cpf"),
-                        rs.getString("nome_completo"),
-                        rs.getString("email"),
-                        rs.getString("senha")
-                );
-                listaRetorno.add(admin);
-            }
-            return listaRetorno;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
     public List<Administrador> buscarPorId(int idAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
