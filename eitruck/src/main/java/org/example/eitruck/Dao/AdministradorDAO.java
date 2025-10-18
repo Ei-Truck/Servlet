@@ -310,5 +310,90 @@ public class AdministradorDAO extends DAO {
             conexao.desconectar(conn);
         } return null;
     }
+
+    // Métodos adicionados - Igor
+    public int alterarCpf(Administrador admin, String novoCpf) {
+        String comando = "UPDATE administrador SET cpf = ? WHERE id = ?";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setString(1, novoCpf);
+            pstmt.setInt(2, admin.getId());
+            int execucao = pstmt.executeUpdate();
+            if (execucao > 0) {
+                admin.setCpf(novoCpf);
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<Administrador> buscarTodos() {
+        ResultSet rs;
+        List<Administrador> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM administrador";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
+                listaRetorno.add(admin);
+            }
+            return listaRetorno;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    // Corrigindo o método buscarPorEmail
+    public List<Administrador> buscarPorEmailCorreto(String emailAdmin) {
+        ResultSet rs;
+        List<Administrador> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM administrador WHERE email = ?";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setString(1, emailAdmin);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
+                listaRetorno.add(admin);
+            }
+            return listaRetorno;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
 }
 

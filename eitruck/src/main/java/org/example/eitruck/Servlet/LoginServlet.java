@@ -10,7 +10,7 @@ import org.example.eitruck.Dao.AdministradorDAO;
 
 import java.io.IOException;
 
-@WebServlet(name = "LoginServlet", value = "/login")
+@WebServlet(name = "login", value = "/login")
 public class LoginServlet extends HttpServlet {
     private final AdministradorDAO admin = new AdministradorDAO();
 
