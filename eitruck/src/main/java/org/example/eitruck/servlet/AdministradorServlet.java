@@ -9,8 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.example.eitruck.Dao.AdministradorDAO;
 
 import java.io.IOException;
 import java.util.List;
@@ -57,7 +55,6 @@ public class AdministradorServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            // Aplicar filtros se existirem
             String filterId = request.getParameter("filter-id");
             String filterNome = request.getParameter("filter-nome");
             String filterCpf = request.getParameter("filter-cpf");
@@ -74,8 +71,7 @@ public class AdministradorServlet extends HttpServlet {
             } else if (filterEmail != null && !filterEmail.isEmpty()) {
                 administradores = administradorDAO.buscarPorEmail(filterEmail);
             } else {
-                // Buscar todos
-                administradores = buscarTodosAdministradores();
+                administradores = administradorDAO.buscarTodos();
             }
 
             request.setAttribute("administradores", administradores);
@@ -90,7 +86,6 @@ public class AdministradorServlet extends HttpServlet {
 
     private void buscarAdministradores(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Implementar busca específica
         listarAdministradores(request, response);
     }
 
@@ -131,7 +126,6 @@ public class AdministradorServlet extends HttpServlet {
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
 
-            // Buscar o administrador existente
             List<Administrador> administradores = administradorDAO.buscarPorId(id);
             if (administradores == null || administradores.isEmpty()) {
                 response.sendRedirect("administradores?error=Administrador não encontrado");
@@ -140,28 +134,19 @@ public class AdministradorServlet extends HttpServlet {
 
             Administrador admin = administradores.get(0);
 
-            // Atualizar campos
-            int resultado = administradorDAO.alterarNomeCompleto(admin, nomeCompleto);
-            if (resultado <= 0) {
-                response.sendRedirect("administradores?error=Erro ao atualizar nome");
-                return;
-            }
+            // Atualiza campos no objeto
+            admin.setNomeCompleto(nomeCompleto);
+            admin.setCpf(cpf);
+            admin.setEmail(email);
 
-            resultado = administradorDAO.alterarEmail(admin, email);
-            if (resultado <= 0) {
-                response.sendRedirect("administradores?error=Erro ao atualizar email");
-                return;
-            }
+            // Chama o método consolidado do DAO
+            boolean atualizado = administradorDAO.atualizar(admin, (senha != null && !senha.isEmpty()) ? senha : null);
 
-            if (senha != null && !senha.isEmpty()) {
-                resultado = administradorDAO.alterarSenha(admin, senha);
-                if (resultado <= 0) {
-                    response.sendRedirect("administradores?error=Erro ao atualizar senha");
-                    return;
-                }
+            if (atualizado) {
+                response.sendRedirect("administradores?success=Administrador atualizado com sucesso");
+            } else {
+                response.sendRedirect("administradores?error=Erro ao atualizar administrador");
             }
-
-            response.sendRedirect("administradores?success=Administrador atualizado com sucesso");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,15 +160,7 @@ public class AdministradorServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
 
-            // Buscar o administrador para passar como parâmetro
-            List<Administrador> administradores = administradorDAO.buscarPorId(id);
-            if (administradores == null || administradores.isEmpty()) {
-                response.sendRedirect("administradores?error=Administrador não encontrado");
-                return;
-            }
-
-            Administrador admin = administradores.get(0);
-            int resultado = administradorDAO.apagar(admin, id);
+            int resultado = administradorDAO.apagar(id);
 
             if (resultado > 0) {
                 response.sendRedirect("administradores?success=Administrador excluído com sucesso");
@@ -195,10 +172,6 @@ public class AdministradorServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("administradores?error=Erro interno do servidor");
         }
-    }
-
-    private List<Administrador> buscarTodosAdministradores() {
-        return java.util.Collections.emptyList();
     }
 
     private int gerarNovoId() {
