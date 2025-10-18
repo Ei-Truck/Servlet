@@ -297,8 +297,13 @@ public class AdministradorDAO extends DAO {
 //                if (senhaCriptografada.equals(senhaBanco)){
 //                    return nome;
 //                }
-                return nome;
-            } return null;
+
+                // Verificar se a senha é igual no banco -- Lucas
+                if (senha.equals(senhaBanco)) {
+                    return nome;
+                }
+            }
+            return null;
         } catch (SQLException sqle){
             sqle.printStackTrace();
         } finally {
