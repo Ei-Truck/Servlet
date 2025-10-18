@@ -1,8 +1,6 @@
 package org.example.eitruck.Dao;
 
 
-import org.example.eitruck.Dao.DAO;
-import org.example.eitruck.Util.Hash;
 import org.example.eitruck.model.Administrador;
 
 import java.sql.*;

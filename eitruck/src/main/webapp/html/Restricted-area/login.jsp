@@ -27,7 +27,7 @@
         %>
 
         <!-- Formulário envia via POST para o servlet /login -->
-        <form id="loginForm" method="post" action="login">
+        <form id="loginForm" method="post" action="${pageContext.request.contextPath}/login">
             <div class="form-group">
                 <label for="email">E-mail:</label>
                 <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required

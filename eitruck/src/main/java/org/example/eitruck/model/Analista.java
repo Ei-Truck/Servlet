@@ -1,6 +1,6 @@
 package org.example.eitruck.model;
 
-import org.example.eitruck.Util.Uteis;
+import org.example.eitruck.util.Uteis;
 
 import java.time.LocalDate;
 

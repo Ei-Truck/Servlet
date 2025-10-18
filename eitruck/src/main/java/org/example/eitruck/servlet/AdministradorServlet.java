@@ -1,4 +1,4 @@
-package org.example.eitruck.Servlet;
+package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import org.example.eitruck.Dao.AdministradorDAO;
@@ -9,8 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.example.eitruck.Dao.AdministradorDAO;
 
 import java.io.IOException;
 import java.util.List;

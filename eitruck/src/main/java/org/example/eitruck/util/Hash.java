@@ -1,4 +1,4 @@
-package org.example.eitruck.Util;
+package org.example.eitruck.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

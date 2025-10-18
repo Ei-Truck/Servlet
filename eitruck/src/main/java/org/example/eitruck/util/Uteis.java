@@ -1,4 +1,4 @@
-package org.example.eitruck.Util;
+package org.example.eitruck.util;
 public class Uteis {
 
     public static String validarCpf(String cpf) {
