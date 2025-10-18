@@ -29,12 +29,12 @@ public class LoginServlet extends HttpServlet {
             sessionNome.setAttribute("nomeAdimin", resultado);
 
             // Encaminha para a tela de carregamento (corrigido o caminho)
-            req.getRequestDispatcher("../../../webapp/html/Restricted-area/loading-screen.html").forward(req, resp);
+            req.getRequestDispatcher("/html/Restricted-area/loading-screen.html").forward(req, resp);
 
         } else {
             // Login inválido → retorna à página de login com mensagem de erro
             req.setAttribute("erroLogin", "E-mail ou senha incorretos!");
-            req.getRequestDispatcher("src/main/webapp/html/Erro.jsp").forward(req, resp);
+            req.getRequestDispatcher("/html/Erro.jsp").forward(req, resp);
         }
     }
 

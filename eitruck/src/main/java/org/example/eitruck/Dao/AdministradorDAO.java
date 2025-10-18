@@ -274,41 +274,71 @@ public class AdministradorDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
-    public String ehAdimin(String email, String senha){
-        conn = conexao.conectar();
-//        Hash hash = new Hash();
+    public String ehAdmin(String email, String senha){
         Connection conn = null;
-        PreparedStatement pstmt;
-        ResultSet rs;
-        String sql = "SELECT senha, nome FROM ADMINISTRADOR WHERE EMAIL = ?";
-        String senhaBanco, senhaCriptografada, nome;
-
+        String sql = "SELECT senha, nome_completo FROM ADMINISTRADOR WHERE EMAIL = ?";
         try {
-            pstmt = conn.prepareStatement(sql);
+            conn = conexao.conectar();
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, email);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        String senhaBanco = rs.getString("senha");
+                        String nome = rs.getString("nome_completo");
 
-//            Setando valores
-            pstmt.setString(1, email);
-            rs = pstmt.executeQuery();
-            if (rs.next()){
-                senhaBanco = rs.getString("senha");
-                nome = rs.getString("nome");
-//                senhaCriptografada = hash.criptografarSenha(senha);
-
-//                if (senhaCriptografada.equals(senhaBanco)){
-//                    return nome;
-//                }
-
-                // Verificar se a senha é igual no banco -- Lucas
-                if (senha.equals(senhaBanco)) {
-                    return nome;
+                        // Se senha em texto puro
+                        if (senha.equals(senhaBanco)) {
+                            return nome;
+                        }
+                    }
                 }
             }
-            return null;
-        } catch (SQLException sqle){
-            sqle.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
         } finally {
             conexao.desconectar(conn);
-        } return null;
+        }
+        return null;
     }
-}
+
+
+
+//    public String ehAdimin(String email, String senha){
+//        conn = conexao.conectar();
+////        Hash hash = new Hash();
+//        Connection conn = null;
+//        PreparedStatement pstmt;
+//        ResultSet rs;
+//        String sql = "SELECT senha, nome FROM ADMINISTRADOR WHERE EMAIL = ?";
+//        String senhaBanco, senhaCriptografada, nome;
+//
+//        try {
+//            pstmt = conn.prepareStatement(sql);
+//
+////            Setando valores
+//            pstmt.setString(1, email);
+//            rs = pstmt.executeQuery();
+//            if (rs.next()){
+//                senhaBanco = rs.getString("senha");
+//                nome = rs.getString("nome");
+////                senhaCriptografada = hash.criptografarSenha(senha);
+//
+////                if (senhaCriptografada.equals(senhaBanco)){
+////                    return nome;
+////                }
+//
+//                // Verificar se a senha é igual no banco -- Lucas
+//                if (senha.equals(senhaBanco)) {
+//                    return nome;
+//                }
+//            }
+//            return null;
+//        } catch (SQLException sqle){
+//            sqle.printStackTrace();
+//        } finally {
+//            conexao.desconectar(conn);
+//        } return null;
+    }
+
 
