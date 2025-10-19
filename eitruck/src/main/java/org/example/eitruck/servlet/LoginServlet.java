@@ -24,16 +24,16 @@ public class LoginServlet extends HttpServlet {
         String resultado = admin.ehAdimin(email, senha);
 
         if (resultado != null) {
-            // Login válido → cria sessão e redireciona para área restrita
+            // Login válido → cria sessão e redireciona
             HttpSession sessionNome = req.getSession();
             sessionNome.setAttribute("nomeAdimin", resultado);
 
             // Redireciona para a tela de carregamento
             resp.sendRedirect(req.getContextPath() + "/html/Restricted-area/loading-screen.html");
         } else {
-            // CORREÇÃO AQUI: Login inválido → volta para a MESMA página de login com mensagem de erro
+            // Login inválido → volta para a mesma página de login
             req.setAttribute("erroLogin", "E-mail ou senha incorretos!");
-            req.getRequestDispatcher("/html/Restricted-area/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/login.jsp").forward(req, resp);
         }
     }
 

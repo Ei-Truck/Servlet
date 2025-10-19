@@ -1,8 +1,5 @@
 package org.example.eitruck.Dao;
 
-
-import org.example.eitruck.Dao.DAO;
-import org.example.eitruck.util.Hash;
 import org.example.eitruck.model.Administrador;
 
 import java.sql.*;
@@ -19,6 +16,7 @@ public class AdministradorDAO extends DAO {
             INSERT INTO administrador (id, cpf, nome_completo, email, senha)
             VALUES (?, ?, ?, ?, ?)""";
 
+        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -38,13 +36,87 @@ public class AdministradorDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+
+    // Método para buscar todos os administradores (FALTANTE)
+    public List<Administrador> buscarTodos() {
+        ResultSet rs;
+        List<Administrador> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM administrador";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
+                listaRetorno.add(admin);
+            }
+            return listaRetorno;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    // Método de atualização consolidado (FALTANTE)
+    public boolean atualizar(Administrador admin, String novaSenha) {
+        String comando;
+        if (novaSenha != null && !novaSenha.isEmpty()) {
+            comando = """
+                UPDATE administrador 
+                SET cpf = ?, nome_completo = ?, email = ?, senha = ?
+                WHERE id = ?""";
+        } else {
+            comando = """
+                UPDATE administrador 
+                SET cpf = ?, nome_completo = ?, email = ?
+                WHERE id = ?""";
+        }
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setString(1, admin.getCpf());
+            pstmt.setString(2, admin.getNomeCompleto());
+            pstmt.setString(3, admin.getEmail());
+
+            if (novaSenha != null && !novaSenha.isEmpty()) {
+                pstmt.setString(4, novaSenha);
+                pstmt.setInt(5, admin.getId());
+            } else {
+                pstmt.setInt(4, admin.getId());
+            }
+
+            int execucao = pstmt.executeUpdate();
+            return execucao > 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return false;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarNomeCompleto(Administrador admin, String novoNomeCompleto) {
         String comando = """
             UPDATE administrador
             SET nome_completo = ?
             WHERE id = ?""";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novoNomeCompleto);
             pstmt.setInt(2, admin.getId());
@@ -65,13 +137,16 @@ public class AdministradorDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+
     public int alterarEmail(Administrador admin, String novoEmail) {
         String comando = """
             UPDATE administrador
             SET email = ?
             WHERE id = ?""";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novoEmail);
             pstmt.setInt(2, admin.getId());
@@ -92,13 +167,16 @@ public class AdministradorDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+
     public int alterarSenha(Administrador admin, String novaSenha) {
         String comando = """
             UPDATE administrador
             SET senha = ?
             WHERE id = ?""";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novaSenha);
             pstmt.setInt(2, admin.getId());
@@ -119,185 +197,173 @@ public class AdministradorDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
-    public int apagar(Administrador admin, int idAdmin) {
-        String comando = """
-            DELETE FROM administrador
-            WHERE id = ?""";
+
+    // Método apagar simplificado (CORREÇÃO)
+    public int apagar(int idAdmin) {
+        String comando = "DELETE FROM administrador WHERE id = ?";
+        Connection conn = null;
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idAdmin);
             int execucao = pstmt.executeUpdate();
-            if (execucao > 0) {
-                admin = null;
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle) {
+            return execucao;
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return -1;
-        }
-        finally {
+        } finally {
             conexao.desconectar(conn);
         }
     }
+
+    // Método apagar antigo (mantido para compatibilidade)
+    public int apagar(Administrador admin, int idAdmin) {
+        return apagar(idAdmin);
+    }
+
+    // CORREÇÃO nos métodos de busca - adicionar conexão
     public List<Administrador> buscarPorId(int idAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = """
-            SELECT * FROM administrador
-            WHERE id = ?""";
+        String comando = "SELECT * FROM administrador WHERE id = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idAdmin);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()) {
-                Administrador admin = new Administrador(rs.getInt("id"), rs.getString("cpf"), rs.getString("nome_completo"), rs.getString("email"), rs.getString("senha"));
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        }
-        catch (SQLException sqle) {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        }
-        finally {
+        } finally {
             conexao.desconectar(conn);
         }
     }
+
     public List<Administrador> buscarPorCpf(String cpfAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = """
-            SELECT * FROM administrador
-            WHERE cpf = ?""";
+        String comando = "SELECT * FROM administrador WHERE cpf = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, cpfAdmin);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()) {
-                Administrador admin = new Administrador(rs.getInt("id"), rs.getString("cpf"), rs.getString("nome_completo"), rs.getString("email"), rs.getString("senha"));
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        }
-        catch (SQLException sqle) {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        }
-        finally {
+        } finally {
             conexao.desconectar(conn);
         }
     }
+
     public List<Administrador> buscarNomeCompleto(String nomeCompletoAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = """
-            SELECT * FROM administrador
-            WHERE nome_completo = ?""";
+        String comando = "SELECT * FROM administrador WHERE nome_completo = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, nomeCompletoAdmin);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()) {
-                Administrador admin = new Administrador(rs.getInt("id"), rs.getString("cpf"), rs.getString("nome_completo"), rs.getString("email"), rs.getString("senha"));
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        }
-        catch (SQLException sqle) {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        }
-        finally {
+        } finally {
             conexao.desconectar(conn);
         }
     }
+
+    // CORREÇÃO no método buscarPorEmail
     public List<Administrador> buscarPorEmail(String emailAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = """
-            SELECT * FROM administrador
-            WHERE id = ?""";
+        String comando = "SELECT * FROM administrador WHERE email = ?"; // CORRIGIDO
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, emailAdmin);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()) {
-                Administrador admin = new Administrador(rs.getInt("id"), rs.getString("cpf"), rs.getString("nome_completo"), rs.getString("email"), rs.getString("senha"));
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        }
-        catch (SQLException sqle) {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        }
-        finally {
+        } finally {
             conexao.desconectar(conn);
         }
     }
-    public List<Administrador> buscarPorSenha(String senhaAdmin) {
-        ResultSet rs;
-        List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = """
-            SELECT * FROM administrador
-            WHERE id = ?""";
 
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, senhaAdmin);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()) {
-                Administrador admin = new Administrador(rs.getInt("id"), rs.getString("cpf"), rs.getString("nome_completo"), rs.getString("email"), rs.getString("senha"));
-                listaRetorno.add(admin);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
+    // Método para autenticação
     public String ehAdimin(String email, String senha){
-        conn = conexao.conectar();
-//        Hash hash = new Hash();
         Connection conn = null;
         PreparedStatement pstmt;
         ResultSet rs;
-        String sql = "SELECT senha, nome FROM ADMINISTRADOR WHERE EMAIL = ?";
-        String senhaBanco, senhaCriptografada, nome;
+        String sql = "SELECT senha, nome_completo FROM administrador WHERE email = ?";
+        String senhaBanco, nome;
 
         try {
+            conn = conexao.conectar();
             pstmt = conn.prepareStatement(sql);
-
-//            Setando valores
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
             if (rs.next()){
                 senhaBanco = rs.getString("senha");
-                nome = rs.getString("nome");
-//                senhaCriptografada = hash.criptografarSenha(senha);
-
-//                if (senhaCriptografada.equals(senhaBanco)){
-//                    return nome;
-//                }
-                return nome;
+                nome = rs.getString("nome_completo");
+                // Comparação de senha (considerando que a senha no banco está em texto plano, mas o ideal é usar hash)
+                if (senha.equals(senhaBanco)){
+                    return nome;
+                }
             } return null;
         } catch (SQLException sqle){
             sqle.printStackTrace();
@@ -306,4 +372,3 @@ public class AdministradorDAO extends DAO {
         } return null;
     }
 }
-

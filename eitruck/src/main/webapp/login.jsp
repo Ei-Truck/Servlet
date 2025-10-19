@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -18,11 +19,16 @@
         <%
             String erro = (String) request.getAttribute("erroLogin");
             if (erro != null) {
-        %>
-        <div class="error-message">
-            <%= erro %>
-        </div>
-        <%
+                out.print("<script>");
+                out.print("window.addEventListener('DOMContentLoaded', () => {");
+                out.print("const notification = document.createElement('div');");
+                out.print("notification.className = 'error-toast';");
+                out.print("notification.textContent = '" + erro.replace("'", "\\'") + "';");
+                out.print("document.body.appendChild(notification);");
+                out.print("setTimeout(() => notification.classList.add('show'), 100);");
+                out.print("setTimeout(() => { notification.classList.remove('show'); setTimeout(() => notification.remove(), 500); }, 4000);");
+                out.print("});");
+                out.print("</script>");
             }
         %>
 

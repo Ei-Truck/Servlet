@@ -17,6 +17,7 @@ public class AnalistaDAO extends DAO {
             INSERT INTO analista (id, id_unidade, cpf, nome, email, dt_contratacao, senha, cargo)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)""";
 
+        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -40,218 +41,126 @@ public class AnalistaDAO extends DAO {
         }
     }
 
-    public int alterarIdUnidade(Analista analista, int novoIdUnidade) {
-        String comando = "UPDATE analista SET id_unidade = ? WHERE id = ?";
+    // Método para buscar todos os analistas
+    public List<Analista> buscarTodos() {
+        ResultSet rs;
+        List<Analista> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM analista";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, novoIdUnidade);
-            pstmt.setInt(2, analista.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                analista.setIdUnidade(novoIdUnidade);
-                return 1;
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
+                listaRetorno.add(analista);
             }
-            else {
-                return 0;
-            }
-        }
-        catch(SQLException sqle){
+            return listaRetorno;
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-            return -1;
-        }
-        finally {
+            return null;
+        } finally {
             conexao.desconectar(conn);
         }
     }
 
-    public int alterarCpf(Analista analista, String novoCpf) {
-        String comando = "UPDATE analista SET cpf = ? WHERE id = ?";
+    // Método de atualização consolidado
+    public boolean atualizar(Analista analista, String novaSenha) {
+        String comando;
+        if (novaSenha != null && !novaSenha.isEmpty()) {
+            comando = """
+                UPDATE analista 
+                SET id_unidade = ?, cpf = ?, nome = ?, email = ?, dt_contratacao = ?, senha = ?, cargo = ?
+                WHERE id = ?""";
+        } else {
+            comando = """
+                UPDATE analista 
+                SET id_unidade = ?, cpf = ?, nome = ?, email = ?, dt_contratacao = ?, cargo = ?
+                WHERE id = ?""";
+        }
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novoCpf);
-            pstmt.setInt(2, analista.getId());
+            pstmt.setInt(1, analista.getIdUnidade());
+            pstmt.setString(2, analista.getCpf());
+            pstmt.setString(3, analista.getNomeCompleto());
+            pstmt.setString(4, analista.getEmail());
+            pstmt.setDate(5, Date.valueOf(analista.getDtContratacao()));
+            if (novaSenha != null && !novaSenha.isEmpty()) {
+                pstmt.setString(6, novaSenha);
+                pstmt.setString(7, analista.getCargo());
+                pstmt.setInt(8, analista.getId());
+            } else {
+                pstmt.setString(6, analista.getCargo());
+                pstmt.setInt(7, analista.getId());
+            }
+
             int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                analista.setCpf(novoCpf);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
+            return execucao > 0;
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-            return -1;
-        }
-        finally {
+            return false;
+        } finally {
             conexao.desconectar(conn);
         }
     }
 
-    public int alterarNome(Analista analista, String novoNome) {
-        String comando = "UPDATE analista SET nome = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novoNome);
-            pstmt.setInt(2, analista.getId());
-            int execucao = pstmt.executeUpdate();
-            if(execucao > 0){
-                analista.setNomeCompleto(novoNome);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int alterarEmail(Analista analista, String novoEmail) {
-        String comando = "UPDATE analista SET email_institucional = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novoEmail);
-            pstmt.setInt(2, analista.getId());
-            int execucao = pstmt.executeUpdate();
-            if(execucao > 0){
-                analista.setEmail(novoEmail);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int alterarDtContratacao(Analista analista, LocalDate novaData) {
-        String comando = "UPDATE analista SET dt_contratacao = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setDate(1, Date.valueOf(novaData));
-            pstmt.setInt(2, analista.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                analista.setDtContratacao(novaData);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int alterarSenha(Analista analista, String novaSenha) {
-        String comando = "UPDATE analista SET senha = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novaSenha);
-            pstmt.setInt(2, analista.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                analista.setSenha(novaSenha);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int alterarCargo(Analista analista, String novoCargo) {
-        String comando = "UPDATE analista SET cargo = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novoCargo);
-            pstmt.setInt(2, analista.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                analista.setCargo(novoCargo);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int apagar(Analista analista, int idAnalista) {
+    // Método apagar simplificado
+    public int apagar(int idAnalista) {
         String comando = "DELETE FROM analista WHERE id = ?";
+        Connection conn = null;
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idAnalista);
             int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                analista = null;
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
+            return execucao;
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return -1;
-        }
-        finally {
+        } finally {
             conexao.desconectar(conn);
         }
     }
 
+    // Métodos de busca
     public List<Analista> buscarPorId(int idAnalista) {
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE id = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idAnalista);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -270,14 +179,24 @@ public class AnalistaDAO extends DAO {
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE id_unidade = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idUnidade);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -296,14 +215,24 @@ public class AnalistaDAO extends DAO {
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE cpf = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, cpf);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while(rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -322,14 +251,24 @@ public class AnalistaDAO extends DAO {
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE nome = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, nome);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -343,71 +282,29 @@ public class AnalistaDAO extends DAO {
         }
     }
 
-    public List<Analista> buscarPorEmailInstitucional(String email) {
+    public List<Analista> buscarPorEmail(String email) {
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM analista WHERE email_institucional = ?";
+        String comando = "SELECT * FROM analista WHERE email = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, email);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
-                listaRetorno.add(analista);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<Analista> buscarPorDtContratacao(Date data) {
-        ResultSet rs;
-        List<Analista> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM analista WHERE dt_contratacao = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setDate(1, data);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
-                listaRetorno.add(analista);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<Analista> buscarPorSenha(String senha) {
-        ResultSet rs;
-        List<Analista> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM analista WHERE senha = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, senha);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -426,14 +323,24 @@ public class AnalistaDAO extends DAO {
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE cargo = ?";
 
+        Connection conn = null;
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, cargo);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
+            rs = pstmt.executeQuery();
             while (rs.next()){
-                Analista analista = new Analista(rs.getInt("id"), rs.getInt("id_unidade"),
-                        rs.getString("cpf"), rs.getString("nome"), rs.getDate("dt_contratacao").toLocalDate(), rs.getString("email"), rs.getString("senha"), rs.getString("cargo"), rs.getString("telefone"));
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
                 listaRetorno.add(analista);
             }
             return listaRetorno;
@@ -446,6 +353,31 @@ public class AnalistaDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+
+    // Método para autenticação
+    public String ehAnalista(String email, String senha){
+        Connection conn = null;
+        PreparedStatement pstmt;
+        ResultSet rs;
+        String sql = "SELECT senha, nome FROM analista WHERE email = ?";
+        String senhaBanco, nome;
+
+        try {
+            conn = conexao.conectar();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                senhaBanco = rs.getString("senha");
+                nome = rs.getString("nome");
+                if (senha.equals(senhaBanco)){
+                    return nome;
+                }
+            } return null;
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
+        } finally {
+            conexao.desconectar(conn);
+        } return null;
+    }
 }
-
-

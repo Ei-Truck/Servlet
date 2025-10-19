@@ -1,56 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos dos modais
+    // Elementos do modal único
     const addBtn = document.getElementById('add-btn');
-    const addModal = document.getElementById('add-modal');
-    const editModal = document.getElementById('edit-modal');
-    const closeBtns = document.querySelectorAll('.close');
-    const cancelAddBtn = document.getElementById('cancel-add-btn');
-    const cancelEditBtn = document.getElementById('cancel-edit-btn');
-    const saveAddBtn = document.getElementById('save-add-btn');
-    const saveEditBtn = document.getElementById('save-edit-btn');
-
-    // Opções de edição
-    const editOptions = document.querySelectorAll('.edit-option');
-    const editForms = document.querySelectorAll('.edit-form');
-
-    // Variáveis para controle
-    let currentEditOption = null;
-    let currentAdminData = null;
+    const modal = document.getElementById('crud-modal');
+    const closeBtn = document.querySelector('.close');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const form = document.getElementById('crud-form');
+    const modalTitle = document.getElementById('modal-title');
+    const adminIdInput = document.getElementById('admin-id');
+    const actionTypeInput = document.getElementById('action-type');
 
     // Abrir modal para adicionar
     addBtn.addEventListener('click', function() {
-        addModal.style.display = 'block';
+        modalTitle.textContent = 'Adicionar Administrador';
+        form.reset();
+        adminIdInput.value = '';
+        actionTypeInput.value = 'cadastrar';
+
+        // Tornar o campo senha obrigatório no cadastro
+        form.querySelector('[name="senha"]').required = true;
+
+        modal.style.display = 'block';
     });
 
-    // Fechar modais
-    closeBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            addModal.style.display = 'none';
-            editModal.style.display = 'none';
-            resetEditModal();
-        });
+    // Fechar modal
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
     });
 
-    cancelAddBtn.addEventListener('click', function() {
-        addModal.style.display = 'none';
+    cancelBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
     });
 
-    cancelEditBtn.addEventListener('click', function() {
-        editModal.style.display = 'none';
-        resetEditModal();
-    });
-
-    // Salvar no modal de adicionar
-    saveAddBtn.addEventListener('click', function() {
-        const form = document.getElementById('add-form');
-        if (form.checkValidity()) {
-            form.submit();
-        } else {
-            alert('Por favor, preencha todos os campos obrigatórios.');
-        }
-    });
-
-    // Editar administrador - abrir modal de opções
+    // Abrir modal para editar
     document.querySelectorAll('.btn-edit').forEach(button => {
         button.addEventListener('click', function() {
             const id = this.getAttribute('data-id');
@@ -58,58 +40,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const cpf = this.getAttribute('data-cpf');
             const email = this.getAttribute('data-email');
 
-            currentAdminData = { id, nome, cpf, email };
-            document.getElementById('edit-admin-id').value = id;
+            modalTitle.textContent = 'Editar Administrador';
+            adminIdInput.value = id;
+            actionTypeInput.value = 'editar';
 
-            // Preencher todos os formulários com os dados atuais
-            document.getElementById('edit-nome').value = nome;
-            document.getElementById('edit-cpf').value = cpf;
-            document.getElementById('edit-email').value = email;
-            document.getElementById('edit-tudo-nome').value = nome;
-            document.getElementById('edit-tudo-cpf').value = cpf;
-            document.getElementById('edit-tudo-email').value = email;
+            // Preencher os campos do formulário
+            form.querySelector('[name="nome_completo"]').value = nome;
+            form.querySelector('[name="cpf"]').value = cpf;
+            form.querySelector('[name="email"]').value = email;
 
-            // Preencher os IDs nos formulários
-            document.getElementById('nome-id').value = id;
-            document.getElementById('cpf-id').value = id;
-            document.getElementById('email-id').value = id;
-            document.getElementById('senha-id').value = id;
-            document.getElementById('tudo-id').value = id;
+            // Senha não é obrigatória na edição
+            form.querySelector('[name="senha"]').required = false;
+            form.querySelector('[name="senha"]').value = '';
+            form.querySelector('[name="senha"]').placeholder = 'Deixe em branco para manter a senha atual';
 
-            editModal.style.display = 'block';
+            modal.style.display = 'block';
         });
     });
 
-    // Selecionar opção de edição
-    editOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            const optionType = this.getAttribute('data-option');
-
-            // Remover seleção anterior
-            editOptions.forEach(opt => opt.classList.remove('selected'));
-            // Esconder formulários anteriores
-            editForms.forEach(form => form.classList.remove('active'));
-
-            // Selecionar opção atual
-            this.classList.add('selected');
-            currentEditOption = optionType;
-
-            // Mostrar formulário correspondente
-            document.getElementById(`edit-${optionType}-form`).classList.add('active');
-
-            // Mostrar botão salvar
-            saveEditBtn.style.display = 'block';
-        });
-    });
-
-    // Salvar no modal de editar
-    saveEditBtn.addEventListener('click', function() {
-        if (!currentEditOption) {
-            alert('Por favor, selecione uma opção de edição.');
-            return;
-        }
-
-        const form = document.getElementById(`${currentEditOption}-form`);
+    // Salvar (tanto adicionar quanto editar)
+    saveBtn.addEventListener('click', function() {
         if (form.checkValidity()) {
             form.submit();
         } else {
@@ -153,23 +103,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('filter-form').submit();
     });
 
-    // Fechar modais ao clicar fora
+    // Fechar modal ao clicar fora
     window.addEventListener('click', function(event) {
-        if (event.target === addModal) {
-            addModal.style.display = 'none';
-        }
-        if (event.target === editModal) {
-            editModal.style.display = 'none';
-            resetEditModal();
+        if (event.target === modal) {
+            modal.style.display = 'none';
         }
     });
-
-    // Função para resetar o modal de edição
-    function resetEditModal() {
-        editOptions.forEach(opt => opt.classList.remove('selected'));
-        editForms.forEach(form => form.classList.remove('active'));
-        saveEditBtn.style.display = 'none';
-        currentEditOption = null;
-        currentAdminData = null;
-    }
 });
