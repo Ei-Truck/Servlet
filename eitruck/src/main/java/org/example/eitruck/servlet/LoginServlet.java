@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/login")
+@WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
     private final AdministradorDAO admin = new AdministradorDAO();

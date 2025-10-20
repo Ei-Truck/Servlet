@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet("/analistas")
+@WebServlet(name = "AnalistaServlet", value = "/analistas")
 public class AnalistaServlet extends HttpServlet {
     private AnalistaDAO analistaDAO;
 
