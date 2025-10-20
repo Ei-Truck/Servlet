@@ -1,5 +1,6 @@
 package org.example.eitruck.Dao;
 
+import org.example.eitruck.model.Segmento;
 import org.example.eitruck.model.TipoOcorrencia;
 
 import java.sql.*;
@@ -125,6 +126,31 @@ public class TipoOcorrenciaDAO extends DAO {
         catch (SQLException sqle){
             sqle.printStackTrace();
             return -1;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<TipoOcorrencia> buscarTodos() {
+        ResultSet rs;
+        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM tipo_ocorrencia";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                TipoOcorrencia tipo = new TipoOcorrencia(rs.getInt("id"), rs.getString("tipo_evento"), rs.getInt("pontuacao"), rs.getString("gravidade"));
+                listaRetorno.add(tipo);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
         }
         finally {
             conexao.desconectar(conn);

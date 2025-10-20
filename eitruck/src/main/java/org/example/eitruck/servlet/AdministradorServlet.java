@@ -24,7 +24,7 @@
 //
 //        // Verificar se a tabela existe ao inicializar o servlet
 //        System.out.println("Inicializando AdministradorServlet...");
-//        administradorDAO.verificarTabela();
+//        administradorDAO.buscarTodos();
 //    }
 //
 //    @Override
@@ -86,7 +86,7 @@
 //            } else if (filterCpf != null && !filterCpf.isEmpty()) {
 //                administradores = administradorDAO.buscarPorCpf(filterCpf);
 //            } else if (filterNome != null && !filterNome.isEmpty()) {
-//                administradores = administradorDAO.buscarPorNome(filterNome);
+//                administradores = administradorDAO.buscarNomeCompleto(filterNome);
 //            } else if (filterEmail != null && !filterEmail.isEmpty()) {
 //                administradores = administradorDAO.buscarPorEmail(filterEmail);
 //            } else {

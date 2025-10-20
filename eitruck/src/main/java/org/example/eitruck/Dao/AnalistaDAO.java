@@ -380,4 +380,47 @@ public class AnalistaDAO extends DAO {
             conexao.desconectar(conn);
         } return null;
     }
+    public boolean verificarEmailExistente(String email) {
+        String comando = "SELECT COUNT(*) FROM analista WHERE email = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+            return false;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return false;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public boolean verificarCpfExistente(String cpf) {
+        String comando = "SELECT COUNT(*) FROM analista WHERE cpf = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setString(1, cpf);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+            return false;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return false;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
 }

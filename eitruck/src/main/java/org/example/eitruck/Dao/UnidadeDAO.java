@@ -1,5 +1,6 @@
 package org.example.eitruck.Dao;
 
+import org.example.eitruck.model.Administrador;
 import org.example.eitruck.model.Unidade;
 
 import java.sql.*;
@@ -134,6 +135,34 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    public List<Unidade> buscarTodos() {
+        ResultSet rs;
+        List<Unidade> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM unidade";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()){
+                Unidade unidade = new Unidade(rs.getInt("id"),
+                        rs.getInt("id_segmento"),
+                        rs.getInt("id_endereco"),
+                        rs.getString("nome"));
+                listaRetorno.add(unidade);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public List<Unidade> buscarPorId(int idUnidade) {
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
@@ -195,7 +224,10 @@ public class UnidadeDAO extends DAO {
             pstmt.executeQuery();
             rs = pstmt.getResultSet();
             while (rs.next()){
-                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"), rs.getInt("id_endereco"), rs.getString("nome"));
+                Unidade unidade = new Unidade(rs.getInt("id"),
+                        rs.getInt("id_segmento"),
+                        rs.getInt("id_endereco"),
+                        rs.getString("nome"));
                 listaRetorno.add(unidade);
             }
             return listaRetorno;

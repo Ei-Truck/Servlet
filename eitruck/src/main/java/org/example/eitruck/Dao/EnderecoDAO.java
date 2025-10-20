@@ -1,6 +1,7 @@
 package org.example.eitruck.Dao;
 
 import org.example.eitruck.model.Endereco;
+import org.example.eitruck.model.Unidade;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -180,6 +181,31 @@ public class EnderecoDAO extends DAO {
             return -1;
         }
         finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<Endereco> buscarTodos() {
+        ResultSet rs;
+        List<Endereco> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM endereco";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()){
+                Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
+                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
+                        rs.getString("estado"), rs.getString("pais"));
+                listaRetorno.add(endereco);
+            }
+            return listaRetorno;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
             conexao.desconectar(conn);
         }
     }

@@ -2,6 +2,7 @@ package org.example.eitruck.model;
 
 import org.example.eitruck.util.Uteis;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Analista {
@@ -29,6 +30,30 @@ public class Analista {
         this.cargo = cargo;
         setTelefone(telefone);
 
+    }
+
+    public Analista(int idUnidade, String cpf, String nomeCompleto, LocalDate dtContratacao, String email, String senha, String cargo, String telefone) {
+        setIdUnidade(idUnidade);
+        setCpf(cpf);
+        this.nomeCompleto = nomeCompleto;
+        this.dtContratacao = dtContratacao;
+        setEmail(email);
+        setSenha(senha);
+        this.cargo = cargo;
+        setTelefone(telefone);
+
+    }
+
+    public Analista(int idUnidade, String cpf, String nome, String email, Date dataContratacaoDate, String senha, String cargo) {
+        setId(id);
+        setIdUnidade(idUnidade);
+        setCpf(cpf);
+        this.nomeCompleto = nomeCompleto;
+        this.dtContratacao = dtContratacao;
+        setEmail(email);
+        setSenha(senha);
+        this.cargo = cargo;
+        setTelefone(telefone);
     }
 
     // getters e setters

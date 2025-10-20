@@ -1,5 +1,6 @@
 package org.example.eitruck.Dao;
 
+import org.example.eitruck.model.Endereco;
 import org.example.eitruck.model.Segmento;
 
 import java.sql.*;
@@ -150,6 +151,31 @@ public class SegmentoDAO extends DAO {
             return listaRetorno;
         }
         catch (SQLException sqle){
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<Segmento> buscarTodos() {
+        ResultSet rs;
+        List<Segmento> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM segmento";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()){
+                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
+                listaRetorno.add(segmento);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
         }

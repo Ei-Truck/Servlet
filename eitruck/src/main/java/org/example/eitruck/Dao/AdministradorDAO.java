@@ -1,6 +1,7 @@
 package org.example.eitruck.Dao;
 
 import org.example.eitruck.model.Administrador;
+import org.example.eitruck.model.Analista;
 
 import java.sql.*;
 import java.util.ArrayList;
