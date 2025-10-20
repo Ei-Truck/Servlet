@@ -133,7 +133,26 @@ body {
     padding: 30px;
 }
 
-/* CRUD Table Styles */
+/* Mensagens */
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #c3e6cb;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+/* CRUD Section */
 .crud-section {
     background: white;
     border-radius: 12px;
@@ -160,17 +179,17 @@ body {
 }
 
 /* Filtros */
-.filters {
+.filters-container {
     padding: 20px 30px;
     background: #f8f9fa;
     border-bottom: 1px solid #eaeaea;
 }
 
-.filter-group1 {
+.filter-row {
     display: flex;
-    flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .filter-group {
@@ -199,6 +218,12 @@ body {
     border-color: var(--brand-blue);
 }
 
+.filter-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Botões */
 .btn {
     padding: 10px 20px;
     border: none;
@@ -210,6 +235,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-size: 14px;
 }
 
 .btn-primary {
@@ -230,26 +256,27 @@ body {
     background: #5a6268;
 }
 
-.btn-edit {
-    background: #ffc107;
-    color: #212529;
-    padding: 8px 16px;
-    font-size: 14px;
+.btn-success {
+    background: var(--brand-green);
+    color: white;
 }
 
-.btn-edit:hover {
-    background: #e0a800;
+.btn-success:hover {
+    background: #00a366;
 }
 
-.btn-delete {
+.btn-danger {
     background: #dc3545;
     color: white;
-    padding: 8px 16px;
-    font-size: 14px;
 }
 
-.btn-delete:hover {
+.btn-danger:hover {
     background: #c82333;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
 }
 
 /* Tabela */
@@ -286,64 +313,50 @@ body {
     color: #555;
 }
 
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
+.actions-cell {
+    display: flex;
+    gap: 8px;
 }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    border-radius: 8px;
-    width: 50%;
-    max-width: 600px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+/* Form Container */
+.form-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
 
-.modal-header {
+.form-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid #eaeaea;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
 }
 
-.modal-header h3 {
-    margin: 0;
+.form-header h2 {
     color: var(--brand-blue);
+    font-size: 20px;
 }
 
-.close {
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: black;
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.modal-footer {
+.btn-back {
+    color: var(--brand-blue);
+    text-decoration: none;
+    font-weight: 600;
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 20px;
-    border-top: 1px solid #ddd;
+    align-items: center;
+    gap: 5px;
 }
 
-/* Formulários */
+.btn-back:hover {
+    text-decoration: underline;
+}
+
+/* Form Styles */
+.admin-form {
+    padding: 30px;
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -369,23 +382,93 @@ body {
     border-color: var(--brand-blue);
 }
 
-/* Alertas */
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    border: 1px solid #c3e6cb;
+.show-password {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
-.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    border: 1px solid #f5c6cb;
+.show-password input[type="checkbox"] {
+    margin: 0;
+}
+
+.show-password label {
+    margin: 0;
+    font-weight: normal;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+/* Confirmation Page */
+.confirmation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+.confirmation-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.warning-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.warning-text {
+    color: #dc3545;
+    font-weight: 600;
+    margin: 15px 0;
+}
+
+.admin-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.detail-item {
+    margin-bottom: 10px;
+    padding: 5px 0;
+}
+
+.confirmation-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.current-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border-left: 4px solid var(--brand-blue);
+}
+
+.current-info h3 {
+    color: var(--brand-blue);
+    margin-bottom: 10px;
+}
+
+.current-info p {
+    margin-bottom: 5px;
 }
 
 /* Responsividade */
@@ -415,7 +498,7 @@ body {
         font-size: 20px;
     }
 
-    .filters {
+    .filter-row {
         flex-direction: column;
     }
 
@@ -434,9 +517,14 @@ body {
         justify-content: flex-end;
     }
 
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
+    .form-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .confirmation-actions {
+        flex-direction: column;
     }
 }
 
@@ -458,12 +546,11 @@ body {
         width: 100%;
     }
 
-    .crud-table td {
-        padding: 10px 15px;
+    .actions-cell {
+        flex-direction: column;
     }
 
-    .btn-edit, .btn-delete {
-        padding: 6px 12px;
-        font-size: 12px;
+    .admin-form {
+        padding: 20px;
     }
 }

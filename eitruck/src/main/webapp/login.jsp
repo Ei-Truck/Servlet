@@ -60,6 +60,26 @@
 </div>
 
 <script>
+    // Função para resetar o botão de login
+    function resetLoginButton() {
+        const btn = document.querySelector('.login-btn');
+        if (btn) {
+            btn.textContent = 'Entrar';
+            btn.classList.remove('login-btn-autentication');
+            btn.disabled = false;
+        }
+    }
+
+    // Resetar o botão quando a página for carregada
+    document.addEventListener('DOMContentLoaded', resetLoginButton);
+
+    // Resetar o botão quando a página for mostrada (incluindo quando volta do cache)
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            resetLoginButton();
+        }
+    });
+
     // Mostrar/ocultar senha
     document.getElementById("mostrarSenha").addEventListener("change", function () {
         const senhaInput = document.getElementById("senha");
