@@ -18,6 +18,12 @@ public class Unidade {
         setIdEndereco(idEndereco);
     }
 
+    public Unidade(int idSegmento, int idEndereco, String nome) {
+        this.nome = nome;
+        setIdSegmento(idSegmento);
+        setIdEndereco(idEndereco);
+    }
+
     // getters e setters
     public int getId() {
         return id;

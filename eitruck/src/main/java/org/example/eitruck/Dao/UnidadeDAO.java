@@ -14,16 +14,15 @@ public class UnidadeDAO extends DAO {
 
     public boolean cadastrar(Unidade unidade) {
         String comando = """
-            INSERT INTO unidade (id, id_segmento, id_endereco, nome)
-            VALUES (?, ?, ?, ?)""";
+            INSERT INTO unidade (id_segmento, id_endereco, nome)
+            VALUES (?, ?, ?)""";
 
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, unidade.getId());
-            pstmt.setInt(2, unidade.getIdSegmento());
-            pstmt.setInt(3, unidade.getIdEndereco());
-            pstmt.setString(4, unidade.getNome());
+            pstmt.setInt(1, unidade.getIdSegmento());
+            pstmt.setInt(2, unidade.getIdEndereco());
+            pstmt.setString(3, unidade.getNome());
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
         }
