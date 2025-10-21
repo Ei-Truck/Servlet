@@ -14,20 +14,20 @@ public class EnderecoDAO extends DAO {
 
     public boolean cadastrar(Endereco endereco) {
         String comando = """
-            INSERT INTO endereco (id, cep, rua, numero, bairro, cidade, estado, pais)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)""";
+            INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado, pais)
+            VALUES (?, ?, ?, ?, ?, ?, ?)""";
 
+        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, endereco.getId());
-            pstmt.setString(2, endereco.getCep());
-            pstmt.setString(3, endereco.getRua());
-            pstmt.setInt(4, endereco.getNumero());
-            pstmt.setString(5, endereco.getBairro());
-            pstmt.setString(6, endereco.getCidade());
-            pstmt.setString(7, endereco.getEstado());
-            pstmt.setString(8, endereco.getPais());
+            pstmt.setString(1, endereco.getCep());
+            pstmt.setString(2, endereco.getRua());
+            pstmt.setInt(3, endereco.getNumero());
+            pstmt.setString(4, endereco.getBairro());
+            pstmt.setString(5, endereco.getCidade());
+            pstmt.setString(6, endereco.getEstado());
+            pstmt.setString(7, endereco.getPais());
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
         }
