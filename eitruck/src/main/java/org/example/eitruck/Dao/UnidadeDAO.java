@@ -17,6 +17,7 @@ public class UnidadeDAO extends DAO {
             INSERT INTO unidade (id_segmento, id_endereco, nome)
             VALUES (?, ?, ?)""";
 
+        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
