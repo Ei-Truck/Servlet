@@ -14,15 +14,15 @@ public class SegmentoDAO extends DAO {
 
     public boolean cadastrar(Segmento segmento) {
         String comando = """
-            INSERT INTO segmento (id, nome, descricao)
-            VALUES (?, ?, ?)""";
+            INSERT INTO segmento (nome, descricao)
+            VALUES (?, ?)""";
 
+        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, segmento.getId());
-            pstmt.setString(2, segmento.getNome());
-            pstmt.setString(3, segmento.getDescricao());
+            pstmt.setString(1, segmento.getNome());
+            pstmt.setString(2, segmento.getDescricao());
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
         }

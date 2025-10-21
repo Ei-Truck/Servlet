@@ -17,6 +17,12 @@ public class Segmento {
         this.descricao = descricao;
     }
 
+    public Segmento(String nome, String descricao) {
+        setId(id);
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+
     //getters e setters
     public int getId() {
         return id;
