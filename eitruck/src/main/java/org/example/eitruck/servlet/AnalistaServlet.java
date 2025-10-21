@@ -1,6 +1,7 @@
 package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConfig;
 import org.example.eitruck.Dao.AnalistaDAO;
 import org.example.eitruck.model.Analista;
 
@@ -13,12 +14,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @WebServlet("/servlet-analista")
 public class AnalistaServlet extends HttpServlet {
     private AnalistaDAO analistaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        // Inicializa o objeto ANTES de qualquer requisição.
+        this.analistaDAO = new AnalistaDAO();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,7 +51,7 @@ public class AnalistaServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao");
+        String acao = request.getParameter("acao_principal");
         String sub_acao = request.getParameter("sub_acao");
 
         switch (acao) {
@@ -97,18 +107,21 @@ public class AnalistaServlet extends HttpServlet {
             System.out.println("Senha: " + senha);
             System.out.println("Cargo: " + cargo);
 
+            // 1. ADICIONAR O NULL CHECK AQUI:
+            if (data_contratacao == null || data_contratacao.trim().isEmpty()) {
+                // Se for nulo/vazio, trate como erro do cliente (Bad Request)
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Data de contratação é obrigatória.");
+                return;
+            }
+
+            // 2. Tente fazer a conversão AGORA:
             int id_unidade = Integer.parseInt(idUnidade);
-            Date data_contratacaoDate = Date.valueOf(data_contratacao);
+            LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE); // Linha 113 agora segura contra null
 
             Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senha, cargo);
             analistaDAO.cadastrar(analista);
 
-            RequestDispatcher rd = request.getRequestDispatcher("Erro.jsp");
-            if (rd != null) {
-                rd.forward(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
-            }
+            redirecionar(request, response);
             return;
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -127,6 +140,11 @@ public class AnalistaServlet extends HttpServlet {
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
         }
+    }
+
+    public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String url = request.getContextPath() + "/servlet-analista/formulario.jsp";
+        response.sendRedirect(url);
     }
 
     private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {

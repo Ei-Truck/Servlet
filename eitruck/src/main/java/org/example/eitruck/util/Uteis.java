@@ -48,7 +48,7 @@ public class Uteis {
     }
 
     public static int validarId(int id) {
-        if (id <= 0) {
+        if (id < 0) {
             throw new IllegalArgumentException("ID inválido. Deve ser positivo.");
         }
         return id;

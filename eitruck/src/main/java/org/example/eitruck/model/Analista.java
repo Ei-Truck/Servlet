@@ -44,16 +44,15 @@ public class Analista {
 
     }
 
-    public Analista(int idUnidade, String cpf, String nome, String email, Date dataContratacaoDate, String senha, String cargo) {
+    public Analista(int idUnidade, String cpf, String nome, String email, LocalDate dataContratacaoDate, String senha, String cargo) {
         setId(id);
         setIdUnidade(idUnidade);
         setCpf(cpf);
-        this.nomeCompleto = nomeCompleto;
-        this.dtContratacao = dtContratacao;
+        this.nomeCompleto = nome;
+        this.dtContratacao = dataContratacaoDate;
         setEmail(email);
         setSenha(senha);
         this.cargo = cargo;
-        setTelefone(telefone);
     }
 
     // getters e setters
