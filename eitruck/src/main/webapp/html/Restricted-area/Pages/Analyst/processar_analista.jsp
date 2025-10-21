@@ -3,16 +3,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String subAcao = request.getParameter("sub_acao");
-    List<Analista> analistas = (List<Analista>) request.getAttribute("sub_acao");
+    List<Analista> analistas = (List<Analista>) request.getAttribute("analistas");
 %>
 <html>
 <head>
     <title>Buscar todos</title>
 </head>
 <body>
-    <%
-        if ("buscar_todos".equals(subAcao))
-    %>
+<%
+    if ("buscar_todos".equals(subAcao)) { // Abre o bloco
+%>
+<h1>Exibindo todos os analistas</h1>
+<%
+    }
+%>
 
     <table>
         <thead>
@@ -28,17 +32,29 @@
         </thead>
 
         <tbody>
-        <%for (Analista a : analistas){%>
+        <%
+            if (analistas != null) {
+                for (Analista a : analistas){
+        %>
         <tr>
-            <td><%=a.getId()%>%></td>
-            <td><%=a.getIdUnidade()%>%></td>
-            <td><%=a.getCpf()%>%></td>
-            <td><%=a.getNomeCompleto()%>%></td>
-            <td><%=a.getEmail()%>%></td>
-            <td><%=a.getDtContratacao()%>%></td>
-            <td><%=a.getCargo()%>%></td>
+            <td><%=a.getId()%></td>
+            <td><%=a.getIdUnidade()%></td>
+            <td><%=a.getCpf()%></td>
+            <td><%=a.getNomeCompleto()%></td>
+            <td><%=a.getEmail()%></td>
+            <td><%=a.getDtContratacao()%></td>
+            <td><%=a.getCargo()%></td>
         </tr>
-        <%}%>
+        <%
+            } // Fecha o for
+        } else {
+        %>
+        <tr>
+            <td colspan="7">Nenhum analista encontrado ou erro ao carregar dados.</td>
+        </tr>
+        <%
+            } // Fecha o if
+        %>
         </tbody>
     </table>
 </body>

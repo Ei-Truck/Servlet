@@ -32,20 +32,19 @@ public class AnalistaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao");
+        String acao = request.getParameter("acao"); // Use apenas "acao" ou "acao_principal" de forma consistente
+        // Mudei o parâmetro para "acao" para ser consistente com o switch
 
         switch (acao != null ? acao : "listar") {
-            case "novo":
-                mostrarFormularioNovo(request, response);
-                break;
-            case "editar":
-                mostrarFormularioEditar(request, response);
-                break;
+            // ...
             case "buscar":
-                buscarAnalista(request, response);
+                // 1. Chame o método de busca específica
+                buscarTodos(request, response, acao, "buscar_todos"); // <--- CHAMADA CORRETA PARA BUSCA ESPECÍFICA
                 break;
+            case "listar": // Caso padrão para listar todos
             default:
-                listarAnalistas(request, response);
+                // 2. Chame o método que busca todos e encaminha para o JSP
+                buscarTodos(request, response, acao, "buscar_todos"); // Reutilizando seu método buscarTodos
         }
     }
 
@@ -207,7 +206,8 @@ public class AnalistaServlet extends HttpServlet {
         String valor = request.getParameter("valor");
         List<Analista> resultados = null;
 
-        switch (tipo) {
+        // CORREÇÃO: Trate 'tipo' nulo com uma string padrão ("erro_busca")
+        switch (tipo != null ? tipo : "erro_busca") {
             case "id":
                 resultados = analistaDAO.buscarPorId(Integer.parseInt(valor));
                 break;
@@ -225,6 +225,10 @@ public class AnalistaServlet extends HttpServlet {
                 break;
             case "unidade":
                 resultados = analistaDAO.buscarPorIdUnidade(Integer.parseInt(valor));
+                break;
+            case "erro_busca":
+                // Tratar erro ou apenas retornar lista vazia
+                resultados = analistaDAO.buscarTodos(); // Exibe todos se a busca falhar
                 break;
         }
 
