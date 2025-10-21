@@ -44,8 +44,7 @@ public class Analista {
 
     }
 
-    public Analista(int idUnidade, String cpf, String nome, String email, LocalDate dataContratacaoDate, String senha, String cargo) {
-        setId(id);
+    public Analista(int idUnidade, String cpf, String nome, String email, LocalDate dataContratacaoDate, String senha, String cargo, String telefone) {
         setIdUnidade(idUnidade);
         setCpf(cpf);
         this.nomeCompleto = nome;
@@ -53,6 +52,7 @@ public class Analista {
         setEmail(email);
         setSenha(senha);
         this.cargo = cargo;
+        this.telefone = telefone;
     }
 
     // getters e setters

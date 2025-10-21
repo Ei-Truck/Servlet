@@ -14,21 +14,21 @@ public class AnalistaDAO extends DAO {
 
     public boolean cadastrar(Analista analista) {
         String comando = """
-            INSERT INTO analista (id, id_unidade, cpf, nome_completo, email, dt_contratacao, senha, cargo)
+            INSERT INTO analista (id_unidade, cpf, nome_completo, email, dt_contratacao, senha, cargo, telefone)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)""";
 
         Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, analista.getId());
-            pstmt.setInt(2, analista.getIdUnidade());
-            pstmt.setString(3, analista.getCpf());
-            pstmt.setString(4, analista.getNomeCompleto());
-            pstmt.setString(5, analista.getEmail());
-            pstmt.setDate(6, Date.valueOf(analista.getDtContratacao()));
-            pstmt.setString(7, analista.getSenha());
-            pstmt.setString(8, analista.getCargo());
+            pstmt.setInt(1, analista.getIdUnidade());
+            pstmt.setString(2, analista.getCpf());
+            pstmt.setString(3, analista.getNomeCompleto());
+            pstmt.setString(4, analista.getEmail());
+            pstmt.setDate(5, Date.valueOf(analista.getDtContratacao()));
+            pstmt.setString(6, analista.getSenha());
+            pstmt.setString(7, analista.getCargo());
+            pstmt.setString(8, analista.getTelefone());
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
         }

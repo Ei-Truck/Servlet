@@ -20,6 +20,7 @@ import java.util.List;
 
 @WebServlet("/servlet-analista")
 public class AnalistaServlet extends HttpServlet {
+
     private AnalistaDAO analistaDAO;
 
     @Override
@@ -97,6 +98,7 @@ public class AnalistaServlet extends HttpServlet {
             String data_contratacao = request.getParameter("data_contratacao");
             String senha = request.getParameter("senha");
             String cargo = request.getParameter("cargo");
+            String telefone = request.getParameter("telefone");
 
             System.out.println("Id de unidade: " + idUnidade);
             System.out.println("Cpf: " + cpf);
@@ -105,6 +107,7 @@ public class AnalistaServlet extends HttpServlet {
             System.out.println("Data de contratacao: " + data_contratacao);
             System.out.println("Senha: " + senha);
             System.out.println("Cargo: " + cargo);
+            System.out.println("Telefone: " + telefone);
 
             // 1. ADICIONAR O NULL CHECK AQUI:
             if (data_contratacao == null || data_contratacao.trim().isEmpty()) {
@@ -117,7 +120,7 @@ public class AnalistaServlet extends HttpServlet {
             int id_unidade = Integer.parseInt(idUnidade);
             LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE); // Linha 113 agora segura contra null
 
-            Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senha, cargo);
+            Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senha, cargo, telefone);
             analistaDAO.cadastrar(analista);
 
             redirecionar(request, response);
@@ -147,7 +150,7 @@ public class AnalistaServlet extends HttpServlet {
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
         try {
             List<Analista> analistas = analistaDAO.buscarTodos();
             request.setAttribute("analistas", analistas);
