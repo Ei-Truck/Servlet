@@ -31,5 +31,11 @@
 
         <input type="submit" value="inserir">
     </form>
+
+    <form action="${pageContext.request.contextPath}/servlet-analista" method="get">
+        <input type="hidden" name="acao_principal" value="buscar">
+
+        <input type="submit" name="sub_acao" value="buscar_todos">
+    </form>
 </body>
 </html>

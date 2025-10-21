@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String subAcao = request.getParameter("sub_acao");
-    List<Analista> analistas = (List<Analista>) request.getAttribute("")
+    List<Analista> analistas = (List<Analista>) request.getAttribute("sub_acao");
 %>
 <html>
 <head>
@@ -28,7 +28,17 @@
         </thead>
 
         <tbody>
-        <%for (Analista a : analistas)%>
+        <%for (Analista a : analistas){%>
+        <tr>
+            <td><%=a.getId()%>%></td>
+            <td><%=a.getIdUnidade()%>%></td>
+            <td><%=a.getCpf()%>%></td>
+            <td><%=a.getNomeCompleto()%>%></td>
+            <td><%=a.getEmail()%>%></td>
+            <td><%=a.getDtContratacao()%>%></td>
+            <td><%=a.getCargo()%>%></td>
+        </tr>
+        <%}%>
         </tbody>
     </table>
 </body>

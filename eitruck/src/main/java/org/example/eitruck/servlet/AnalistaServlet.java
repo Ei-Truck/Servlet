@@ -70,7 +70,7 @@ public class AnalistaServlet extends HttpServlet {
     private void listarAnalistas(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Analista> analistas = analistaDAO.buscarTodos();
         request.setAttribute("analistas", analistas);
-        request.getRequestDispatcher("/WEB-INF/analista/lista.jsp").forward(request, response);
+        request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/processar_analista.jsp").forward(request, response);
     }
 
     private void mostrarFormularioNovo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -147,6 +147,35 @@ public class AnalistaServlet extends HttpServlet {
         response.sendRedirect(url);
     }
 
+    private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
+        throws IOException, ServletException {
+        try {
+            List<Analista> analistas = analistaDAO.buscarTodos();
+            request.setAttribute("analistas", analistas);
+
+            encaminhar(request, response, "html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("sub_acao", subAcao);
+
+        if (acao != null) {
+            request.setAttribute("acao", acao);
+        }
+
+        encaminhar(request, response, "Erro.jsp");
+    }
+
+    public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher(jspErro);
+        if (rd != null) {
+            rd.forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
+        }
+    }
+
     private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             Analista analista = extrairAnalistaDoRequest(request);
@@ -201,7 +230,7 @@ public class AnalistaServlet extends HttpServlet {
 
         request.setAttribute("analistas", resultados);
         request.setAttribute("resultadoBusca", true);
-        request.getRequestDispatcher("/WEB-INF/analista/lista.jsp").forward(request, response);
+        request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/processar_analista.jsp").forward(request, response);
     }
 
     private Analista extrairAnalistaDoRequest(HttpServletRequest request) {
