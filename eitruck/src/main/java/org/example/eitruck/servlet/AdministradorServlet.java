@@ -1,222 +1,253 @@
-//package org.example.eitruck.servlet;
-//
-//import jakarta.servlet.RequestDispatcher;
-//import org.example.eitruck.Dao.AdministradorDAO;
-//import org.example.eitruck.model.Administrador;
-//
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.annotation.WebServlet;
-//import jakarta.servlet.http.HttpServlet;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-//
-//import java.io.IOException;
-//import java.util.List;
-//
-//@WebServlet("/administradores")
-//public class AdministradorServlet extends HttpServlet {
-//    private AdministradorDAO administradorDAO;
-//
-//    @Override
-//    public void init() throws ServletException {
-//        super.init();
-//        administradorDAO = new AdministradorDAO();
-//
-//        // Verificar se a tabela existe ao inicializar o servlet
-//        System.out.println("Inicializando AdministradorServlet...");
-//        administradorDAO.buscarTodos();
-//    }
-//
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        System.out.println("Recebida requisição GET para /administradores"); // DEBUG
-//
-//        String action = request.getParameter("action");
-//
-//        if ("buscar".equals(action)) {
-//            System.out.println("Ação: buscar"); // DEBUG
-//            buscarAdministradores(request, response);
-//        } else {
-//            System.out.println("Ação: listar"); // DEBUG
-//            listarAdministradores(request, response);
-//        }
-//    }
-//
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        System.out.println("Recebida requisição POST para /administradores"); // DEBUG
-//
-//        String action = request.getParameter("action");
-//
-//        if ("cadastrar".equals(action)) {
-//            System.out.println("Ação: cadastrar"); // DEBUG
-//            cadastrarAdministrador(request, response);
-//        } else if ("editar".equals(action)) {
-//            System.out.println("Ação: editar"); // DEBUG
-//            editarAdministrador(request, response);
-//        } else if ("excluir".equals(action)) {
-//            System.out.println("Ação: excluir"); // DEBUG
-//            excluirAdministrador(request, response);
-//        } else {
-//            // Se nenhuma ação específica, listar
-//            listarAdministradores(request, response);
-//        }
-//    }
-//
-//    private void listarAdministradores(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        try {
-//            String filterId = request.getParameter("filter-id");
-//            String filterNome = request.getParameter("filter-nome");
-//            String filterCpf = request.getParameter("filter-cpf");
-//            String filterEmail = request.getParameter("filter-email");
-//
-//            System.out.println("Filtros - ID: " + filterId + ", Nome: " + filterNome +
-//                    ", CPF: " + filterCpf + ", Email: " + filterEmail); // DEBUG
-//
-//            List<Administrador> administradores;
-//
-//            if (filterId != null && !filterId.isEmpty()) {
-//                administradores = administradorDAO.buscarPorId(Integer.parseInt(filterId));
-//            } else if (filterCpf != null && !filterCpf.isEmpty()) {
-//                administradores = administradorDAO.buscarPorCpf(filterCpf);
-//            } else if (filterNome != null && !filterNome.isEmpty()) {
-//                administradores = administradorDAO.buscarNomeCompleto(filterNome);
-//            } else if (filterEmail != null && !filterEmail.isEmpty()) {
-//                administradores = administradorDAO.buscarPorEmail(filterEmail);
-//            } else {
-//                administradores = administradorDAO.buscarTodos();
-//            }
-//
-//            System.out.println("Número de administradores encontrados: " +
-//                    (administradores != null ? administradores.size() : "null")); // DEBUG
-//
-//            request.setAttribute("administradores", administradores);
-//            RequestDispatcher dispatcher = request.getRequestDispatcher("/Restricted-area/Pages/administrator.jsp");
-//            dispatcher.forward(request, response);
-//
-//        } catch (Exception e) {
-//            System.err.println("Erro ao listar administradores: " + e.getMessage()); // DEBUG
-//            e.printStackTrace();
-//            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao listar administradores: " + e.getMessage());
-//        }
-//    }
-//
-//    private void buscarAdministradores(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        listarAdministradores(request, response);
-//    }
-//
-//    private void cadastrarAdministrador(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        try {
-//            String nomeCompleto = request.getParameter("nome_completo");
-//            String cpf = request.getParameter("cpf");
-//            String email = request.getParameter("email");
-//            String senha = request.getParameter("senha");
-//
-//            System.out.println("Cadastrando administrador - Nome: " + nomeCompleto +
-//                    ", CPF: " + cpf + ", Email: " + email); // DEBUG
-//
-//            int novoId = gerarNovoId();
-//
-//            Administrador admin = new Administrador(novoId, cpf, nomeCompleto, email, senha);
-//
-//            boolean sucesso = administradorDAO.cadastrar(admin);
-//
-//            if (sucesso) {
-//                System.out.println("Cadastro realizado com sucesso"); // DEBUG
-//                response.sendRedirect("administradores?success=Cadastro realizado com sucesso");
-//            } else {
-//                System.out.println("Erro ao cadastrar"); // DEBUG
-//                response.sendRedirect("administradores?error=Erro ao cadastrar administrador");
-//            }
-//
-//        } catch (Exception e) {
-//            System.err.println("Erro no cadastro: " + e.getMessage()); // DEBUG
-//            e.printStackTrace();
-//            response.sendRedirect("administradores?error=Erro interno do servidor: " + e.getMessage());
-//        }
-//    }
-//
-//    private void editarAdministrador(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        try {
-//            int id = Integer.parseInt(request.getParameter("id"));
-//            String nomeCompleto = request.getParameter("nome_completo");
-//            String cpf = request.getParameter("cpf");
-//            String email = request.getParameter("email");
-//            String senha = request.getParameter("senha");
-//
-//            System.out.println("Editando administrador ID: " + id +
-//                    " - Nome: " + nomeCompleto + ", CPF: " + cpf +
-//                    ", Email: " + email); // DEBUG
-//
-//            List<Administrador> administradores = administradorDAO.buscarPorId(id);
-//            if (administradores == null || administradores.isEmpty()) {
-//                response.sendRedirect("administradores?error=Administrador não encontrado");
-//                return;
-//            }
-//
-//            Administrador admin = administradores.get(0);
-//
-//            // Atualiza campos no objeto
-//            admin.setNomeCompleto(nomeCompleto);
-//            admin.setCpf(cpf);
-//            admin.setEmail(email);
-//
-//            // Chama o método consolidado do DAO
-//            boolean atualizado = administradorDAO.atualizar(admin, (senha != null && !senha.isEmpty()) ? senha : null);
-//
-//            if (atualizado) {
-//                System.out.println("Atualização realizada com sucesso"); // DEBUG
-//                response.sendRedirect("administradores?success=Administrador atualizado com sucesso");
-//            } else {
-//                System.out.println("Erro na atualização"); // DEBUG
-//                response.sendRedirect("administradores?error=Erro ao atualizar administrador");
-//            }
-//
-//        } catch (Exception e) {
-//            System.err.println("Erro na edição: " + e.getMessage()); // DEBUG
-//            e.printStackTrace();
-//            response.sendRedirect("administradores?error=Erro interno do servidor: " + e.getMessage());
-//        }
-//    }
-//
-//    private void excluirAdministrador(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        try {
-//            int id = Integer.parseInt(request.getParameter("id"));
-//
-//            System.out.println("Excluindo administrador ID: " + id); // DEBUG
-//
-//            int resultado = administradorDAO.apagar(id);
-//
-//            if (resultado > 0) {
-//                System.out.println("Exclusão realizada com sucesso"); // DEBUG
-//                response.sendRedirect("administradores?success=Administrador excluído com sucesso");
-//            } else {
-//                System.out.println("Erro na exclusão"); // DEBUG
-//                response.sendRedirect("administradores?error=Erro ao excluir administrador");
-//            }
-//
-//        } catch (Exception e) {
-//            System.err.println("Erro na exclusão: " + e.getMessage()); // DEBUG
-//            e.printStackTrace();
-//            response.sendRedirect("administradores?error=Erro interno do servidor: " + e.getMessage());
-//        }
-//    }
-//
-//    private int gerarNovoId() {
-//        // Gera um ID baseado no timestamp para evitar conflitos
-//        return (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
-//    }
-//}
+package org.example.eitruck.servlet;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConfig;
+import org.example.eitruck.Dao.AnalistaDAO;
+import org.example.eitruck.model.Analista;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+
+@WebServlet("/servlet-analista")
+public class AnalistaServlet extends HttpServlet {
+    private AnalistaDAO analistaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        // Inicializa o objeto ANTES de qualquer requisição.
+        this.analistaDAO = new AnalistaDAO();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String acao = request.getParameter("acao"); // Use apenas "acao" ou "acao_principal" de forma consistente
+        // Mudei o parâmetro para "acao" para ser consistente com o switch
+
+        switch (acao != null ? acao : "listar") {
+            // ...
+            case "buscar":
+                // 1. Chame o método de busca específica
+                buscarTodos(request, response, acao, "buscar_todos"); // <--- CHAMADA CORRETA PARA BUSCA ESPECÍFICA
+                break;
+            case "listar": // Caso padrão para listar todos
+            default:
+                // 2. Chame o método que busca todos e encaminha para o JSP
+                buscarTodos(request, response, acao, "buscar_todos"); // Reutilizando seu método buscarTodos
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String acao = request.getParameter("acao_principal");
+        String sub_acao = request.getParameter("sub_acao");
+
+        switch (acao) {
+            case "inserir":
+                inserirAnalista(request, response, acao, sub_acao);
+                break;
+            case "atualizar":
+                atualizarAnalista(request, response);
+                break;
+            case "excluir":
+                excluirAnalista(request, response);
+                break;
+        }
+    }
+
+    private void listarAnalistas(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Analista> analistas = analistaDAO.buscarTodos();
+        request.setAttribute("analistas", analistas);
+        request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/processar_analista.jsp").forward(request, response);
+    }
+
+    private void mostrarFormularioNovo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/analista/formulario.jsp").forward(request, response);
+    }
+
+    private void mostrarFormularioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        List<Analista> analistas = analistaDAO.buscarPorId(id);
+
+        if (!analistas.isEmpty()) {
+            request.setAttribute("analista", analistas.get(0));
+            request.getRequestDispatcher("/WEB-INF/analista/formulario.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("analista?erro=Analista não encontrado");
+        }
+    }
+
+    private void inserirAnalista(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
+        try {
+            String idUnidade = request.getParameter("id_unidade");
+            String cpf = request.getParameter("cpf");
+            String nome = request.getParameter("nome");
+            String email = request.getParameter("email");
+            String data_contratacao = request.getParameter("data_contratacao");
+            String senha = request.getParameter("senha");
+            String cargo = request.getParameter("cargo");
+
+            System.out.println("Id de unidade: " + idUnidade);
+            System.out.println("Cpf: " + cpf);
+            System.out.println("Nome: " + nome);
+            System.out.println("Email: " + email);
+            System.out.println("Data de contratacao: " + data_contratacao);
+            System.out.println("Senha: " + senha);
+            System.out.println("Cargo: " + cargo);
+
+            // 1. ADICIONAR O NULL CHECK AQUI:
+            if (data_contratacao == null || data_contratacao.trim().isEmpty()) {
+                // Se for nulo/vazio, trate como erro do cliente (Bad Request)
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Data de contratação é obrigatória.");
+                return;
+            }
+
+            // 2. Tente fazer a conversão AGORA:
+            int id_unidade = Integer.parseInt(idUnidade);
+            LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE); // Linha 113 agora segura contra null
+
+            Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senha, cargo);
+            analistaDAO.cadastrar(analista);
+
+            redirecionar(request, response);
+            return;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (DateTimeParseException e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("sub_acao", sub_acao);
+
+        if (acao != null) {
+            request.setAttribute("acao", acao);
+        }
+
+        RequestDispatcher respacher = request.getRequestDispatcher("Erro.jsp");
+        if (respacher != null) {
+            respacher.forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
+        }
+    }
+
+    public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String url = request.getContextPath() + "/servlet-analista/formulario.jsp";
+        response.sendRedirect(url);
+    }
+
+    private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
+            throws IOException, ServletException {
+        try {
+            List<Analista> analistas = analistaDAO.buscarTodos();
+            request.setAttribute("analistas", analistas);
+
+            encaminhar(request, response, "html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("sub_acao", subAcao);
+
+        if (acao != null) {
+            request.setAttribute("acao", acao);
+        }
+
+        encaminhar(request, response, "Erro.jsp");
+    }
+
+    public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher(jspErro);
+        if (rd != null) {
+            rd.forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
+        }
+    }
+
+    private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            Analista analista = extrairAnalistaDoRequest(request);
+            String novaSenha = request.getParameter("novaSenha");
+
+            if (analistaDAO.atualizar(analista, novaSenha)) {
+                response.sendRedirect("analista?sucesso=Analista atualizado com sucesso");
+            } else {
+                response.sendRedirect("analista?erro=Erro ao atualizar analista");
+            }
+        } catch (Exception e) {
+            response.sendRedirect("analista?erro=" + e.getMessage());
+        }
+    }
+
+    private void excluirAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        int resultado = analistaDAO.apagar(id);
+
+        if (resultado > 0) {
+            response.sendRedirect("analista?sucesso=Analista excluído com sucesso");
+        } else {
+            response.sendRedirect("analista?erro=Erro ao excluir analista");
+        }
+    }
+
+    private void buscarAnalista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String tipo = request.getParameter("tipo");
+        String valor = request.getParameter("valor");
+        List<Analista> resultados = null;
+
+        // CORREÇÃO: Trate 'tipo' nulo com uma string padrão ("erro_busca")
+        switch (tipo != null ? tipo : "erro_busca") {
+            case "id":
+                resultados = analistaDAO.buscarPorId(Integer.parseInt(valor));
+                break;
+            case "cpf":
+                resultados = analistaDAO.buscarPorCpf(valor);
+                break;
+            case "nome":
+                resultados = analistaDAO.buscarPorNome(valor);
+                break;
+            case "email":
+                resultados = analistaDAO.buscarPorEmail(valor);
+                break;
+            case "cargo":
+                resultados = analistaDAO.buscarPorCargo(valor);
+                break;
+            case "unidade":
+                resultados = analistaDAO.buscarPorIdUnidade(Integer.parseInt(valor));
+                break;
+            case "erro_busca":
+                // Tratar erro ou apenas retornar lista vazia
+                resultados = analistaDAO.buscarTodos(); // Exibe todos se a busca falhar
+                break;
+        }
+
+        request.setAttribute("analistas", resultados);
+        request.setAttribute("resultadoBusca", true);
+        request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/processar_analista.jsp").forward(request, response);
+    }
+
+    private Analista extrairAnalistaDoRequest(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        int idUnidade = Integer.parseInt(request.getParameter("idUnidade"));
+        String cpf = request.getParameter("cpf");
+        String nome = request.getParameter("nome");
+        LocalDate dtContratacao = LocalDate.parse(request.getParameter("dtContratacao"));
+        String email = request.getParameter("email");
+        String senha = request.getParameter("senha");
+        String cargo = request.getParameter("cargo");
+        String telefone = request.getParameter("telefone");
+
+        return new Analista(id, idUnidade, cpf, nome, dtContratacao, email, senha, cargo, telefone);
+    }
+}

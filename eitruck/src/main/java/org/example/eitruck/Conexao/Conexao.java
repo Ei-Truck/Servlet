@@ -46,23 +46,23 @@ public class Conexao {
         }
         return false;
     }
-//
-//    // Método auxiliar para testar a conexão com feedback
-//    public void testarConexaoComFeedback() {
-//        Connection conn = null;
-//        try {
-//            conn = conectar();
-//            if (conn != null) {
-//                System.out.println("\n*** CONEXÃO COM O BANCO DE DADOS TESTADA E BEM-SUCEDIDA! *** ✅");
-//            } else {
-//                System.out.println("\n--- FALHA NA CONEXÃO --- ❌");
-//            }
-//        } finally {
-//            // Garante que a conexão de teste será fechada
-//            desconectar(conn);
-//            System.out.println("--- TESTE DE CONEXÃO FINALIZADO ---");
-//        }
-//    }
+
+    // Método auxiliar para testar a conexão com feedback
+    public void testarConexaoComFeedback() {
+        Connection conn = null;
+        try {
+            conn = conectar();
+            if (conn != null) {
+                System.out.println("\n*** CONEXÃO COM O BANCO DE DADOS TESTADA E BEM-SUCEDIDA! *** ✅");
+            } else {
+                System.out.println("\n--- FALHA NA CONEXÃO --- ❌");
+            }
+        } finally {
+            // Garante que a conexão de teste será fechada
+            desconectar(conn);
+            System.out.println("--- TESTE DE CONEXÃO FINALIZADO ---");
+        }
+    }
 //
 //    // MÉTODO MAIN (PSVM) PARA TESTE
 //    public static void main(String[] args) {
