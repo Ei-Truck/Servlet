@@ -17,8 +17,8 @@
     <label for="email"> Especifique o email: </label>
     <input type="text" name="email" id="email" required>
 
-    <label for="data_contratacao"> Especifique a data de contratação: </label>
-    <input type="date" name="data_contratacao" id="data_contratacao" required>
+    <label for="telefone"> Especifique o telefone: </label>
+    <input type="text" name="telefone" id="telefone" required>
 
     <label for="senha"> Especifique a senha: </label>
     <input type="password" name="senha" id="senha" required>

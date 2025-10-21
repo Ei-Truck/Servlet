@@ -11,8 +11,26 @@ public class Administrador {
     private String nomeCompleto;
     private String email;
     private String senha;
+    private String telefone;
 
     // método construtor
+    public Administrador(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
+        setId(id);
+        setCpf(cpf);
+        this.nomeCompleto = nomeCompleto;
+        setEmail(email);
+        setSenha(senha);
+        this.telefone = telefone;
+    }
+
+    public Administrador(String telefone, String cpf, String nomeCompleto, String email, String senha) {
+        setCpf(cpf);
+        this.nomeCompleto = nomeCompleto;
+        setEmail(email);
+        setSenha(senha);
+        setTelefone(telefone);
+    }
+
     public Administrador(int id, String cpf, String nomeCompleto, String email, String senha) {
         setId(id);
         setCpf(cpf);
@@ -55,6 +73,13 @@ public class Administrador {
     }
     public void setSenha(String senha) {
         this.senha = Uteis.validarSenha(senha);
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+    public void setTelefone(String telefone) {
+        this.telefone = Uteis.validarTelefone(telefone);
     }
 
     // toString

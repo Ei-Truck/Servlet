@@ -14,18 +14,18 @@ public class AdministradorDAO extends DAO {
 
     public boolean cadastrar(Administrador admin) {
         String comando = """
-            INSERT INTO administrador (id, cpf, nome_completo, email, senha)
+            INSERT INTO administrador (cpf, nome_completo, email, senha, telefone)
             VALUES (?, ?, ?, ?, ?)""";
 
         Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, admin.getId());
-            pstmt.setString(2, admin.getCpf());
-            pstmt.setString(3, admin.getNomeCompleto());
-            pstmt.setString(4, admin.getEmail());
-            pstmt.setString(5, admin.getSenha());
+            pstmt.setString(1, admin.getCpf());
+            pstmt.setString(2, admin.getNomeCompleto());
+            pstmt.setString(3, admin.getEmail());
+            pstmt.setString(4, admin.getSenha());
+            pstmt.setString(5, admin.getTelefone());
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
         }
