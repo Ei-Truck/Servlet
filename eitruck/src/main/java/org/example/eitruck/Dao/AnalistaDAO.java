@@ -14,7 +14,7 @@ public class AnalistaDAO extends DAO {
 
     public boolean cadastrar(Analista analista) {
         String comando = """
-            INSERT INTO analista (id, id_unidade, cpf, nome, email, dt_contratacao, senha, cargo)
+            INSERT INTO analista (id, id_unidade, cpf, nome_completo, email, dt_contratacao, senha, cargo)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)""";
 
         Connection conn = null;
@@ -57,7 +57,7 @@ public class AnalistaDAO extends DAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
+                        rs.getString("nome_completo"),
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -334,7 +334,7 @@ public class AnalistaDAO extends DAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
+                        rs.getString("nome_completo"),
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -423,4 +423,68 @@ public class AnalistaDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+//
+//    public static void main(String[] args) {
+//        // 1. Instancia o objeto que contém o método
+//        // Substitua 'AnalistaDAO' pela classe real onde o seu método está.
+//        AnalistaDAO dao = new AnalistaDAO();
+//
+//        System.out.println("--- Iniciando teste do método buscarTodos() ---");
+//
+//        // 2. Chama o método
+//        List<Analista> analistas = dao.buscarTodos();
+//
+//        // 3. Verifica o resultado
+//        if (analistas == null) {
+//            // Isso acontece se o método retornar 'null' em caso de erro (SQLException)
+//            System.err.println("\n❌ ERRO: Ocorreu uma exceção de SQL. Verifique o console para o stack trace e a conexão com o banco de dados.");
+//        } else if (analistas.isEmpty()) {
+//            System.out.println("\n⚠️ A consulta retornou uma lista vazia. Pode não haver dados na tabela 'analista' ou houve um problema de conexão/dados.");
+//        } else {
+//            // Imprime os resultados se a lista não for nula e nem vazia
+//            System.out.println("\n✅ Sucesso! O método buscou " + analistas.size() + " analistas.");
+//            System.out.println("--- Detalhes dos Analistas ---");
+//
+//            // Itera sobre a lista para imprimir cada objeto Analista
+//            for (Analista analista : analistas) {
+//                // É necessário que a classe Analista tenha um método toString()
+//                // ou que você acesse as propriedades individualmente, ex: analista.getNome()
+//                System.out.println(analista); // Chama o método toString() de Analista
+//            }
+//
+//            System.out.println("-----------------------------");
+//        }
+//
+//        System.out.println("--- Teste concluído ---");
+//    }
+//    public static void main(String[] args) {
+//        // 1. Prepara os dados de teste
+//        Analista novoAnalista = new Analista(
+//                1,   // id_unidade
+//                "12345678901",
+//                "João da Silva",
+//                "joao.silva@empresa.com",
+//                LocalDate.of(2023, 10, 21), // dt_contratacao (hoje)
+//                "senhasegura123",
+//                "Analista Pleno" // cargo
+//        );
+//
+//        // 2. Instancia o DAO
+//        AnalistaDAO dao = new AnalistaDAO();
+//
+//        System.out.println("--- INICIANDO TESTE DE CADASTRO ---");
+//
+//        // 3. Chama o método que queremos testar
+//        boolean sucesso = dao.cadastrar(novoAnalista);
+//
+//        // 4. Verifica e exibe o resultado
+//        if (sucesso) {
+//            System.out.println("\n[SUCESSO] Analista cadastrado com êxito no banco de dados.");
+//        } else {
+//            System.err.println("\n[FALHA] Não foi possível cadastrar o Analista.");
+//            System.err.println("Verifique o log de erros acima e as configurações de conexão.");
+//        }
+//
+//        System.out.println("--- FIM DO TESTE ---");
+//    }
 }

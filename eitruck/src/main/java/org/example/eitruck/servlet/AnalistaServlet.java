@@ -142,7 +142,7 @@ public class AnalistaServlet extends HttpServlet {
     }
 
     public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getContextPath() + "/servlet-analista/formulario.jsp";
+        String url = request.getContextPath() + "html/Restricted-area/Pages/Analyst/processar_analista.jsp";
         response.sendRedirect(url);
     }
 
