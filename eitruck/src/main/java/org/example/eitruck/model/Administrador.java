@@ -28,7 +28,7 @@ public class Administrador {
         this.nomeCompleto = nomeCompleto;
         setEmail(email);
         setSenha(senha);
-        setTelefone(telefone);
+        this.telefone = telefone;
     }
 
     public Administrador(int id, String cpf, String nomeCompleto, String email, String senha) {
