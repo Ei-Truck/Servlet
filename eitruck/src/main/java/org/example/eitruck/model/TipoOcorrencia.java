@@ -19,6 +19,12 @@ public class TipoOcorrencia {
         this.gravidade = gravidade;
     }
 
+    public TipoOcorrencia(String tipoEvento, int pontuacao, String gravidade) {
+        this.tipoEvento = tipoEvento;
+        setPontuacao(pontuacao);
+        this.gravidade = gravidade;
+    }
+
     //getters e setters
     public int getId() {
         return id;

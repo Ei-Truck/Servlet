@@ -14,16 +14,16 @@ public class TipoOcorrenciaDAO extends DAO {
 
     public boolean cadastrar(TipoOcorrencia tipoOcorrencia) {
         String comando = """
-            INSERT INTO tipo_ocorrencia (id, tipo_evento, pontuacao, gravidade)
-            VALUES (?, ?, ?, ?)""";
+            INSERT INTO tipo_ocorrencia (tipo_evento, pontuacao, gravidade)
+            VALUES (?, ?, ?)""";
 
+        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, tipoOcorrencia.getId());
-            pstmt.setString(2, tipoOcorrencia.getTipoEvento());
-            pstmt.setInt(3, tipoOcorrencia.getPontuacao());
-            pstmt.setString(4, tipoOcorrencia.getGravidade());
+            pstmt.setString(1, tipoOcorrencia.getTipoEvento());
+            pstmt.setInt(2, tipoOcorrencia.getPontuacao());
+            pstmt.setString(3, tipoOcorrencia.getGravidade());
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
         }
