@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.eitruck.model.Analista;
 import org.example.eitruck.model.Unidade;
 
 import java.io.IOException;
@@ -17,14 +18,14 @@ import java.util.List;
 
 @WebServlet("/servlet-unidade")
 public class UnidadeServlet extends HttpServlet {
-    private UnidadeDAO UnidadeDao;
+    private UnidadeDAO unidadeDao;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         // Inicializa o objeto ANTES de qualquer requisição.
-        this.UnidadeDao = new UnidadeDAO();
+        this.unidadeDao = new UnidadeDAO();
     }
 
     @Override
@@ -64,7 +65,7 @@ public class UnidadeServlet extends HttpServlet {
     }
 
     private void listarUnidades(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Unidade> unidades = UnidadeDao.buscarTodos();
+        List<Unidade> unidades = unidadeDao.buscarTodos();
         request.setAttribute("Unidade", unidades);
         request.getRequestDispatcher("").forward(request, response);
         //todo colocar caminho correto
@@ -77,7 +78,7 @@ public class UnidadeServlet extends HttpServlet {
 
     private void mostrarFormularioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        List<Unidade> unidades = UnidadeDao.buscarPorId(id);
+        List<Unidade> unidades = unidadeDao.buscarPorId(id);
 
         if (!unidades.isEmpty()) {
             request.setAttribute("Unidade", unidades.get(0));
@@ -106,7 +107,7 @@ public class UnidadeServlet extends HttpServlet {
 
             Unidade unidade = new Unidade(id_segmento, id_endereco, nome);
             //todo ver os parametros do construtor
-            UnidadeDao.cadastrar(unidade);
+            unidadeDao.cadastrar(unidade);
 
             redirecionar(request, response);
             return;
@@ -138,10 +139,10 @@ public class UnidadeServlet extends HttpServlet {
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
         try {
-            List<Unidade> Unidades = UnidadeDao.buscarTodos();
-            request.setAttribute("Unidades", Unidades);
-
-            encaminhar(request, response, "");
+            List<Unidade> unidades = unidadeDao.buscarTodos();
+            request.setAttribute("unidades", unidades);
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Units/processar_units.jsp");
+            rd.forward(request, response);
             return;
         } catch (Exception e) {
             e.printStackTrace();
