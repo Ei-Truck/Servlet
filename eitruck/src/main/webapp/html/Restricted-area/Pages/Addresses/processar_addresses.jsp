@@ -8,6 +8,7 @@
     String subAcao = request.getParameter("sub_acao");
     List<Endereco> enderecos = (List<Endereco>) request.getAttribute("enderecos");
     if (enderecos != null) enderecos = enderecoDAO.buscarTodos();
+
 %>
 <html>
 <head>
