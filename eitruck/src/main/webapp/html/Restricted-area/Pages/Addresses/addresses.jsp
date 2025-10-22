@@ -419,6 +419,17 @@
         </div>
 
         <div class="form-container">
+          <%
+            String errorMessage = (String) request.getAttribute("errorMessage");
+
+            if (errorMessage != null) {
+          %>
+          <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
+            <strong>Erro em algum cadastro</strong>
+          </div>
+          <%
+            }
+          %>
           <form action="${pageContext.request.contextPath}/servlet-enderecos" method="post">
             <input type="hidden" name="acao_principal" value="inserir">
             <input type="hidden" name="sub_acao" value="inserir">
@@ -426,41 +437,41 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="cep">CEP:</label>
-                <input type="text" name="cep" id="cep" class="form-control" required>
+                <input type="text" name="cep" id="cep" class="form-control" value="${cep != null ? cep : ''}" required>
               </div>
 
               <div class="form-group">
                 <label for="numero">Número:</label>
-                <input type="text" name="numero" id="numero" class="form-control" required>
+                <input type="text" name="numero" id="numero" class="form-control" value="${numero != null ? numero : ''}" required>
               </div>
             </div>
 
             <div class="form-group">
               <label for="rua">Rua:</label>
-              <input type="text" name="rua" id="rua" class="form-control" required>
+              <input type="text" name="rua" id="rua" class="form-control" value="${rua != null ? rua : ''}" required>
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="bairro">Bairro:</label>
-                <input type="text" name="bairro" id="bairro" class="form-control" required>
+                <input type="text" name="bairro" id="bairro" class="form-control" value="${bairro != null ? bairro : ''}" required>
               </div>
 
               <div class="form-group">
                 <label for="cidade">Cidade:</label>
-                <input type="text" name="cidade" id="cidade" class="form-control" required>
+                <input type="text" name="cidade" id="cidade" class="form-control" value="${cidade != null ? cidade : ''}" required>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="estado">Estado:</label>
-                <input type="text" name="estado" id="estado" class="form-control" required>
+                <input type="text" name="estado" id="estado" class="form-control" value="${estado != null ? estado : ''}" required>
               </div>
 
               <div class="form-group">
                 <label for="pais">País:</label>
-                <input type="text" name="pais" id="pais" class="form-control" required>
+                <input type="text" name="pais" id="pais" class="form-control" value="${pais != null ? pais : ''}" required>
               </div>
             </div>
 

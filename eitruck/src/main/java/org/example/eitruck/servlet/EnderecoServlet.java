@@ -93,6 +93,10 @@ public class EnderecoServlet extends HttpServlet {
     }
 
     private void inserirEndereco(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
+        String errorMessage = null;
+        boolean success = false;
+        boolean isFormSubmission = false;
+
         try {
             String cep = request.getParameter("cep");
             String rua = request.getParameter("rua");
@@ -113,22 +117,49 @@ public class EnderecoServlet extends HttpServlet {
             int numeroInt = Integer.parseInt(numero);
 
             Endereco endereco = new Endereco(cep, rua, numeroInt, bairro, cidade, estado, pais);
-            enderecoDAO.cadastrar(endereco);
+            success = enderecoDAO.cadastrar(endereco);
 
-            redirecionar(request, response);
-            return;
+            if (success) {
+                if (success) {
+                    response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos");
+                    return;
+                }
+                return;
+            } else {
+                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            errorMessage = "ID da unidade deve ser um número válido.";
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
+            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (IllegalArgumentException e) {
+            // Já tem a mensagem de erro
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
         }
+
+        if (errorMessage == null) {
+            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+        }
+
+        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("isFormSubmission", isFormSubmission);
+
+        request.setAttribute("cep", request.getParameter("cep"));
+        request.setAttribute("rua", request.getParameter("rua"));
+        request.setAttribute("bairro", request.getParameter("bairro"));
+        request.setAttribute("cidade", request.getParameter("cidade"));
+        request.setAttribute("estado", request.getParameter("estado"));
+        request.setAttribute("pais", request.getParameter("pais"));
+        request.setAttribute("numero", request.getParameter("numero"));
+
         request.setAttribute("sub_acao", sub_acao);
 
         if (acao != null) {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("Erro.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Addresses/addresses.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {

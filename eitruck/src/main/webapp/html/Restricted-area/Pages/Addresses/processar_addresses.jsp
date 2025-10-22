@@ -1,9 +1,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.example.eitruck.model.Endereco" %>
+<%@ page import="org.example.eitruck.Dao.AdministradorDAO" %>
+<%@ page import="org.example.eitruck.Dao.EnderecoDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    EnderecoDAO enderecoDAO = new EnderecoDAO();
     String subAcao = request.getParameter("sub_acao");
     List<Endereco> enderecos = (List<Endereco>) request.getAttribute("enderecos");
+    if (enderecos != null) enderecos = enderecoDAO.buscarTodos();
 %>
 <html>
 <head>
@@ -35,8 +39,7 @@
 
     <tbody>
     <%
-        if (enderecos != null) {
-            for (int i=0; i < enderecos.size(); i++){
+        for (int i=0; i < enderecos.size(); i++){
     %>
     <tr>
         <td><%=enderecos.get(i).getId()%></td>
@@ -47,13 +50,6 @@
         <td><%=enderecos.get(i).getCidade()%></td>
         <td><%=enderecos.get(i).getEstado()%></td>
         <td><%=enderecos.get(i).getPais()%></td>
-    </tr>
-    <%
-        } // Fecha o for
-    } else {
-    %>
-    <tr>
-        <td colspan="7">Nenhum endereço encontrado ou erro ao carregar dados.</td>
     </tr>
     <%
         } // Fecha o if
