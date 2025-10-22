@@ -431,6 +431,17 @@
                 </div>
 
                 <div class="form-container">
+                    <%
+                        String errorMessage = (String) request.getAttribute("errorMessage");
+
+                        if (errorMessage != null) {
+                    %>
+                    <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
+                        <strong>Erro em algum cadastro</strong>
+                    </div>
+                    <%
+                        }
+                    %>
                     <form action="${pageContext.request.contextPath}/servlet-analista" method="post">
                         <input type="hidden" name="acao_principal" value="inserir">
                         <input type="hidden" name="sub_acao" value="inserir">
@@ -438,29 +449,34 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="id_unidade">Unidade:</label>
-                                <input type="text" name="id_unidade" id="id_unidade" class="form-control" required>
+                                <input type="text" name="id_unidade" id="id_unidade" class="form-control" required
+                                       value="${id_unidade != null ? id_unidade : ''}">
                             </div>
 
                             <div class="form-group">
                                 <label for="cpf">CPF:</label>
-                                <input type="text" name="cpf" id="cpf" class="form-control" required>
+                                <input type="text" name="cpf" id="cpf" class="form-control" required
+                                       value="${cpf != null ? cpf : ''}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="nome">Nome Completo:</label>
-                            <input type="text" name="nome" id="nome" class="form-control" required>
+                            <input type="text" name="nome" id="nome" class="form-control" required
+                                   value="${nome != null ? nome : ''}">
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="text" name="email" id="email" class="form-control" required>
+                                <input type="text" name="email" id="email" class="form-control" required
+                                       value="${email != null ? email : ''}">
                             </div>
 
                             <div class="form-group">
                                 <label for="data_contratacao">Data de Contratação:</label>
-                                <input type="date" name="data_contratacao" id="data_contratacao" class="form-control" required>
+                                <input type="date" name="data_contratacao" id="data_contratacao" class="form-control" required
+                                       value="${data_contratacao != null ? data_contratacao : ''}">
                             </div>
                         </div>
 
@@ -468,17 +484,20 @@
                             <div class="form-group">
                                 <label for="senha">Senha:</label>
                                 <input type="password" name="senha" id="senha" class="form-control" required>
+                                <!-- Senha não repopulamos por segurança -->
                             </div>
 
                             <div class="form-group">
                                 <label for="cargo">Cargo:</label>
-                                <input type="text" name="cargo" id="cargo" class="form-control" required>
+                                <input type="text" name="cargo" id="cargo" class="form-control" required
+                                       value="${cargo != null ? cargo : ''}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="telefone">Telefone:</label>
-                            <input type="text" name="telefone" id="telefone" class="form-control" required>
+                            <input type="text" name="telefone" id="telefone" class="form-control" required
+                                   value="${telefone != null ? telefone : ''}">
                         </div>
 
                         <div class="form-actions">

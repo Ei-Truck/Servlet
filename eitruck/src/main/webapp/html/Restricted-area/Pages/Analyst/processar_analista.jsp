@@ -1,9 +1,12 @@
 <%@ page import="org.example.eitruck.model.Analista" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.example.eitruck.Dao.AnalistaDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    AnalistaDAO analistaDAO = new AnalistaDAO();
     String subAcao = request.getParameter("sub_acao");
     List<Analista> analistas = (List<Analista>) request.getAttribute("analistas");
+    if (analistas != null) analistas = analistaDAO.buscarTodos();
 %>
 <html>
 <head>
@@ -33,8 +36,7 @@
 
         <tbody>
         <%
-            if (analistas != null) {
-                for (int i=0; i < analistas.size(); i++){
+            for (int i=0; i < analistas.size(); i++){
         %>
         <tr>
             <td><%=analistas.get(i).getId()%></td>
@@ -47,13 +49,6 @@
         </tr>
         <%
             } // Fecha o for
-        } else {
-        %>
-        <tr>
-            <td colspan="7">Nenhum analista encontrado ou erro ao carregar dados.</td>
-        </tr>
-        <%
-            } // Fecha o if
         %>
         </tbody>
     </table>

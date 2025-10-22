@@ -92,6 +92,8 @@ public class AnalistaServlet extends HttpServlet {
     private void inserirAnalista(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
+        boolean isFormSubmission = false;
+
         try {
             String idUnidade = request.getParameter("id_unidade");
             String cpf = request.getParameter("cpf");
@@ -123,29 +125,51 @@ public class AnalistaServlet extends HttpServlet {
             LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE); // Linha 113 agora segura contra null
 
             Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senha, cargo, telefone);
-            analistaDAO.cadastrar(analista);
+            success = analistaDAO.cadastrar(analista);
 
-            redirecionar(request, response);
-            return;
+            if (success) {
+                // SUCESSO: Redireciona para processo_analista.jsp
+                if (success) {
+                    // SUCESSO: Redireciona para processo_analista.jsp
+                    response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
+                    return;
+                }
+                return;
+            } else {
+                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            }
+
         } catch (NumberFormatException e) {
             errorMessage = "ID da unidade deve ser um número válido.";
         } catch (DateTimeParseException e) {
             errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (IllegalArgumentException e) {
+            // Já tem a mensagem de erro
         } catch (Exception e) {
-            // Captura qualquer exceção não tratada e usa o mesmo fluxo de fallback
-            response.setContentType("text/html");
-            response.getWriter().println("<h1>Erro no Processamento</h1><p>Ocorreu um erro inesperado.</p>");
-            return;
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
         }
-        request.setAttribute("sub_acao", sub_acao);
 
+        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("isFormSubmission", isFormSubmission);
+
+        // Mantém os dados do formulário para repopular
+        request.setAttribute("id_unidade", request.getParameter("id_unidade"));
+        request.setAttribute("cpf", request.getParameter("cpf"));
+        request.setAttribute("nome", request.getParameter("nome"));
+        request.setAttribute("email", request.getParameter("email"));
+        request.setAttribute("data_contratacao", request.getParameter("data_contratacao"));
+        request.setAttribute("cargo", request.getParameter("cargo"));
+        request.setAttribute("telefone", request.getParameter("telefone"));
+
+        request.setAttribute("sub_acao", sub_acao);
         if (acao != null) {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("Erro.jsp");
-        if (respacher != null) {
-            respacher.forward(request, response);
+        // Forward para o MESMO JSP de cadastro (não muda de página)
+        RequestDispatcher dispatcher = request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/analista.jsp"); // substitua pelo nome do seu JSP atual
+        if (dispatcher != null) {
+            dispatcher.forward(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
         }
