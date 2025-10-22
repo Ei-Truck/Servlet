@@ -136,20 +136,31 @@ public class UnidadeDAO extends DAO {
     }
 
     public List<Unidade> buscarTodos() {
-        ResultSet rs;
-        List<Unidade> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM unidade";
+        String comando = """
+        SELECT 
+            u.*,
+            s.nome as nome_segmento,
+            e.cidade as nome_endereco
+        FROM unidade u
+        INNER JOIN segmento s ON u.id_segmento = s.id
+        INNER JOIN endereco e ON u.id_endereco = e.id
+        """;
 
-        Connection conn = null;
         try {
-            conn = conexao.conectar();
+            Connection conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            rs = pstmt.executeQuery();
-            while (rs.next()){
-                Unidade unidade = new Unidade(rs.getInt("id"),
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Unidade> listaRetorno = new ArrayList<>();
+            while (rs.next()) {
+                Unidade unidade = new Unidade(
+                        rs.getInt("id"),
                         rs.getInt("id_segmento"),
                         rs.getInt("id_endereco"),
-                        rs.getString("nome"));
+                        rs.getString("nome"),
+                        rs.getString("nome_segmento"),
+                        rs.getString("nome_endereco")
+                );
                 listaRetorno.add(unidade);
             }
             return listaRetorno;

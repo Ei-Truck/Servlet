@@ -26,8 +26,8 @@
     <tr>
         <th><strong>ID</strong></th>
         <th><strong>NOME</strong></th>
-        <th><strong>ID SEGMENTO</strong></th>
-        <th><strong>ID ENDEREÇO</strong></th>
+        <th><strong>NOME SEGMENTO</strong></th>
+        <th><strong>NOME ENDEREÇO</strong></th>
     </tr>
     </thead>
 
@@ -40,8 +40,8 @@
     <tr>
         <td><%=unidades.get(i).getId()%></td>
         <td><%=unidades.get(i).getNome()%></td>
-        <td><%=unidades.get(i).getIdSegmento()%></td>
-        <td><%=unidades.get(i).getIdEndereco()%></td>
+        <td><%=unidades.get(i).getNomeSegmento()%></td>
+        <td><%=unidades.get(i).getNomeEndereco()%></td>
     </tr>
     <%
         } // Fecha o for

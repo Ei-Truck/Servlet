@@ -9,6 +9,9 @@ public class Unidade {
     private String nome;
     private int idSegmento;
     private int idEndereco;
+    private String nomeSegmento;
+    private String nomeEndereco;
+
 
     // construtor
     public Unidade(int id, int idSegmento, int idEndereco, String nome) {
@@ -16,6 +19,15 @@ public class Unidade {
         this.nome = nome;
         setIdSegmento(idSegmento);
         setIdEndereco(idEndereco);
+    }
+
+    public Unidade(int id, int idSegmento, int idEndereco, String nome, String nomeSegmento, String nomeEndereco) {
+        this.id = id;
+        this.idSegmento = idSegmento;
+        this.idEndereco = idEndereco;
+        this.nome = nome;
+        this.nomeSegmento = nomeSegmento;
+        this.nomeEndereco = nomeEndereco;
     }
 
     public Unidade(int idSegmento, int idEndereco, String nome) {
@@ -51,6 +63,22 @@ public class Unidade {
     }
     public void setIdEndereco(int idEndereco) {
         this.idEndereco = Uteis.validarId(idEndereco);
+    }
+
+    public String getNomeSegmento() {
+        return nomeSegmento;
+    }
+
+    public void setNomeSegmento(String nomeSegmento) {
+        this.nomeSegmento = nomeSegmento;
+    }
+
+    public String getNomeEndereco() {
+        return nomeEndereco;
+    }
+
+    public void setNomeEndereco(String nomeEndereco) {
+        this.nomeEndereco = nomeEndereco;
     }
 
     // toString
