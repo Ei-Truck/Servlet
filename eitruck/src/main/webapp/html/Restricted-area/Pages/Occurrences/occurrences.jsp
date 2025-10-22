@@ -419,24 +419,35 @@
         </div>
 
         <div class="form-container">
+          <%
+            String errorMessage = (String) request.getAttribute("errorMessage");
+
+            if (errorMessage != null) {
+          %>
+          <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
+            <strong>Erro em algum cadastro</strong>
+          </div>
+          <%
+            }
+          %>
           <form action="${pageContext.request.contextPath}/servlet-ocorrencias" method="post">
             <input type="hidden" name="acao_principal" value="inserir">
             <input type="hidden" name="sub_acao" value="inserir">
 
             <div class="form-group">
               <label for="tipo_evento">Tipo de Evento:</label>
-              <input type="text" name="tipo_evento" id="tipo_evento" class="form-control" required>
+              <input type="text" name="tipo_evento" id="tipo_evento" class="form-control" value="${tipo_evento != null ? tipo_evento : ''}" required>
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="pontuacao">Pontuação:</label>
-                <input type="text" name="pontuacao" id="pontuacao" class="form-control" required>
+                <input type="text" name="pontuacao" id="pontuacao" class="form-control" value="${pontuacao != null ? pontuacao : ''}" required>
               </div>
 
               <div class="form-group">
                 <label for="gravidade">Gravidade:</label>
-                <input type="text" name="gravidade" id="gravidade" class="form-control" required>
+                <input type="text" name="gravidade" id="gravidade" class="form-control" value="${gravidade != null ? gravidade : ''}" required>
               </div>
             </div>
 

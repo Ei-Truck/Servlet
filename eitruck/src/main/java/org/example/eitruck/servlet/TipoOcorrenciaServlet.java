@@ -94,6 +94,10 @@ public class TipoOcorrenciaServlet extends HttpServlet {
     }
 
     private void inserirTipoOcorrencia(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
+        String errorMessage = null;
+        boolean success = false;
+        boolean isFormSubmission = false;
+
         try {
             String tipo_evento = request.getParameter("tipo_evento");
             String pontuacao = request.getParameter("pontuacao");
@@ -102,27 +106,49 @@ public class TipoOcorrenciaServlet extends HttpServlet {
             System.out.println("Tipo de evento: " + tipo_evento);
             System.out.println("Pontuacao: " + pontuacao);
             System.out.println("Gravidade: " + gravidade);
-            //todo trocar para atributos de TipoOcorrencia
 
             int pontuacaoInt = Integer.parseInt(pontuacao);
 
             TipoOcorrencia tipoOcorrencia = new TipoOcorrencia(tipo_evento, pontuacaoInt, gravidade);
-            tipoOcorrenciaDAO.cadastrar(tipoOcorrencia);
+            success = tipoOcorrenciaDAO.cadastrar(tipoOcorrencia);
 
-            redirecionar(request, response);
-            return;
+            if (success) {
+                if (success) {
+                    response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos");
+                    return;
+                }
+                return;
+            } else {
+                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            errorMessage = "ID da unidade deve ser um número válido.";
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
+            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (IllegalArgumentException e) {
+            // Já tem a mensagem de erro
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
         }
+
+        if (errorMessage == null) {
+            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+        }
+
+        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("isFormSubmission", isFormSubmission);
+
+        request.setAttribute("tipo_evento", request.getParameter("tipo_evento"));
+        request.setAttribute("pontuacao", request.getParameter("pontuacao"));
+        request.setAttribute("gravidade", request.getParameter("gravidade"));
+
         request.setAttribute("sub_acao", sub_acao);
 
         if (acao != null) {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("Erro.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Occurrences/occurrences.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
