@@ -53,7 +53,7 @@
     } else {
     %>
     <tr>
-        <td colspan="7">Nenhum analista encontrado ou erro ao carregar dados.</td>
+        <td colspan="7">Nenhum endereço encontrado ou erro ao carregar dados.</td>
     </tr>
     <%
         } // Fecha o if

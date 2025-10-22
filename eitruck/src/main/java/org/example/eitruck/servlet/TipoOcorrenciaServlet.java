@@ -137,31 +137,31 @@ public class TipoOcorrenciaServlet extends HttpServlet {
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
-//        try {
-//            List<Analista> analistas = analistaDAO.buscarTodos();
-//            request.setAttribute("analistas", analistas);
-//
-//            encaminhar(request, response, "html/Restricted-area/Pages/Analyst/processar_analista.jsp");
-//            return;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        request.setAttribute("sub_acao", subAcao);
-//
-//        if (acao != null) {
-//            request.setAttribute("acao", acao);
-//        }
-//
-//        encaminhar(request, response, "Erro.jsp");
+        try {
+            List<TipoOcorrencia> tipoOcorrencia = tipoOcorrenciaDAO.buscarTodos();
+            request.setAttribute("analistas", tipoOcorrencia);
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/processar_occurrences.jsp");
+            rd.forward(request, response);
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("sub_acao", subAcao);
+
+        if (acao != null) {
+            request.setAttribute("acao", acao);
+        }
+
+        encaminhar(request, response, "Erro.jsp");
     }
 
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
-//        RequestDispatcher rd = request.getRequestDispatcher(jspErro);
-//        if (rd != null) {
-//            rd.forward(request, response);
-//        } else {
-//            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
-//        }
+        RequestDispatcher rd = request.getRequestDispatcher(jspErro);
+        if (rd != null) {
+            rd.forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
+        }
     }
 
     private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
