@@ -13,11 +13,10 @@
 <%
     if ("buscar_todos".equals(subAcao)) { // Abre o bloco
 %>
-<h1>Exibindo todos os analistas</h1>
-<%
-    }
-%>
 
+<button onclick="window.location.href='html/Restricted-area/Pages/Analyst/analista.jsp'">Adicionar Endereços</button>
+
+<h1>Exibindo todos os analistas</h1>
     <table>
         <thead>
         <tr>
@@ -58,5 +57,8 @@
         %>
         </tbody>
     </table>
+<%
+    }
+%>
 </body>
 </html>

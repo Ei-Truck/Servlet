@@ -143,22 +143,22 @@ public class EnderecoServlet extends HttpServlet {
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
-//        try {
-//            List<Analista> analistas = analistaDAO.buscarTodos();
-//            request.setAttribute("analistas", analistas);
-//
-//            encaminhar(request, response, "html/Restricted-area/Pages/Analyst/processar_analista.jsp");
-//            return;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        request.setAttribute("sub_acao", subAcao);
-//
-//        if (acao != null) {
-//            request.setAttribute("acao", acao);
-//        }
-//
-//        encaminhar(request, response, "Erro.jsp");
+        try {
+            List<Endereco> enderecos = enderecoDAO.buscarTodos();
+            request.setAttribute("enderecos", enderecos);
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Addresses/processar_addresses.jsp");
+            rd.forward(request, response);
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("sub_acao", subAcao);
+
+        if (acao != null) {
+            request.setAttribute("acao", acao);
+        }
+
+        encaminhar(request, response, "Erro.jsp");
     }
 
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
