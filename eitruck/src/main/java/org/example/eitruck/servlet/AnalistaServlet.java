@@ -128,9 +128,7 @@ public class AnalistaServlet extends HttpServlet {
             success = analistaDAO.cadastrar(analista);
 
             if (success) {
-                // SUCESSO: Redireciona para processo_analista.jsp
                 if (success) {
-                    // SUCESSO: Redireciona para processo_analista.jsp
                     response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
                     return;
                 }
@@ -149,6 +147,10 @@ public class AnalistaServlet extends HttpServlet {
             errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
         }
 
+        if (errorMessage == null) {
+            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+        }
+
         request.setAttribute("errorMessage", errorMessage);
         request.setAttribute("isFormSubmission", isFormSubmission);
 
@@ -162,11 +164,11 @@ public class AnalistaServlet extends HttpServlet {
         request.setAttribute("telefone", request.getParameter("telefone"));
 
         request.setAttribute("sub_acao", sub_acao);
+
         if (acao != null) {
             request.setAttribute("acao", acao);
         }
 
-        // Forward para o MESMO JSP de cadastro (não muda de página)
         RequestDispatcher dispatcher = request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/analista.jsp"); // substitua pelo nome do seu JSP atual
         if (dispatcher != null) {
             dispatcher.forward(request, response);
