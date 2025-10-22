@@ -45,7 +45,13 @@ public class AnalistaDAO extends DAO {
     public List<Analista> buscarTodos() {
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM analista";
+        String comando = """
+        SELECT 
+            a.*,
+            u.nome as nome_unidade
+        FROM analista a
+        INNER JOIN unidade u ON a.id_unidade = u.id
+        """;
 
         Connection conn = null;
         try {
@@ -64,6 +70,7 @@ public class AnalistaDAO extends DAO {
                         rs.getString("cargo"),
                         rs.getString("telefone")
                 );
+                analista.setNomeUnidade(rs.getString("nome_unidade"));
                 listaRetorno.add(analista);
             }
             return listaRetorno;

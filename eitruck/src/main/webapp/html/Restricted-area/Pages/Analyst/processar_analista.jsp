@@ -24,7 +24,7 @@
         <thead>
         <tr>
             <th><strong>ID</strong></th>
-            <th><strong>ID UNIDADE</strong></th>
+            <th><strong>NOME UNIDADE</strong></th>
             <th><strong>CPF</strong></th>
             <th><strong>NOME COMPLETO</strong></th>
             <th><strong>EMAIL</strong></th>
@@ -40,7 +40,7 @@
         %>
         <tr>
             <td><%=analistas.get(i).getId()%></td>
-            <td><%=analistas.get(i).getIdUnidade()%></td>
+            <td><%=analistas.get(i).getNomeUnidade()%></td>
             <td><%=analistas.get(i).getCpf()%></td>
             <td><%=analistas.get(i).getNomeCompleto()%></td>
             <td><%=analistas.get(i).getEmail()%></td>

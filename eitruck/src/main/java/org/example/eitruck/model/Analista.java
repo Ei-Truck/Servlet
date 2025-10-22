@@ -16,6 +16,7 @@ public class Analista {
     private String senha;
     private String cargo;
     private String telefone;
+    private String nomeUnidade;
 
 
     // construtor
@@ -117,6 +118,13 @@ public class Analista {
     }
     public void setTelefone(String telefone) {
         this.telefone = Uteis.validarTelefone(telefone);
+    }
+
+    public String getNomeUnidade() {
+        return nomeUnidade;
+    }
+    public void setNomeUnidade(String nomeUnidade) {
+        this.nomeUnidade = nomeUnidade;
     }
 
     // toString
