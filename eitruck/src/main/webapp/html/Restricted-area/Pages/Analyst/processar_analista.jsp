@@ -31,19 +31,20 @@
         </tr>
         </thead>
 
+
         <tbody>
         <%
             if (analistas != null) {
-                for (Analista a : analistas){
+                for (int i=0; i < analistas.size(); i++){
         %>
         <tr>
-            <td><%=a.getId()%></td>
-            <td><%=a.getIdUnidade()%></td>
-            <td><%=a.getCpf()%></td>
-            <td><%=a.getNomeCompleto()%></td>
-            <td><%=a.getEmail()%></td>
-            <td><%=a.getDtContratacao()%></td>
-            <td><%=a.getCargo()%></td>
+            <td><%=analistas.get(i).getId()%></td>
+            <td><%=analistas.get(i).getIdUnidade()%></td>
+            <td><%=analistas.get(i).getCpf()%></td>
+            <td><%=analistas.get(i).getNomeCompleto()%></td>
+            <td><%=analistas.get(i).getEmail()%></td>
+            <td><%=analistas.get(i).getDtContratacao()%></td>
+            <td><%=analistas.get(i).getCargo()%></td>
         </tr>
         <%
             } // Fecha o for

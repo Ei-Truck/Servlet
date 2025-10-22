@@ -90,6 +90,8 @@ public class AnalistaServlet extends HttpServlet {
     }
 
     private void inserirAnalista(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
+        String errorMessage = null;
+        boolean success = false;
         try {
             String idUnidade = request.getParameter("id_unidade");
             String cpf = request.getParameter("cpf");
@@ -126,9 +128,14 @@ public class AnalistaServlet extends HttpServlet {
             redirecionar(request, response);
             return;
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            errorMessage = "ID da unidade deve ser um número válido.";
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
+            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (Exception e) {
+            // Captura qualquer exceção não tratada e usa o mesmo fluxo de fallback
+            response.setContentType("text/html");
+            response.getWriter().println("<h1>Erro no Processamento</h1><p>Ocorreu um erro inesperado.</p>");
+            return;
         }
         request.setAttribute("sub_acao", sub_acao);
 
@@ -149,13 +156,33 @@ public class AnalistaServlet extends HttpServlet {
         response.sendRedirect(url);
     }
 
+//    private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
+//            throws IOException, ServletException {
+//        try {
+//            List<Analista> analistas = analistaDAO.buscarTodos();
+//            request.setAttribute("analistas", analistas);
+//
+//            encaminhar(request, response, "/html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+//            return;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        request.setAttribute("sub_acao", subAcao);
+//
+//        if (acao != null) {
+//            request.setAttribute("acao", acao);
+//        }
+//
+//        encaminhar(request, response, "Erro.jsp");
+//    }
+
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
         try {
             List<Analista> analistas = analistaDAO.buscarTodos();
             request.setAttribute("analistas", analistas);
-
-            encaminhar(request, response, "html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+            rd.forward(request, response);
             return;
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,14 +1,28 @@
 package org.example.eitruck.util;
 public class Uteis {
 
+//    public static String validarCpf(String cpf) {
+//        if (cpf == null || !cpf.matches("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}")) {
+//            throw new IllegalArgumentException("CPF inválido. Deve conter 11 dígitos numéricos.");
+//        }
+//        String numeros = cpf.replaceAll("\\D", ""); // remove tudo que não é número
+//        if (numeros.chars().distinct().count() == 1 || numeros.endsWith("00")) {
+//            throw new IllegalArgumentException("CPF inválido.");
+//        }
+//        return numeros; // retorna só os números, pronto para banco
+//    }
     public static String validarCpf(String cpf) {
-        if (cpf == null || !cpf.matches("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}")) {
+        if (cpf == null || !cpf.matches("\\d{11}")) {
             throw new IllegalArgumentException("CPF inválido. Deve conter 11 dígitos numéricos.");
         }
+
         String numeros = cpf.replaceAll("\\D", ""); // remove tudo que não é número
-        if (numeros.chars().distinct().count() == 1 || numeros.endsWith("00")) {
+
+        // Verifica se todos os dígitos são iguais
+        if (numeros.chars().distinct().count() == 1) {
             throw new IllegalArgumentException("CPF inválido.");
         }
+
         return numeros; // retorna só os números, pronto para banco
     }
 
@@ -26,11 +40,24 @@ public class Uteis {
         return senha; // senha não precisa de limpeza
     }
 
+//    public static String validarTelefone(String telefone) {
+//        if (telefone == null || !telefone.matches("\\([0-9]{2}\\) ?[0-9]{5}-[0-9]{4}")) {
+//            throw new IllegalArgumentException("Telefone inválido. Formato esperado: (XX) 9XXXX-XXXX");
+//        }
+//        return telefone.replaceAll("\\D", ""); // só números
+//    }
     public static String validarTelefone(String telefone) {
-        if (telefone == null || !telefone.matches("\\([0-9]{2}\\) ?[0-9]{5}-[0-9]{4}")) {
-            throw new IllegalArgumentException("Telefone inválido. Formato esperado: (XX) 9XXXX-XXXX");
+        if (telefone == null) {
+            throw new IllegalArgumentException("Telefone não pode ser nulo.");
         }
-        return telefone.replaceAll("\\D", ""); // só números
+
+        String apenasNumeros = telefone.replaceAll("\\D", "");
+
+        if (!apenasNumeros.matches("^[0-9]{10,11}$")) {
+            throw new IllegalArgumentException("Telefone inválido. Deve conter apenas 10 ou 11 dígitos numéricos, sem espaços ou símbolos.");
+        }
+
+        return apenasNumeros;
     }
 
     public static String validarCep(String cep) {
