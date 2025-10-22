@@ -14,7 +14,7 @@
     if ("buscar_todos".equals(subAcao)) { // Abre o bloco
 %>
 
-<button onclick="window.location.href='html/Restricted-area/Pages/Addresses/addresses.jsp'">Adicionar Analista</button>
+<button onclick="window.location.href='html/Restricted-area/Pages/Addresses/addresses.jsp'">Adicionar Endereço</button>
 
 <h1>Exibindo todos os Endereços</h1>
 
