@@ -90,6 +90,10 @@ public class UnidadeServlet extends HttpServlet {
     }
 
     private void inserirUnidade(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
+        String errorMessage = null;
+        boolean success = false;
+        boolean isFormSubmission = false;
+
         try {
             String idSegmento = request.getParameter("id_segmento");
             String idEndereco = request.getParameter("id_endereco");
@@ -107,22 +111,45 @@ public class UnidadeServlet extends HttpServlet {
 
             Unidade unidade = new Unidade(id_segmento, id_endereco, nome);
             //todo ver os parametros do construtor
-            unidadeDao.cadastrar(unidade);
+            success = unidadeDao.cadastrar(unidade);
 
-            redirecionar(request, response);
-            return;
+            if (success) {
+                if (success) {
+                    response.sendRedirect(request.getContextPath() + "/servlet-unidade?acao_principal=buscar&sub_acao=buscar_todos");
+                    return;
+                }
+                return;
+            } else {
+                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            errorMessage = "ID da unidade deve ser um número válido.";
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
+            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (IllegalArgumentException e) {
+            // Já tem a mensagem de erro
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
         }
+
+        if (errorMessage == null) {
+            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+        }
+
+        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("isFormSubmission", isFormSubmission);
+
+        request.setAttribute("id_segmento", request.getParameter("id_segmento"));
+        request.setAttribute("id_endereco", request.getParameter("id_endereco"));
+        request.setAttribute("nome", request.getParameter("nome"));
+
         request.setAttribute("sub_acao", sub_acao);
 
         if (acao != null) {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("Erro.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Units/units.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {

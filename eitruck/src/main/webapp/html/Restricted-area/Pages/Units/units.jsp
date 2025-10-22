@@ -419,6 +419,17 @@
                 </div>
 
                 <div class="form-container">
+                    <%
+                        String errorMessage = (String) request.getAttribute("errorMessage");
+
+                        if (errorMessage != null) {
+                    %>
+                    <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
+                        <strong>Erro em algum cadastro</strong>
+                    </div>
+                    <%
+                        }
+                    %>
                     <form action="${pageContext.request.contextPath}/servlet-unidade" method="post">
                         <input type="hidden" name="acao_principal" value="inserir">
                         <input type="hidden" name="sub_acao" value="inserir">
@@ -426,18 +437,18 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="id_segmento">ID do Segmento:</label>
-                                <input type="text" name="id_segmento" id="id_segmento" class="form-control" required>
+                                <input type="text" name="id_segmento" id="id_segmento" class="form-control" value="${id_segmento != null ? id_segmento : ''}" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="id_endereco">ID do Endereço:</label>
-                                <input type="text" name="id_endereco" id="id_endereco" class="form-control" required>
+                                <input type="text" name="id_endereco" id="id_endereco" class="form-control" value="${id_endereco != null ? id_endereco : ''}" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="nome">Nome da Unidade:</label>
-                            <input type="text" name="nome" id="nome" class="form-control" required>
+                            <input type="text" name="nome" id="nome" class="form-control" value="${nome != null ? nome : ''}" required>
                         </div>
 
                         <div class="form-actions">
