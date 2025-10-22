@@ -184,6 +184,27 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM segmento";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public List<Segmento> buscarPorDescricao(String descricao) {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();

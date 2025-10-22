@@ -174,6 +174,27 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM unidade";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public List<Unidade> buscarPorId(int idUnidade) {
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();

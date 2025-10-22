@@ -68,6 +68,27 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM administrador";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     // Método de atualização consolidado (FALTANTE)
     public boolean atualizar(Administrador admin, String novaSenha) {
         String comando;
