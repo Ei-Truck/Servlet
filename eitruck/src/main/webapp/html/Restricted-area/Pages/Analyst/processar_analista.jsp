@@ -25,8 +25,8 @@
         <tr>
             <th><strong>ID</strong></th>
             <th><strong>NOME UNIDADE</strong></th>
-            <th><strong>CPF</strong></th>
             <th><strong>NOME COMPLETO</strong></th>
+            <th><strong>CPF</strong></th>
             <th><strong>EMAIL</strong></th>
             <th><strong>DATA CONTRATAÇÃO</strong></th>
             <th><strong>CARGO</strong></th>
@@ -41,8 +41,8 @@
         <tr>
             <td><%=analistas.get(i).getId()%></td>
             <td><%=analistas.get(i).getNomeUnidade()%></td>
-            <td><%=analistas.get(i).getCpf()%></td>
             <td><%=analistas.get(i).getNomeCompleto()%></td>
+            <td><%=analistas.get(i).getCpf()%></td>
             <td><%=analistas.get(i).getEmail()%></td>
             <td><%=analistas.get(i).getDtContratacao()%></td>
             <td><%=analistas.get(i).getCargo()%></td>

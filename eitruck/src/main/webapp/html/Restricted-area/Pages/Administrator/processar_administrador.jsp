@@ -23,8 +23,8 @@
     <thead>
     <tr>
         <th><strong>ID</strong></th>
-        <th><strong>CPF</strong></th>
         <th><strong>NOME COMPLETO</strong></th>
+        <th><strong>CPF</strong></th>
         <th><strong>EMAIL</strong></th>
         <th><strong>TELEFONE</strong></th>
     </tr>
@@ -38,8 +38,8 @@
     %>
     <tr>
         <td><%=administradores.get(i).getId()%></td>
-        <td><%=administradores.get(i).getCpf()%></td>
         <td><%=administradores.get(i).getNomeCompleto()%></td>
+        <td><%=administradores.get(i).getCpf()%></td>
         <td><%=administradores.get(i).getEmail()%></td>
         <td><%=administradores.get(i).getTelefone()%></td>
     </tr>
