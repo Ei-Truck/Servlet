@@ -91,6 +91,10 @@ public class SegmentoServlet extends HttpServlet {
     }
 
     private void inserirSegmento(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
+        String errorMessage = null;
+        boolean success = false;
+        boolean isFormSubmission = false;
+
         try {
             String nome = request.getParameter("nome");
             String descricao = request.getParameter("descricao");
@@ -99,22 +103,44 @@ public class SegmentoServlet extends HttpServlet {
             System.out.println("Descrição: " + descricao);
 
             Segmento segmento = new Segmento(nome, descricao);
-            segmentoDAO.cadastrar(segmento);
+            success = segmentoDAO.cadastrar(segmento);
 
-            redirecionar(request, response);
-            return;
+            if (success) {
+                if (success) {
+                    response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos");
+                    return;
+                }
+                return;
+            } else {
+                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            errorMessage = "ID da unidade deve ser um número válido.";
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
+            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (IllegalArgumentException e) {
+            // Já tem a mensagem de erro
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
         }
+
+        if (errorMessage == null) {
+            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+        }
+
+        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("isFormSubmission", isFormSubmission);
+
+        request.setAttribute("nome", request.getParameter("nome"));
+        request.setAttribute("descricao", request.getParameter("descricao"));
+
         request.setAttribute("sub_acao", sub_acao);
 
         if (acao != null) {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("Erro.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Segments/segments.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {

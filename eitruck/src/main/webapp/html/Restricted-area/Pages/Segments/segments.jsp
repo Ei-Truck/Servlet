@@ -419,18 +419,29 @@
         </div>
 
         <div class="form-container">
+          <%
+            String errorMessage = (String) request.getAttribute("errorMessage");
+
+            if (errorMessage != null) {
+          %>
+          <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
+            <strong>Erro em algum cadastro</strong>
+          </div>
+          <%
+            }
+          %>
           <form action="${pageContext.request.contextPath}/servlet-segmentos" method="post">
             <input type="hidden" name="acao_principal" value="inserir">
             <input type="hidden" name="sub_acao" value="inserir">
 
             <div class="form-group">
               <label for="nome">Nome do Segmento:</label>
-              <input type="text" name="nome" id="nome" class="form-control" required>
+              <input type="text" name="nome" id="nome" class="form-control" value="${nome != null ? nome : ''}" required>
             </div>
 
             <div class="form-group">
               <label for="descricao">Descrição:</label>
-              <input type="text" name="descricao" id="descricao" class="form-control" required>
+              <input type="text" name="descricao" id="descricao" class="form-control" value="${descricao != null ? descricao : ''}" required>
             </div>
 
             <div class="form-actions">
