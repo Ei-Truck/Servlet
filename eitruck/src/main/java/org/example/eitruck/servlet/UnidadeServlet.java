@@ -65,31 +65,6 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
-    private void listarUnidades(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Unidade> unidades = unidadeDao.buscarTodos();
-        request.setAttribute("Unidade", unidades);
-        request.getRequestDispatcher("").forward(request, response);
-        //todo colocar caminho correto
-    }
-
-    private void mostrarFormularioNovo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("").forward(request, response);
-        //todo colocar caminho certo
-    }
-
-    private void mostrarFormularioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        List<Unidade> unidades = unidadeDao.buscarPorId(id);
-
-        if (!unidades.isEmpty()) {
-            request.setAttribute("Unidade", unidades.get(0));
-            request.getRequestDispatcher("").forward(request, response);
-            //todo colocar o caminho
-        } else {
-            response.sendRedirect("Unidade?erro=Unidade não encontrado");
-        }
-    }
-
     private void inserirUnidade(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -215,70 +190,6 @@ public class UnidadeServlet extends HttpServlet {
     }
 
     private void atualizarUnidade(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        try {
-//            Analista analista = extrairAnalistaDoRequest(request);
-//            String novaSenha = request.getParameter("novaSenha");
-//
-//            if (UnidadeDao.atualizar(analista, novaSenha)) {
-//                response.sendRedirect("Unidade?sucesso=Unidade atualizado com sucesso");
-//            } else {
-//                response.sendRedirect("Unidade?erro=Erro ao atualizar analista");
-//            }
-//        } catch (Exception e) {
-//            response.sendRedirect("Unidade?erro=" + e.getMessage());
-//        }
-    }
 
-    private void buscarUnidade(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String tipo = request.getParameter("tipo");
-//        String valor = request.getParameter("valor");
-//        List<Unidade> resultados = null;
-//
-//        // CORREÇÃO: Trate 'tipo' nulo com uma string padrão ("erro_busca")
-//        switch (tipo != null ? tipo : "erro_busca") {
-//            case "id":
-//                resultados = UnidadeDao.buscarPorId(Integer.parseInt(valor));
-//                break;
-//            case "cpf":
-//                resultados = UnidadeDao.buscarPorCpf(valor);
-//                break;
-//            case "nome":
-//                resultados = UnidadeDao.buscarPorNome(valor);
-//                break;
-//            case "email":
-//                resultados = UnidadeDao.buscarPorEmail(valor);
-//                break;
-//            case "cargo":
-//                resultados = UnidadeDao.buscarPorCargo(valor);
-//                break;
-//            case "unidade":
-//                resultados = UnidadeDao.buscarPorIdUnidade(Integer.parseInt(valor));
-//                break;
-//            case "erro_busca":
-//                // Tratar erro ou apenas retornar lista vazia
-//                resultados = UnidadeDao.buscarTodos(); // Exibe todos se a busca falhar
-//                break;
-//                //todo checar e fazer a troca pelos daos de UNidade
-//        }
-//
-//        request.setAttribute("Unidades", resultados);
-//        request.setAttribute("resultadoBusca", true);
-//        request.getRequestDispatcher("").forward(request, response);
-//        //todo caminho do Dispatcher
-    }
-
-    private void extrairUnidadeDoRequest(HttpServletRequest request) {
-//        int id = Integer.parseInt(request.getParameter("id"));
-//        int idUnidade = Integer.parseInt(request.getParameter("idUnidade"));
-//        String cpf = request.getParameter("cpf");
-//        String nome = request.getParameter("nome");
-//        LocalDate dtContratacao = LocalDate.parse(request.getParameter("dtContratacao"));
-//        String email = request.getParameter("email");
-//        String senha = request.getParameter("senha");
-//        String cargo = request.getParameter("cargo");
-//        String telefone = request.getParameter("telefone");
-//        //todo trocar para os atributos de Unidade
-//
-//        return new Unidade(id, idUnidade, cpf, nome, dtContratacao, email, senha, cargo, telefone);
     }
 }

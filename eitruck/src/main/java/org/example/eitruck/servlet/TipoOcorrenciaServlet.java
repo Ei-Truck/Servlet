@@ -69,31 +69,6 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
-    private void listarAnalistas(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        List<TipoOcorrencia> tipoOcorrencias = TipoOcorrenciaDAO.buscarTodos();
-//        request.setAttribute("tipoOcorrencias", tipoOcorrencias);
-//        request.getRequestDispatcher("").forward(request, response);
-//        //todo colocar caminho certo
-    }
-
-    private void mostrarFormularioNovo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.getRequestDispatcher("").forward(request, response);
-//        //todo colocar caminho certo
-    }
-
-    private void mostrarFormularioEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        int id = Integer.parseInt(request.getParameter("id"));
-//        List<TipoOcorrencia> tipoOcorrencias = TipoOcorrenciaDAO.buscarPorId(id);
-//
-//        if (!tipoOcorrencias.isEmpty()) {
-//            request.setAttribute("tipoOcorrencia", tipoOcorrencias.get(0));
-//            request.getRequestDispatcher("").forward(request, response);
-//            //todo colocar caminho certo
-//        } else {
-//            response.sendRedirect("tipoOcorrencia?erro=tipoOcorrencia não encontrado");
-//        }
-    }
-
     private void inserirTipoOcorrencia(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -210,78 +185,6 @@ public class TipoOcorrenciaServlet extends HttpServlet {
     }
 
     private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        try {
-//            Analista analista = extrairAnalistaDoRequest(request);
-//            String novaSenha = request.getParameter("novaSenha");
-//
-//            if (analistaDAO.atualizar(analista, novaSenha)) {
-//                response.sendRedirect("analista?sucesso=Analista atualizado com sucesso");
-//            } else {
-//                response.sendRedirect("analista?erro=Erro ao atualizar analista");
-//            }
-//        } catch (Exception e) {
-//            response.sendRedirect("analista?erro=" + e.getMessage());
-//        }
-    }
 
-    private void excluirAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        int id = Integer.parseInt(request.getParameter("id"));
-//        int resultado = analistaDAO.apagar(id);
-//
-//        if (resultado > 0) {
-//            response.sendRedirect("analista?sucesso=Analista excluído com sucesso");
-//        } else {
-//            response.sendRedirect("analista?erro=Erro ao excluir analista");
-//        }
-    }
-
-    private void buscarAnalista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String tipo = request.getParameter("tipo");
-//        String valor = request.getParameter("valor");
-//        List<Analista> resultados = null;
-//
-//        // CORREÇÃO: Trate 'tipo' nulo com uma string padrão ("erro_busca")
-//        switch (tipo != null ? tipo : "erro_busca") {
-//            case "id":
-//                resultados = analistaDAO.buscarPorId(Integer.parseInt(valor));
-//                break;
-//            case "cpf":
-//                resultados = analistaDAO.buscarPorCpf(valor);
-//                break;
-//            case "nome":
-//                resultados = analistaDAO.buscarPorNome(valor);
-//                break;
-//            case "email":
-//                resultados = analistaDAO.buscarPorEmail(valor);
-//                break;
-//            case "cargo":
-//                resultados = analistaDAO.buscarPorCargo(valor);
-//                break;
-//            case "unidade":
-//                resultados = analistaDAO.buscarPorIdUnidade(Integer.parseInt(valor));
-//                break;
-//            case "erro_busca":
-//                // Tratar erro ou apenas retornar lista vazia
-//                resultados = analistaDAO.buscarTodos(); // Exibe todos se a busca falhar
-//                break;
-//        }
-//
-//        request.setAttribute("analistas", resultados);
-//        request.setAttribute("resultadoBusca", true);
-//        request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/processar_analista.jsp").forward(request, response);
-    }
-
-    private Analista extrairAnalistaDoRequest(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        int idUnidade = Integer.parseInt(request.getParameter("idUnidade"));
-        String cpf = request.getParameter("cpf");
-        String nome = request.getParameter("nome");
-        LocalDate dtContratacao = LocalDate.parse(request.getParameter("dtContratacao"));
-        String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
-        String cargo = request.getParameter("cargo");
-        String telefone = request.getParameter("telefone");
-
-        return new Analista(id, idUnidade, cpf, nome, dtContratacao, email, senha, cargo, telefone);
     }
 }
