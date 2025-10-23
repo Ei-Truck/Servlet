@@ -27,6 +27,7 @@
         <th><strong>CPF</strong></th>
         <th><strong>EMAIL</strong></th>
         <th><strong>TELEFONE</strong></th>
+        <th><strong>AÇÕES</strong></th>
     </tr>
     </thead>
 
@@ -42,6 +43,13 @@
         <td><%=administradores.get(i).getCpf()%></td>
         <td><%=administradores.get(i).getEmail()%></td>
         <td><%=administradores.get(i).getTelefone()%></td>
+        <td>
+            <form action="${pageContext.request.contextPath}/servlet-administrador" method="post" style="display:inline;">
+                <input type="hidden" name="acao_principal" value="excluir">
+                <input type="hidden" name="id" value="<%= administradores.get(i).getId() %>">
+                <button type="submit" onclick="return confirm('Tem certeza que deseja excluir este administrador?')">Excluir</button>
+            </form>
+        </td>
     </tr>
     <%
         } // Fecha o for

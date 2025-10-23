@@ -177,9 +177,27 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
-    public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getContextPath() + "html/Restricted-area/Pages/Analyst/processar_analista.jsp";
-        response.sendRedirect(url);
+    private void excluirAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int resultado = analistaDAO.apagar(id);
+
+            if (resultado > 0) {
+                // Sucesso: redireciona para a lista sem mensagem de erro
+                response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
+            } else {
+                // Erro: redireciona de volta para a lista com mensagem de erro
+                request.setAttribute("errorMessage", "Erro ao excluir analista. Tente novamente.");
+                buscarTodos(request, response, "buscar", "buscar_todos");
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "ID inválido.");
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Erro interno ao excluir analista.");
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        }
     }
 
 //    private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
@@ -243,17 +261,6 @@ public class AnalistaServlet extends HttpServlet {
             }
         } catch (Exception e) {
             response.sendRedirect("analista?erro=" + e.getMessage());
-        }
-    }
-
-    private void excluirAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        int resultado = analistaDAO.apagar(id);
-
-        if (resultado > 0) {
-            response.sendRedirect("analista?sucesso=Analista excluído com sucesso");
-        } else {
-            response.sendRedirect("analista?erro=Erro ao excluir analista");
         }
     }
 

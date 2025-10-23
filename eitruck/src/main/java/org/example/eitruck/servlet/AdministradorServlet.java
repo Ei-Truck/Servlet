@@ -64,7 +64,7 @@ public class AdministradorServlet extends HttpServlet {
                 atualizarAnalista(request, response);
                 break;
             case "excluir":
-                excluirAnalista(request, response);
+                excluirAdministrador(request, response);
                 break;
         }
     }
@@ -156,9 +156,27 @@ public class AdministradorServlet extends HttpServlet {
         }
     }
 
-    public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getContextPath() + "html/Restricted-area/Pages/Analyst/processar_analista.jsp";
-        response.sendRedirect(url);
+    private void excluirAdministrador(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int resultado = administradorDAO.apagar(id);
+
+            if (resultado > 0) {
+                // Sucesso: redireciona para a lista sem mensagem de erro
+                response.sendRedirect(request.getContextPath() + "/servlet-administrador?acao_principal=buscar&sub_acao=buscar_todos");
+            } else {
+                // Erro: redireciona de volta para a lista com mensagem de erro
+                request.setAttribute("errorMessage", "Erro ao excluir administrador. Tente novamente.");
+                buscarTodos(request, response, "buscar", "buscar_todos");
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "ID inválido.");
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Erro interno ao excluir administrador.");
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        }
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)

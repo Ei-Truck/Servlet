@@ -41,6 +41,25 @@ public class AnalistaDAO extends DAO {
         }
     }
 
+    // Método apagar simplificado
+    public int apagar(int idAnalista) {
+        String comando = "DELETE FROM analista WHERE id = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idAnalista);
+            int execucao = pstmt.executeUpdate();
+            return execucao;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     // Método para buscar todos os analistas
     public List<Analista> buscarTodos() {
         ResultSet rs;
@@ -173,25 +192,6 @@ public class AnalistaDAO extends DAO {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
             return false;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Método apagar simplificado
-    public int apagar(int idAnalista) {
-        String comando = "DELETE FROM analista WHERE id = ?";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idAnalista);
-            int execucao = pstmt.executeUpdate();
-            return execucao;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
         } finally {
             conexao.desconectar(conn);
         }

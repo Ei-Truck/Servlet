@@ -30,6 +30,7 @@
             <th><strong>EMAIL</strong></th>
             <th><strong>DATA CONTRATAÇÃO</strong></th>
             <th><strong>CARGO</strong></th>
+            <th><strong>AÇÕES</strong></th>
         </tr>
         </thead>
 
@@ -46,6 +47,13 @@
             <td><%=analistas.get(i).getEmail()%></td>
             <td><%=analistas.get(i).getDtContratacao()%></td>
             <td><%=analistas.get(i).getCargo()%></td>
+            <td>
+                <form action="${pageContext.request.contextPath}/servlet-analista" method="post" style="display:inline;">
+                    <input type="hidden" name="acao_principal" value="excluir">
+                    <input type="hidden" name="id" value="<%= analistas.get(i).getId() %>">
+                    <button type="submit" onclick="return confirm('Tem certeza que deseja excluir este administrador?')">Excluir</button>
+                </form>
+            </td>
         </tr>
         <%
             } // Fecha o for

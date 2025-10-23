@@ -39,6 +39,25 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Método apagar simplificado (CORREÇÃO)
+    public int apagar(int idAdmin) {
+        String comando = "DELETE FROM administrador WHERE id = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idAdmin);
+            int execucao = pstmt.executeUpdate();
+            return execucao;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     // Método para buscar todos os administradores (FALTANTE)
     public List<Administrador> buscarTodos() {
         ResultSet rs;
@@ -249,25 +268,6 @@ public class AdministradorDAO extends DAO {
             return -1;
         }
         finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Método apagar simplificado (CORREÇÃO)
-    public int apagar(int idAdmin) {
-        String comando = "DELETE FROM administrador WHERE id = ?";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idAdmin);
-            int execucao = pstmt.executeUpdate();
-            return execucao;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        } finally {
             conexao.desconectar(conn);
         }
     }
