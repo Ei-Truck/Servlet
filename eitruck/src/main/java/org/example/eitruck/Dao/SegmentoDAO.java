@@ -34,6 +34,33 @@ public class SegmentoDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+    public int alterarTodos(int id, String nome, String descricao) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE segmento SET nome = ?, descricao = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, nome);
+            pstmt.setString(2, descricao);
+            pstmt.setInt(3, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
+
 
     public int alterarNome(Segmento segmento, String novoNome) {
         String comando = "UPDATE segmento SET nome = ? WHERE id = ?";
@@ -230,5 +257,3 @@ public class SegmentoDAO extends DAO {
         }
     }
 }
-
-

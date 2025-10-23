@@ -2,6 +2,7 @@ package org.example.eitruck.Dao;
 
 import org.example.eitruck.model.Administrador;
 import org.example.eitruck.model.Analista;
+import org.example.eitruck.util.Hash;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -90,6 +91,38 @@ public class AdministradorDAO extends DAO {
     }
 
     // Método de atualização consolidado (FALTANTE)
+
+    public int alterarTodos(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE administrador SET cpf = ?, nome_completo = ?, email = ?, senha = ?, telefone = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, cpf);
+            pstmt.setString(2, nomeCompleto);
+            pstmt.setString(3, email);
+            pstmt.setString(4, senha);
+            pstmt.setString(5, telefone);
+            pstmt.setInt(6, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
+
+
     public boolean atualizar(Administrador admin, String novaSenha) {
         String comando;
         if (novaSenha != null && !novaSenha.isEmpty()) {
@@ -367,23 +400,53 @@ public class AdministradorDAO extends DAO {
     }
 
     // Método para autenticação
-    public String ehAdimin(String email, String senha){
+//    public String ehAdimin(String email, String senha){
+//        Connection conn = null;
+//        PreparedStatement pstmt;
+//        ResultSet rs;
+//        String sql = "SELECT senha, nome_completo FROM administrador WHERE email = ?";
+//        String senhaBanco, nome;
+//
+//        try {
+//            conn = conexao.conectar();
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1, email);
+//            rs = pstmt.executeQuery();
+//            if (rs.next()){
+//                senhaBanco = rs.getString("senha");
+//                nome = rs.getString("nome_completo");
+//                // Comparação de senha (considerando que a senha no banco está em texto plano, mas o ideal é usar hash)
+//                if (senha.equals(senhaBanco)){
+//                    return nome;
+//                }
+//            } return null;
+//        } catch (SQLException sqle){
+//            sqle.printStackTrace();
+//        } finally {
+//            conexao.desconectar(conn);
+//        } return null;
+//    }
+    public String ehAdmin(String email, String senha){
         Connection conn = null;
+        Hash hash = new Hash();
         PreparedStatement pstmt;
         ResultSet rs;
-        String sql = "SELECT senha, nome_completo FROM administrador WHERE email = ?";
-        String senhaBanco, nome;
+        String sql = "SELECT senha, nome FROM ADMINISTRADOR WHERE EMAIL = ?";
+        String senhaBanco, senhaCriptografada, nome;
 
         try {
             conn = conexao.conectar();
             pstmt = conn.prepareStatement(sql);
+
+//            Setando valores
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
             if (rs.next()){
                 senhaBanco = rs.getString("senha");
-                nome = rs.getString("nome_completo");
-                // Comparação de senha (considerando que a senha no banco está em texto plano, mas o ideal é usar hash)
-                if (senha.equals(senhaBanco)){
+                nome = rs.getString("nome");
+                senhaCriptografada = hash.criptografarSenha(senha);
+
+                if (senhaCriptografada.equals(senhaBanco)){
                     return nome;
                 }
             } return null;

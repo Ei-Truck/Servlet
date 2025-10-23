@@ -36,6 +36,33 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    public int alterarTodos(int id, String nome, int idSegmento, int idEndereco) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE unidade SET nome = ?, id_segmento = ?, id_endereco = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, nome);
+            pstmt.setInt(2, idSegmento);
+            pstmt.setInt(3, idEndereco);
+            pstmt.setInt(4, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
     public int alterarIdSegmento(Unidade unidade, int novoIdSegmento) {
         String comando = "UPDATE unidade SET id_segmento = ? WHERE id = ?";
 
@@ -298,4 +325,3 @@ public class UnidadeDAO extends DAO {
         }
     }
 }
-

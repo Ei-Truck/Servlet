@@ -41,8 +41,10 @@ public class EnderecoDAO extends DAO {
     }
     public int alterarCep(Endereco endereco, String novoCep) {
         String comando = "UPDATE endereco SET cep = ? WHERE id = ?";
+        Connection conn = null;
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novoCep);
             pstmt.setInt(2, endereco.getId());
@@ -63,7 +65,38 @@ public class EnderecoDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+    public int alterarEndereco(int id, String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
+        Connection conn = null;
 
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE endereco SET cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, pais = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, cep);
+            pstmt.setString(2, rua);
+            pstmt.setInt(3, numero);
+            pstmt.setString(4, bairro);
+            pstmt.setString(5, cidade);
+            pstmt.setString(6, estado);
+            pstmt.setString(7, pais);
+            pstmt.setInt(8, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
     public int alterarRua(Endereco endereco, String novaRua) {
         String comando = "UPDATE endereco SET rua = ? WHERE id = ?";
 
@@ -390,5 +423,3 @@ public class EnderecoDAO extends DAO {
         }
     }
 }
-
-

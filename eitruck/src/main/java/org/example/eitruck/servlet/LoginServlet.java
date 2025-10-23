@@ -21,7 +21,7 @@ public class LoginServlet extends HttpServlet {
         String senha = req.getParameter("senha");
 
         // Verifica login com o DAO
-        String resultado = admin.ehAdimin(email, senha);
+        String resultado = admin.ehAdmin(email, senha);
 
         if (resultado != null) {
             // Login válido → cria sessão e redireciona

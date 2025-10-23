@@ -165,7 +165,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
             throws IOException, ServletException {
         try {
             List<TipoOcorrencia> tipoOcorrencia = tipoOcorrenciaDAO.buscarTodos();
-            request.setAttribute("analistas", tipoOcorrencia);
+            request.setAttribute("ocorrencias", tipoOcorrencia);
             RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/processar_occurrences.jsp");
             rd.forward(request, response);
             return;

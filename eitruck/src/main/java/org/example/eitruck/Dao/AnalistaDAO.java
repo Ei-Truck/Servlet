@@ -102,6 +102,38 @@ public class AnalistaDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+    public int alterarTodos(int id, int idUnidade, String cpf, String nomeCompleto, LocalDate dtContratacao, String email, String senha, String cargo, String telefone) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE analista SET id_unidade = ?, cpf = ?, nome_completo = ?, dt_contratacao = ?, email = ?, senha = ?, cargo = ?, telefone = ? WHERE id = ?"
+            );
+
+            pstmt.setInt(1, idUnidade);
+            pstmt.setString(2, cpf);
+            pstmt.setString(3, nomeCompleto);
+            pstmt.setDate(4, java.sql.Date.valueOf(dtContratacao));
+            pstmt.setString(5, email);
+            pstmt.setString(6, senha);
+            pstmt.setString(7, cargo);
+            pstmt.setString(8, telefone);
+            pstmt.setInt(9, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
 
     // Método de atualização consolidado
     public boolean atualizar(Analista analista, String novaSenha) {
@@ -959,8 +991,8 @@ public class AnalistaDAO extends DAO {
 //            );
 //
 //            System.out.println("Resultado: " + (resultado2 == 1 ? "Sucesso" : "Falha"));
-//        }
-//    }
+//        }
+//    }
 //
 //}
 }

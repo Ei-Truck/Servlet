@@ -35,6 +35,33 @@ public class TipoOcorrenciaDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+    public int alterarTodos(int id, String tipoEvento, int pontuacao, String gravidade) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE tipo_ocorrencia SET tipo_evento = ?, pontuacao = ?, gravidade = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, tipoEvento);
+            pstmt.setInt(2, pontuacao);
+            pstmt.setString(3, gravidade);
+            pstmt.setInt(4, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
 
     public int alterarTipoEvento(TipoOcorrencia tipoOcorrencia, String novoTipoEvento) {
         String comando = "UPDATE tipo_ocorrencia SET tipo_evento = ? WHERE id = ?";
