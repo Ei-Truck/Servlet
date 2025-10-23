@@ -41,6 +41,86 @@ public class AnalistaDAO extends DAO {
         }
     }
 
+    public int apagar(int idAnalista) {
+        String comando = "DELETE FROM analista WHERE id = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idAnalista);
+            int execucao = pstmt.executeUpdate();
+            return execucao;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    // Método para buscar todos os analistas
+    public List<Analista> buscarTodos() {
+        ResultSet rs;
+        List<Analista> listaRetorno = new ArrayList<>();
+        String comando = """
+        SELECT 
+            a.*,
+            u.nome as nome_unidade
+        FROM analista a
+        INNER JOIN unidade u ON a.id_unidade = u.id
+        """;
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
+                analista.setNomeUnidade(rs.getString("nome_unidade"));
+                listaRetorno.add(analista);
+            }
+            return listaRetorno;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM analista";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public List<Analista> filtrarAnalistasMultiplos(String filtroId, String filtroNomeUnidade, String filtroNomeCompleto,
                                                     String filtroCpf, String filtroEmail, String filtroCargo) {
         ResultSet rs;
@@ -135,86 +215,6 @@ public class AnalistaDAO extends DAO {
         }
     }
 
-    // Método apagar simplificado
-    public int apagar(int idAnalista) {
-        String comando = "DELETE FROM analista WHERE id = ?";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idAnalista);
-            int execucao = pstmt.executeUpdate();
-            return execucao;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Método para buscar todos os analistas
-    public List<Analista> buscarTodos() {
-        ResultSet rs;
-        List<Analista> listaRetorno = new ArrayList<>();
-        String comando = """
-        SELECT 
-            a.*,
-            u.nome as nome_unidade
-        FROM analista a
-        INNER JOIN unidade u ON a.id_unidade = u.id
-        """;
-
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Analista analista = new Analista(
-                        rs.getInt("id"),
-                        rs.getInt("id_unidade"),
-                        rs.getString("cpf"),
-                        rs.getString("nome_completo"),
-                        rs.getDate("dt_contratacao").toLocalDate(),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getString("cargo"),
-                        rs.getString("telefone")
-                );
-                analista.setNomeUnidade(rs.getString("nome_unidade"));
-                listaRetorno.add(analista);
-            }
-            return listaRetorno;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM analista";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-            return 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
     public int alterarTodos(int id, int idUnidade, String cpf, String nomeCompleto, LocalDate dtContratacao, String email, String senha, String cargo, String telefone) {
         Connection conn = null;
         try {

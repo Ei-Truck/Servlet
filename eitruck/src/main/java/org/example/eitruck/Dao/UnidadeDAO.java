@@ -36,6 +36,101 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    public int apagar(int idUnidade) {
+        String comando = "DELETE FROM unidade WHERE id = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+
+            // Primeiro, verifica se existe algum analista usando esta unidade
+            String verificaAnalista = "SELECT COUNT(*) FROM analista WHERE id_unidade = ?";
+            PreparedStatement pstmtVerifica = conn.prepareStatement(verificaAnalista);
+            pstmtVerifica.setInt(1, idUnidade);
+            ResultSet rs = pstmtVerifica.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                // Existem analistas usando esta unidade, não pode excluir
+                return -2; // Código especial para "em uso por analista"
+            }
+
+            // Se não há analistas usando, procede com a exclusão
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idUnidade);
+            int execucao = pstmt.executeUpdate();
+            return execucao;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            // Verifica se é erro de restrição de chave estrangeira
+            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
+                return -2; // Também retorna -2 se houver violação de FK
+            }
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<Unidade> buscarTodos() {
+        String comando = """
+        SELECT 
+            u.*,
+            s.nome as nome_segmento,
+            e.cidade as nome_endereco
+        FROM unidade u
+        INNER JOIN segmento s ON u.id_segmento = s.id
+        INNER JOIN endereco e ON u.id_endereco = e.id
+        """;
+
+        try {
+            Connection conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            List<Unidade> listaRetorno = new ArrayList<>();
+            while (rs.next()) {
+                Unidade unidade = new Unidade(
+                        rs.getInt("id"),
+                        rs.getInt("id_segmento"),
+                        rs.getInt("id_endereco"),
+                        rs.getString("nome"),
+                        rs.getString("nome_segmento"),
+                        rs.getString("nome_endereco")
+                );
+                listaRetorno.add(unidade);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM unidade";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public List<Unidade> filtrarUnidadesMultiplos(String filtroId, String filtroNome, String filtroNomeSegmento, String filtroNomeEndereco) {
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
@@ -213,101 +308,6 @@ public class UnidadeDAO extends DAO {
             return -1;
         }
         finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int apagar(int idUnidade) {
-        String comando = "DELETE FROM unidade WHERE id = ?";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-
-            // Primeiro, verifica se existe algum analista usando esta unidade
-            String verificaAnalista = "SELECT COUNT(*) FROM analista WHERE id_unidade = ?";
-            PreparedStatement pstmtVerifica = conn.prepareStatement(verificaAnalista);
-            pstmtVerifica.setInt(1, idUnidade);
-            ResultSet rs = pstmtVerifica.executeQuery();
-
-            if (rs.next() && rs.getInt(1) > 0) {
-                // Existem analistas usando esta unidade, não pode excluir
-                return -2; // Código especial para "em uso por analista"
-            }
-
-            // Se não há analistas usando, procede com a exclusão
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idUnidade);
-            int execucao = pstmt.executeUpdate();
-            return execucao;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            // Verifica se é erro de restrição de chave estrangeira
-            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
-                return -2; // Também retorna -2 se houver violação de FK
-            }
-            return -1;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<Unidade> buscarTodos() {
-        String comando = """
-        SELECT 
-            u.*,
-            s.nome as nome_segmento,
-            e.cidade as nome_endereco
-        FROM unidade u
-        INNER JOIN segmento s ON u.id_segmento = s.id
-        INNER JOIN endereco e ON u.id_endereco = e.id
-        """;
-
-        try {
-            Connection conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            ResultSet rs = pstmt.executeQuery();
-
-            List<Unidade> listaRetorno = new ArrayList<>();
-            while (rs.next()) {
-                Unidade unidade = new Unidade(
-                        rs.getInt("id"),
-                        rs.getInt("id_segmento"),
-                        rs.getInt("id_endereco"),
-                        rs.getString("nome"),
-                        rs.getString("nome_segmento"),
-                        rs.getString("nome_endereco")
-                );
-                listaRetorno.add(unidade);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM unidade";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-            return 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        } finally {
             conexao.desconectar(conn);
         }
     }

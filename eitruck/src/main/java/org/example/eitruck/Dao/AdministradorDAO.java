@@ -39,6 +39,75 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    public int apagar(int idAdmin) {
+        String comando = "DELETE FROM administrador WHERE id = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idAdmin);
+            int execucao = pstmt.executeUpdate();
+            return execucao;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<Administrador> buscarTodos() {
+        ResultSet rs;
+        List<Administrador> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM administrador";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("telefone")
+                );
+                listaRetorno.add(admin);
+            }
+            return listaRetorno;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM administrador";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public List<Administrador> filtrarAdministradoresMultiplos(String filtroId, String filtroNome, String filtroCpf,
                                                                String filtroEmail, String filtroTelefone) {
         ResultSet rs;
@@ -109,77 +178,6 @@ public class AdministradorDAO extends DAO {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Método apagar simplificado (CORREÇÃO)
-    public int apagar(int idAdmin) {
-        String comando = "DELETE FROM administrador WHERE id = ?";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idAdmin);
-            int execucao = pstmt.executeUpdate();
-            return execucao;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Método para buscar todos os administradores (FALTANTE)
-    public List<Administrador> buscarTodos() {
-        ResultSet rs;
-        List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM administrador";
-
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Administrador admin = new Administrador(
-                        rs.getInt("id"),
-                        rs.getString("cpf"),
-                        rs.getString("nome_completo"),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getString("telefone")
-                );
-                listaRetorno.add(admin);
-            }
-            return listaRetorno;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM administrador";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-            return 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
         } finally {
             conexao.desconectar(conn);
         }
@@ -475,33 +473,6 @@ public class AdministradorDAO extends DAO {
         }
     }
 
-    // Método para autenticação
-//    public String ehAdimin(String email, String senha){
-//        Connection conn = null;
-//        PreparedStatement pstmt;
-//        ResultSet rs;
-//        String sql = "SELECT senha, nome_completo FROM administrador WHERE email = ?";
-//        String senhaBanco, nome;
-//
-//        try {
-//            conn = conexao.conectar();
-//            pstmt = conn.prepareStatement(sql);
-//            pstmt.setString(1, email);
-//            rs = pstmt.executeQuery();
-//            if (rs.next()){
-//                senhaBanco = rs.getString("senha");
-//                nome = rs.getString("nome_completo");
-//                // Comparação de senha (considerando que a senha no banco está em texto plano, mas o ideal é usar hash)
-//                if (senha.equals(senhaBanco)){
-//                    return nome;
-//                }
-//            } return null;
-//        } catch (SQLException sqle){
-//            sqle.printStackTrace();
-//        } finally {
-//            conexao.desconectar(conn);
-//        } return null;
-//    }
     public String ehAdmin(String email, String senha){
         Connection conn = null;
         Hash hash = new Hash();
