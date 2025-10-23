@@ -1,21 +1,71 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.example.eitruck.model.Administrador" %>
-<%@ page import="org.example.eitruck.model.Endereco" %>
+<%@ page import="java.net.URLDecoder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String subAcao = request.getParameter("sub_acao");
     List<Administrador> administradores = (List<Administrador>) request.getAttribute("administradores");
+    String errorMessage = (String) request.getAttribute("errorMessage");
+
+    // Capturar e decodificar o erro da URL
+    String errorParam = request.getParameter("error");
+    if (errorParam != null) {
+        errorParam = URLDecoder.decode(errorParam, "UTF-8");
+    }
 %>
 <html>
 <head>
     <title>Buscar todos</title>
+    <style>
+        .error-notification {
+            background-color: #ffebee;
+            border: 1px solid #f44336;
+            color: #c62828;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .error-notification button {
+            background: none;
+            border: none;
+            color: #c62828;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .error-notification button:hover {
+            color: #b71c1c;
+        }
+    </style>
 </head>
 <body>
 <%
-    if ("buscar_todos".equals(subAcao)) { // Abre o bloco
+    if ("buscar_todos".equals(subAcao)) {
 %>
 
 <button onclick="window.location.href='html/Restricted-area/Pages/Administrator/administrator.jsp'">Adicionar Administrador</button>
+
+<%-- Notificação de erro --%>
+<% if (errorMessage != null || errorParam != null) { %>
+<div class="error-notification" id="errorNotification">
+    <span>Erro: <%= errorMessage != null ? errorMessage : errorParam %></span>
+    <button onclick="document.getElementById('errorNotification').style.display='none'">×</button>
+</div>
+
+<script>
+    // Opcional: remover automaticamente após 5 segundos
+    setTimeout(function() {
+        var notification = document.getElementById('errorNotification');
+        if (notification) {
+            notification.style.display = 'none';
+        }
+    }, 5000);
+</script>
+<% } %>
 
 <h1>Exibindo todos os Administradores</h1>
 
@@ -31,10 +81,9 @@
     </tr>
     </thead>
 
-
     <tbody>
     <%
-        if (administradores != null) {
+        if (administradores != null && !administradores.isEmpty()) {
             for (int i=0; i < administradores.size(); i++){
     %>
     <tr>
@@ -52,14 +101,14 @@
         </td>
     </tr>
     <%
-        } // Fecha o for
+        }
     } else {
     %>
     <tr>
-        <td colspan="7">Nenhum administrador encontrado ou erro ao carregar dados.</td>
+        <td colspan="6">Nenhum administrador encontrado ou erro ao carregar dados.</td>
     </tr>
     <%
-        } // Fecha o if
+        }
     %>
     </tbody>
 </table>

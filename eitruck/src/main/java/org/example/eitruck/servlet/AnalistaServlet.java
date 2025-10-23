@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -186,17 +187,17 @@ public class AnalistaServlet extends HttpServlet {
                 // Sucesso: redireciona para a lista sem mensagem de erro
                 response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
             } else {
-                // Erro: redireciona de volta para a lista com mensagem de erro
-                request.setAttribute("errorMessage", "Erro ao excluir analista. Tente novamente.");
-                buscarTodos(request, response, "buscar", "buscar_todos");
+                // Erro: redireciona com mensagem de erro codificada
+                String errorMessage = URLEncoder.encode("Erro ao excluir analista. Tente novamente.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
             }
         } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "ID inválido.");
-            buscarTodos(request, response, "buscar", "buscar_todos");
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Erro interno ao excluir analista.");
-            buscarTodos(request, response, "buscar", "buscar_todos");
+            String errorMessage = URLEncoder.encode("Erro interno ao excluir analista.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
         }
     }
 
