@@ -36,6 +36,81 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    public List<TipoOcorrencia> filtrarTiposOcorrenciaMultiplos(String filtroId, String filtroTipoEvento,
+                                                                String filtroPontuacao, String filtroGravidade) {
+        ResultSet rs;
+        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            StringBuilder sql = new StringBuilder("SELECT * FROM tipo_ocorrencia WHERE 1=1");
+            List<Object> parametros = new ArrayList<>();
+
+            // Filtro por ID (busca parcial)
+            if (filtroId != null && !filtroId.trim().isEmpty()) {
+                sql.append(" AND id::text LIKE ?");
+                parametros.add("%" + filtroId.trim() + "%");
+            }
+
+            // Filtro por Tipo de Evento (busca parcial case-insensitive)
+            if (filtroTipoEvento != null && !filtroTipoEvento.trim().isEmpty()) {
+                sql.append(" AND tipo_evento ILIKE ?");
+                parametros.add("%" + filtroTipoEvento.trim() + "%");
+            }
+
+            // Filtro por Pontuação (busca parcial)
+            if (filtroPontuacao != null && !filtroPontuacao.trim().isEmpty()) {
+                // Tenta converter para número para busca exata, senão busca como texto
+                try {
+                    int pontuacao = Integer.parseInt(filtroPontuacao.trim());
+                    sql.append(" AND pontuacao = ?");
+                    parametros.add(pontuacao);
+                } catch (NumberFormatException e) {
+                    // Se não é número, busca como texto parcial
+                    sql.append(" AND pontuacao::text LIKE ?");
+                    parametros.add("%" + filtroPontuacao.trim() + "%");
+                }
+            }
+
+            // Filtro por Gravidade (busca parcial case-insensitive)
+            if (filtroGravidade != null && !filtroGravidade.trim().isEmpty()) {
+                sql.append(" AND gravidade ILIKE ?");
+                parametros.add("%" + filtroGravidade.trim() + "%");
+            }
+
+            sql.append(" ORDER BY id");
+
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+            // Preenche os parâmetros
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            System.out.println("SQL Tipo Ocorrência: " + sql.toString());
+            System.out.println("Parâmetros Tipo Ocorrência: " + parametros);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                TipoOcorrencia tipoOcorrencia = new TipoOcorrencia(
+                        rs.getInt("id"),
+                        rs.getString("tipo_evento"),
+                        rs.getInt("pontuacao"),
+                        rs.getString("gravidade")
+                );
+                listaRetorno.add(tipoOcorrencia);
+            }
+            return listaRetorno;
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public int apagar(int idOcorrencia) {
         String comando = "DELETE FROM tipo_ocorrencia WHERE id = ?";
         Connection conn = null;

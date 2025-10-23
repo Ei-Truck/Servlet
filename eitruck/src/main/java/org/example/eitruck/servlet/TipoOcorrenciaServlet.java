@@ -35,19 +35,62 @@ public class TipoOcorrenciaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao"); // Use apenas "acao" ou "acao_principal" de forma consistente
-        // Mudei o parâmetro para "acao" para ser consistente com o switch
+        String acao = request.getParameter("acao");
 
         switch (acao != null ? acao : "listar") {
-            // ...
             case "buscar":
-                // 1. Chame o método de busca específica
-                buscarTodos(request, response, acao, "buscar_todos"); // <--- CHAMADA CORRETA PARA BUSCA ESPECÍFICA
+                buscarTodos(request, response, acao, "buscar_todos");
                 break;
-            case "listar": // Caso padrão para listar todos
+            case "filtrar": // NOVO CASO PARA FILTRAR
+                filtrarTiposOcorrencia(request, response);
+                break;
+            case "listar":
             default:
-                // 2. Chame o método que busca todos e encaminha para o JSP
-                buscarTodos(request, response, acao, "buscar_todos"); // Reutilizando seu método buscarTodos
+                buscarTodos(request, response, acao, "buscar_todos");
+        }
+    }
+
+    private void filtrarTiposOcorrencia(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String filtroId = request.getParameter("filtro_id");
+            String filtroTipoEvento = request.getParameter("filtro_tipo_evento");
+            String filtroPontuacao = request.getParameter("filtro_pontuacao");
+            String filtroGravidade = request.getParameter("filtro_gravidade");
+
+            List<TipoOcorrencia> ocorrencias;
+
+            // Verifica se pelo menos um filtro foi preenchido
+            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
+                    (filtroTipoEvento != null && !filtroTipoEvento.trim().isEmpty()) ||
+                    (filtroPontuacao != null && !filtroPontuacao.trim().isEmpty()) ||
+                    (filtroGravidade != null && !filtroGravidade.trim().isEmpty());
+
+            if (algumFiltro) {
+                // Busca com filtros
+                ocorrencias = tipoOcorrenciaDAO.filtrarTiposOcorrenciaMultiplos(filtroId, filtroTipoEvento,
+                        filtroPontuacao, filtroGravidade);
+            } else {
+                // Se nenhum filtro, busca todos
+                ocorrencias = tipoOcorrenciaDAO.buscarTodos();
+            }
+
+            request.setAttribute("ocorrencias", ocorrencias);
+
+            // Mantém os parâmetros do filtro para mostrar no formulário
+            request.setAttribute("filtroId", filtroId);
+            request.setAttribute("filtroTipoEvento", filtroTipoEvento);
+            request.setAttribute("filtroPontuacao", filtroPontuacao);
+            request.setAttribute("filtroGravidade", filtroGravidade);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/processar_occurrences.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "Erro ao filtrar tipos de ocorrência: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            buscarTodos(request, response, "buscar", "buscar_todos");
         }
     }
 
