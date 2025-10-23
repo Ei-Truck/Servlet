@@ -37,19 +37,74 @@ public class EnderecoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao"); // Use apenas "acao" ou "acao_principal" de forma consistente
-        // Mudei o parâmetro para "acao" para ser consistente com o switch
+        String acao = request.getParameter("acao");
 
         switch (acao != null ? acao : "listar") {
-            // ...
             case "buscar":
-                // 1. Chame o método de busca específica
-                buscarTodos(request, response, acao, "buscar_todos"); // <--- CHAMADA CORRETA PARA BUSCA ESPECÍFICA
+                buscarTodos(request, response, acao, "buscar_todos");
                 break;
-            case "listar": // Caso padrão para listar todos
+            case "filtrar": // NOVO CASO PARA FILTRAR
+                filtrarEnderecos(request, response);
+                break;
+            case "listar":
             default:
-                // 2. Chame o método que busca todos e encaminha para o JSP
-                buscarTodos(request, response, acao, "buscar_todos"); // Reutilizando seu método buscarTodos
+                buscarTodos(request, response, acao, "buscar_todos");
+        }
+    }
+
+    private void filtrarEnderecos(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String filtroId = request.getParameter("filtro_id");
+            String filtroCep = request.getParameter("filtro_cep");
+            String filtroRua = request.getParameter("filtro_rua");
+            String filtroNumero = request.getParameter("filtro_numero");
+            String filtroBairro = request.getParameter("filtro_bairro");
+            String filtroCidade = request.getParameter("filtro_cidade");
+            String filtroEstado = request.getParameter("filtro_estado");
+            String filtroPais = request.getParameter("filtro_pais");
+
+            List<Endereco> enderecos;
+
+            // Verifica se pelo menos um filtro foi preenchido
+            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
+                    (filtroCep != null && !filtroCep.trim().isEmpty()) ||
+                    (filtroRua != null && !filtroRua.trim().isEmpty()) ||
+                    (filtroNumero != null && !filtroNumero.trim().isEmpty()) ||
+                    (filtroBairro != null && !filtroBairro.trim().isEmpty()) ||
+                    (filtroCidade != null && !filtroCidade.trim().isEmpty()) ||
+                    (filtroEstado != null && !filtroEstado.trim().isEmpty()) ||
+                    (filtroPais != null && !filtroPais.trim().isEmpty());
+
+            if (algumFiltro) {
+                // Busca com filtros
+                enderecos = enderecoDAO.filtrarEnderecosMultiplos(filtroId, filtroCep, filtroRua, filtroNumero,
+                        filtroBairro, filtroCidade, filtroEstado, filtroPais);
+            } else {
+                // Se nenhum filtro, busca todos
+                enderecos = enderecoDAO.buscarTodos();
+            }
+
+            request.setAttribute("enderecos", enderecos);
+
+            // Mantém os parâmetros do filtro para mostrar no formulário
+            request.setAttribute("filtroId", filtroId);
+            request.setAttribute("filtroCep", filtroCep);
+            request.setAttribute("filtroRua", filtroRua);
+            request.setAttribute("filtroNumero", filtroNumero);
+            request.setAttribute("filtroBairro", filtroBairro);
+            request.setAttribute("filtroCidade", filtroCidade);
+            request.setAttribute("filtroEstado", filtroEstado);
+            request.setAttribute("filtroPais", filtroPais);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Addresses/processar_addresses.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "Erro ao filtrar endereços: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            buscarTodos(request, response, "buscar", "buscar_todos");
         }
     }
 

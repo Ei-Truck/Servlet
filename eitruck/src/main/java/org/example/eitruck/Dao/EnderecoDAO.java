@@ -40,6 +40,102 @@ public class EnderecoDAO extends DAO {
         }
     }
 
+    public List<Endereco> filtrarEnderecosMultiplos(String filtroId, String filtroCep, String filtroRua,
+                                                    String filtroNumero, String filtroBairro, String filtroCidade,
+                                                    String filtroEstado, String filtroPais) {
+        ResultSet rs;
+        List<Endereco> listaRetorno = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            StringBuilder sql = new StringBuilder("SELECT * FROM endereco WHERE 1=1");
+            List<Object> parametros = new ArrayList<>();
+
+            // Filtro por ID (busca parcial)
+            if (filtroId != null && !filtroId.trim().isEmpty()) {
+                sql.append(" AND id::text LIKE ?");
+                parametros.add("%" + filtroId.trim() + "%");
+            }
+
+            // Filtro por CEP (busca parcial)
+            if (filtroCep != null && !filtroCep.trim().isEmpty()) {
+                sql.append(" AND cep LIKE ?");
+                parametros.add("%" + filtroCep.trim() + "%");
+            }
+
+            // Filtro por Rua (busca parcial case-insensitive)
+            if (filtroRua != null && !filtroRua.trim().isEmpty()) {
+                sql.append(" AND rua ILIKE ?");
+                parametros.add("%" + filtroRua.trim() + "%");
+            }
+
+            // Filtro por Número (busca parcial)
+            if (filtroNumero != null && !filtroNumero.trim().isEmpty()) {
+                sql.append(" AND numero::text LIKE ?");
+                parametros.add("%" + filtroNumero.trim() + "%");
+            }
+
+            // Filtro por Bairro (busca parcial case-insensitive)
+            if (filtroBairro != null && !filtroBairro.trim().isEmpty()) {
+                sql.append(" AND bairro ILIKE ?");
+                parametros.add("%" + filtroBairro.trim() + "%");
+            }
+
+            // Filtro por Cidade (busca parcial case-insensitive)
+            if (filtroCidade != null && !filtroCidade.trim().isEmpty()) {
+                sql.append(" AND cidade ILIKE ?");
+                parametros.add("%" + filtroCidade.trim() + "%");
+            }
+
+            // Filtro por Estado (busca parcial case-insensitive)
+            if (filtroEstado != null && !filtroEstado.trim().isEmpty()) {
+                sql.append(" AND estado ILIKE ?");
+                parametros.add("%" + filtroEstado.trim() + "%");
+            }
+
+            // Filtro por País (busca parcial case-insensitive)
+            if (filtroPais != null && !filtroPais.trim().isEmpty()) {
+                sql.append(" AND pais ILIKE ?");
+                parametros.add("%" + filtroPais.trim() + "%");
+            }
+
+            sql.append(" ORDER BY id");
+
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+            // Preenche os parâmetros
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            System.out.println("SQL Endereço: " + sql.toString());
+            System.out.println("Parâmetros Endereço: " + parametros);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Endereco endereco = new Endereco(
+                        rs.getInt("id"),
+                        rs.getString("cep"),
+                        rs.getString("rua"),
+                        rs.getInt("numero"),
+                        rs.getString("bairro"),
+                        rs.getString("cidade"),
+                        rs.getString("estado"),
+                        rs.getString("pais")
+                );
+                listaRetorno.add(endereco);
+            }
+            return listaRetorno;
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public int apagar(int idEndereco) {
         String comando = "DELETE FROM endereco WHERE id = ?";
         Connection conn = null;
