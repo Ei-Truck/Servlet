@@ -39,6 +39,81 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    public List<Administrador> filtrarAdministradoresMultiplos(String filtroId, String filtroNome, String filtroCpf,
+                                                               String filtroEmail, String filtroTelefone) {
+        ResultSet rs;
+        List<Administrador> listaRetorno = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            StringBuilder sql = new StringBuilder("SELECT * FROM administrador WHERE 1=1");
+            List<Object> parametros = new ArrayList<>();
+
+            // Filtro por ID (busca parcial)
+            if (filtroId != null && !filtroId.trim().isEmpty()) {
+                sql.append(" AND id::text LIKE ?");
+                parametros.add("%" + filtroId.trim() + "%");
+            }
+
+            // Filtro por Nome (busca parcial case-insensitive)
+            if (filtroNome != null && !filtroNome.trim().isEmpty()) {
+                sql.append(" AND nome_completo ILIKE ?");
+                parametros.add("%" + filtroNome.trim() + "%");
+            }
+
+            // Filtro por CPF (busca parcial)
+            if (filtroCpf != null && !filtroCpf.trim().isEmpty()) {
+                sql.append(" AND cpf LIKE ?");
+                parametros.add("%" + filtroCpf.trim() + "%");
+            }
+
+            // Filtro por Email (busca parcial case-insensitive)
+            if (filtroEmail != null && !filtroEmail.trim().isEmpty()) {
+                sql.append(" AND email ILIKE ?");
+                parametros.add("%" + filtroEmail.trim() + "%");
+            }
+
+            // Filtro por Telefone (busca parcial)
+            if (filtroTelefone != null && !filtroTelefone.trim().isEmpty()) {
+                sql.append(" AND telefone LIKE ?");
+                parametros.add("%" + filtroTelefone.trim() + "%");
+            }
+
+            sql.append(" ORDER BY id");
+
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+            // Preenche os parâmetros
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            System.out.println("SQL Administrador: " + sql.toString());
+            System.out.println("Parâmetros Administrador: " + parametros);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Administrador admin = new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("telefone")
+                );
+                listaRetorno.add(admin);
+            }
+            return listaRetorno;
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     // Método apagar simplificado (CORREÇÃO)
     public int apagar(int idAdmin) {
         String comando = "DELETE FROM administrador WHERE id = ?";
