@@ -35,6 +35,73 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    public List<Segmento> filtrarSegmentosMultiplos(String filtroId, String filtroNome, String filtroDescricao) {
+        ResultSet rs;
+        List<Segmento> listaRetorno = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            StringBuilder sql = new StringBuilder("SELECT * FROM segmento WHERE 1=1");
+            List<Object> parametros = new ArrayList<>();
+
+            // Filtro por ID (busca exata ou parcial)
+            if (filtroId != null && !filtroId.trim().isEmpty()) {
+                // Tenta converter para número para busca exata, senão busca como texto
+                try {
+                    int id = Integer.parseInt(filtroId.trim());
+                    sql.append(" AND id = ?");
+                    parametros.add(id);
+                } catch (NumberFormatException e) {
+                    // Se não é número, busca como texto parcial
+                    sql.append(" AND id::text LIKE ?");
+                    parametros.add("%" + filtroId.trim() + "%");
+                }
+            }
+
+            // Filtro por Nome (busca parcial case-insensitive)
+            if (filtroNome != null && !filtroNome.trim().isEmpty()) {
+                sql.append(" AND nome ILIKE ?");
+                parametros.add("%" + filtroNome.trim() + "%");
+            }
+
+            // Filtro por Descrição (busca parcial case-insensitive)
+            if (filtroDescricao != null && !filtroDescricao.trim().isEmpty()) {
+                sql.append(" AND descricao ILIKE ?");
+                parametros.add("%" + filtroDescricao.trim() + "%");
+            }
+
+            sql.append(" ORDER BY id");
+
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+            // Preenche os parâmetros
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            System.out.println("SQL: " + sql.toString());
+            System.out.println("Parâmetros: " + parametros);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Segmento segmento = new Segmento(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("descricao")
+                );
+                listaRetorno.add(segmento);
+            }
+            return listaRetorno;
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public int apagar(int idSegmento) {
         String comando = "DELETE FROM segmento WHERE id = ?";
         Connection conn = null;
