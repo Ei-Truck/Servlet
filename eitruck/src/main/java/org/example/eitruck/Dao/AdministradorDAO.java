@@ -75,7 +75,8 @@ public class AdministradorDAO extends DAO {
                         rs.getString("cpf"),
                         rs.getString("nome_completo"),
                         rs.getString("email"),
-                        rs.getString("senha")
+                        rs.getString("senha"),
+                        rs.getString("telefone")
                 );
                 listaRetorno.add(admin);
             }
