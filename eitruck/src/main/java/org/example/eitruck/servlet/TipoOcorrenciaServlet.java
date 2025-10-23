@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.eitruck.model.TipoOcorrencia;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -63,7 +64,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
                 atualizarAnalista(request, response);
                 break;
             case "excluir":
-                excluirAnalista(request, response);
+                excluirOcorrencia(request, response);
                 break;
         }
     }
@@ -156,9 +157,27 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
-    public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getContextPath() + "html/Restricted-area/Pages/Analyst/processar_analista.jsp";
-        response.sendRedirect(url);
+    private void excluirOcorrencia(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int resultado = tipoOcorrenciaDAO.apagar(id);
+
+            if (resultado > 0) {
+                // Sucesso: redireciona para a lista sem mensagem de erro
+                response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos");
+            } else {
+                // Erro: redireciona com mensagem de erro codificada
+                String errorMessage = URLEncoder.encode("Erro ao excluir tipo de ocorrência. Tente novamente.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro interno ao excluir tipo de ocorrência.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)

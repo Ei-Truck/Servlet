@@ -35,6 +35,71 @@ public class TipoOcorrenciaDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+
+    public int apagar(int idOcorrencia) {
+        String comando = "DELETE FROM tipo_ocorrencia WHERE id = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idOcorrencia);
+            int execucao = pstmt.executeUpdate();
+            return execucao;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<TipoOcorrencia> buscarTodos() {
+        ResultSet rs;
+        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM tipo_ocorrencia";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                TipoOcorrencia tipo = new TipoOcorrencia(rs.getInt("id"), rs.getString("tipo_evento"), rs.getInt("pontuacao"), rs.getString("gravidade"));
+                listaRetorno.add(tipo);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM tipo_ocorrencia";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public int alterarTodos(int id, String tipoEvento, int pontuacao, String gravidade) {
         Connection conn = null;
         try {
@@ -134,73 +199,6 @@ public class TipoOcorrenciaDAO extends DAO {
             return -1;
         }
         finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int apagar(TipoOcorrencia tipoOcorrencia, int idTipoOcorrencia) {
-        String comando = "DELETE FROM tipo_ocorrencia WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idTipoOcorrencia);
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0) {
-                tipoOcorrencia = null;
-                return 1;
-            } else return 0;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<TipoOcorrencia> buscarTodos() {
-        ResultSet rs;
-        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM tipo_ocorrencia";
-
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            rs = pstmt.executeQuery();
-            while (rs.next()) {
-                TipoOcorrencia tipo = new TipoOcorrencia(rs.getInt("id"), rs.getString("tipo_evento"), rs.getInt("pontuacao"), rs.getString("gravidade"));
-                listaRetorno.add(tipo);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM tipo_ocorrencia";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-            return 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        } finally {
             conexao.desconectar(conn);
         }
     }
