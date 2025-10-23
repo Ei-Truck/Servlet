@@ -138,26 +138,37 @@ public class UnidadeDAO extends DAO {
         }
     }
 
-    public int apagar(Unidade unidade, int idUnidade) {
+    public int apagar(int idUnidade) {
         String comando = "DELETE FROM unidade WHERE id = ?";
+        Connection conn = null;
 
         try {
+            conn = conexao.conectar();
+
+            // Primeiro, verifica se existe algum analista usando esta unidade
+            String verificaAnalista = "SELECT COUNT(*) FROM analista WHERE id_unidade = ?";
+            PreparedStatement pstmtVerifica = conn.prepareStatement(verificaAnalista);
+            pstmtVerifica.setInt(1, idUnidade);
+            ResultSet rs = pstmtVerifica.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                // Existem analistas usando esta unidade, não pode excluir
+                return -2; // Código especial para "em uso por analista"
+            }
+
+            // Se não há analistas usando, procede com a exclusão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idUnidade);
             int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                unidade = null;
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch(SQLException sqle){
+            return execucao;
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
+            // Verifica se é erro de restrição de chave estrangeira
+            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
+                return -2; // Também retorna -2 se houver violação de FK
+            }
             return -1;
-        }
-        finally {
+        } finally {
             conexao.desconectar(conn);
         }
     }

@@ -13,6 +13,7 @@ import org.example.eitruck.model.Analista;
 import org.example.eitruck.model.Unidade;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -157,10 +158,31 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
-    public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getContextPath() + "html/Restricted-area/Pages/Analyst/processar_analista.jsp";
-        //todo pegar a url
-        response.sendRedirect(url);
+    private void excluirUnidade(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int resultado = unidadeDao.apagar(id);
+
+            if (resultado > 0) {
+                // Sucesso: redireciona para a lista sem mensagem de erro
+                response.sendRedirect(request.getContextPath() + "/servlet-unidade?acao_principal=buscar&sub_acao=buscar_todos");
+            } else if (resultado == -2) {
+                // Erro específico: unidade está sendo usada por um analista
+                String errorMessage = URLEncoder.encode("Não é possível excluir essa unidade porque ela está sendo usada por um analista.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-unidade?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            } else {
+                // Erro genérico
+                String errorMessage = URLEncoder.encode("Erro ao excluir unidade. Tente novamente.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-unidade?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-unidade?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro interno ao excluir unidade.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-unidade?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
@@ -204,18 +226,6 @@ public class UnidadeServlet extends HttpServlet {
 //            }
 //        } catch (Exception e) {
 //            response.sendRedirect("Unidade?erro=" + e.getMessage());
-//        }
-    }
-
-    private void excluirUnidade(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        int id = Integer.parseInt(request.getParameter("id"));
-//        int resultado = UnidadeDao.apagar(id);
-//        //todo checar o parametro de apagar
-//
-//        if (resultado > 0) {
-//            response.sendRedirect("unidade?sucesso=Unidade excluído com sucesso");
-//        } else {
-//            response.sendRedirect("unidade?erro=Erro ao excluir unidade");
 //        }
     }
 
