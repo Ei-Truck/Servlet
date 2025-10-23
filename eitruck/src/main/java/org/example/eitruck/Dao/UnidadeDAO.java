@@ -36,6 +36,85 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    public List<Unidade> filtrarUnidadesMultiplos(String filtroId, String filtroNome, String filtroNomeSegmento, String filtroNomeEndereco) {
+        ResultSet rs;
+        List<Unidade> listaRetorno = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            // Usando JOIN para buscar o nome do segmento e o nome do endereço (cidade)
+            StringBuilder sql = new StringBuilder("""
+            SELECT 
+                u.*,
+                s.nome as nome_segmento,
+                e.cidade as nome_endereco
+            FROM unidade u
+            INNER JOIN segmento s ON u.id_segmento = s.id
+            INNER JOIN endereco e ON u.id_endereco = e.id
+            WHERE 1=1
+        """);
+
+            List<Object> parametros = new ArrayList<>();
+
+            // Filtro por ID (busca parcial)
+            if (filtroId != null && !filtroId.trim().isEmpty()) {
+                sql.append(" AND u.id::text LIKE ?");
+                parametros.add("%" + filtroId.trim() + "%");
+            }
+
+            // Filtro por Nome (busca parcial case-insensitive)
+            if (filtroNome != null && !filtroNome.trim().isEmpty()) {
+                sql.append(" AND u.nome ILIKE ?");
+                parametros.add("%" + filtroNome.trim() + "%");
+            }
+
+            // Filtro por Nome do Segmento (busca parcial case-insensitive)
+            if (filtroNomeSegmento != null && !filtroNomeSegmento.trim().isEmpty()) {
+                sql.append(" AND s.nome ILIKE ?");
+                parametros.add("%" + filtroNomeSegmento.trim() + "%");
+            }
+
+            // Filtro por Nome do Endereço (cidade) (busca parcial case-insensitive)
+            if (filtroNomeEndereco != null && !filtroNomeEndereco.trim().isEmpty()) {
+                sql.append(" AND e.cidade ILIKE ?");
+                parametros.add("%" + filtroNomeEndereco.trim() + "%");
+            }
+
+            sql.append(" ORDER BY u.id");
+
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+            // Preenche os parâmetros
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            System.out.println("SQL Unidade: " + sql.toString());
+            System.out.println("Parâmetros Unidade: " + parametros);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Unidade unidade = new Unidade(
+                        rs.getInt("id"),
+                        rs.getInt("id_segmento"),
+                        rs.getInt("id_endereco"),
+                        rs.getString("nome"),
+                        rs.getString("nome_segmento"),
+                        rs.getString("nome_endereco")
+                );
+                listaRetorno.add(unidade);
+            }
+            return listaRetorno;
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public int alterarTodos(int id, String nome, int idSegmento, int idEndereco) {
         Connection conn = null;
         try {
