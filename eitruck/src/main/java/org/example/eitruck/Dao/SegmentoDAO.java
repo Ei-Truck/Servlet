@@ -34,6 +34,88 @@ public class SegmentoDAO extends DAO {
             conexao.desconectar(conn);
         }
     }
+
+    public int apagar(int idSegmento) {
+        String comando = "DELETE FROM segmento WHERE id = ?";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+
+            // Primeiro, verifica se existe alguma unidade usando este segmento
+            String verificaUnidade = "SELECT COUNT(*) FROM unidade WHERE id_segmento = ?";
+            PreparedStatement pstmtVerifica = conn.prepareStatement(verificaUnidade);
+            pstmtVerifica.setInt(1, idSegmento);
+            ResultSet rs = pstmtVerifica.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                // Existem unidades usando este segmento, não pode excluir
+                return -2; // Código especial para "em uso por unidade"
+            }
+
+            // Se não há unidades usando, procede com a exclusão
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idSegmento);
+            int execucao = pstmt.executeUpdate();
+            return execucao;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            // Verifica se é erro de restrição de chave estrangeira
+            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
+                return -2; // Também retorna -2 se houver violação de FK
+            }
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public List<Segmento> buscarTodos() {
+        ResultSet rs;
+        List<Segmento> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM segmento";
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            rs = pstmt.executeQuery();
+            while (rs.next()){
+                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
+                listaRetorno.add(segmento);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    public int numeroRegistros() {
+        String comando = "SELECT COUNT(*) AS total FROM segmento";
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public int alterarTodos(int id, String nome, String descricao) {
         Connection conn = null;
         try {
@@ -112,30 +194,6 @@ public class SegmentoDAO extends DAO {
         }
     }
 
-    public int apagar(Segmento segmento, int idSegmento) {
-        String comando = "DELETE FROM segmento WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idSegmento);
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                segmento = null;
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
     public List<Segmento> buscarPorId(int idSegmento) {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();
@@ -182,52 +240,6 @@ public class SegmentoDAO extends DAO {
             return null;
         }
         finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<Segmento> buscarTodos() {
-        ResultSet rs;
-        List<Segmento> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM segmento";
-
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            rs = pstmt.executeQuery();
-            while (rs.next()){
-                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
-                listaRetorno.add(segmento);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM segmento";
-        Connection conn = null;
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-            return 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        } finally {
             conexao.desconectar(conn);
         }
     }

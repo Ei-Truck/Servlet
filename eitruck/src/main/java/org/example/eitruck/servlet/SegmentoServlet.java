@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.eitruck.model.Segmento;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -63,7 +64,7 @@ public class SegmentoServlet extends HttpServlet {
                 atualizarAnalista(request, response);
                 break;
             case "excluir":
-                excluirAnalista(request, response);
+                excluirSegmento(request, response);
                 break;
         }
     }
@@ -148,9 +149,31 @@ public class SegmentoServlet extends HttpServlet {
         }
     }
 
-    public void redirecionar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getContextPath() + "html/Restricted-area/Pages/Analyst/processar_analista.jsp";
-        response.sendRedirect(url);
+    private void excluirSegmento(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int resultado = segmentoDAO.apagar(id);
+
+            if (resultado > 0) {
+                // Sucesso: redireciona para a lista sem mensagem de erro
+                response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos");
+            } else if (resultado == -2) {
+                // Erro específico: segmento está sendo usado por uma unidade
+                String errorMessage = URLEncoder.encode("Não é possível excluir esse segmento por ele estar instanciado em uma unidade.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            } else {
+                // Erro genérico
+                String errorMessage = URLEncoder.encode("Erro ao excluir segmento. Tente novamente.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro interno ao excluir segmento.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
