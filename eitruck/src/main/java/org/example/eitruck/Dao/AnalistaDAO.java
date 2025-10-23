@@ -41,6 +41,100 @@ public class AnalistaDAO extends DAO {
         }
     }
 
+    public List<Analista> filtrarAnalistasMultiplos(String filtroId, String filtroNomeUnidade, String filtroNomeCompleto,
+                                                    String filtroCpf, String filtroEmail, String filtroCargo) {
+        ResultSet rs;
+        List<Analista> listaRetorno = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = conexao.conectar();
+
+            // Usando JOIN para buscar o nome da unidade
+            StringBuilder sql = new StringBuilder("""
+            SELECT a.*, u.nome as nome_unidade 
+            FROM analista a 
+            LEFT JOIN unidade u ON a.id_unidade = u.id 
+            WHERE 1=1
+        """);
+
+            List<Object> parametros = new ArrayList<>();
+
+            // Filtro por ID (busca parcial)
+            if (filtroId != null && !filtroId.trim().isEmpty()) {
+                sql.append(" AND a.id::text LIKE ?");
+                parametros.add("%" + filtroId.trim() + "%");
+            }
+
+            // Filtro por Nome da Unidade (busca parcial case-insensitive)
+            if (filtroNomeUnidade != null && !filtroNomeUnidade.trim().isEmpty()) {
+                sql.append(" AND u.nome ILIKE ?");
+                parametros.add("%" + filtroNomeUnidade.trim() + "%");
+            }
+
+            // Filtro por Nome Completo (busca parcial case-insensitive)
+            if (filtroNomeCompleto != null && !filtroNomeCompleto.trim().isEmpty()) {
+                sql.append(" AND a.nome_completo ILIKE ?");
+                parametros.add("%" + filtroNomeCompleto.trim() + "%");
+            }
+
+            // Filtro por CPF (busca parcial)
+            if (filtroCpf != null && !filtroCpf.trim().isEmpty()) {
+                sql.append(" AND a.cpf LIKE ?");
+                parametros.add("%" + filtroCpf.trim() + "%");
+            }
+
+            // Filtro por Email (busca parcial case-insensitive)
+            if (filtroEmail != null && !filtroEmail.trim().isEmpty()) {
+                sql.append(" AND a.email ILIKE ?");
+                parametros.add("%" + filtroEmail.trim() + "%");
+            }
+
+            // Filtro por Cargo (busca parcial case-insensitive)
+            if (filtroCargo != null && !filtroCargo.trim().isEmpty()) {
+                sql.append(" AND a.cargo ILIKE ?");
+                parametros.add("%" + filtroCargo.trim() + "%");
+            }
+
+            sql.append(" ORDER BY a.id");
+
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+            // Preenche os parâmetros
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            System.out.println("SQL Analista: " + sql.toString());
+            System.out.println("Parâmetros Analista: " + parametros);
+
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Analista analista = new Analista(
+                        rs.getInt("id"),
+                        rs.getInt("id_unidade"),
+                        rs.getString("cpf"),
+                        rs.getString("nome_completo"),
+                        rs.getDate("dt_contratacao").toLocalDate(),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo"),
+                        rs.getString("telefone")
+                );
+                // Define o nome da unidade no objeto Analista
+                analista.setNomeUnidade(rs.getString("nome_unidade"));
+                listaRetorno.add(analista);
+            }
+            return listaRetorno;
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     // Método apagar simplificado
     public int apagar(int idAnalista) {
         String comando = "DELETE FROM analista WHERE id = ?";
