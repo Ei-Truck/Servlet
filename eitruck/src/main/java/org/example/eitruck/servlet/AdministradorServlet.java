@@ -51,53 +51,6 @@ public class AdministradorServlet extends HttpServlet {
         }
     }
 
-    private void filtrarAdministradores(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            String filtroId = request.getParameter("filtro_id");
-            String filtroNome = request.getParameter("filtro_nome");
-            String filtroCpf = request.getParameter("filtro_cpf");
-            String filtroEmail = request.getParameter("filtro_email");
-            String filtroTelefone = request.getParameter("filtro_telefone");
-
-            List<Administrador> administradores;
-
-            // Verifica se pelo menos um filtro foi preenchido
-            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
-                    (filtroNome != null && !filtroNome.trim().isEmpty()) ||
-                    (filtroCpf != null && !filtroCpf.trim().isEmpty()) ||
-                    (filtroEmail != null && !filtroEmail.trim().isEmpty()) ||
-                    (filtroTelefone != null && !filtroTelefone.trim().isEmpty());
-
-            if (algumFiltro) {
-                // Busca com filtros
-                administradores = administradorDAO.filtrarAdministradoresMultiplos(filtroId, filtroNome, filtroCpf,
-                        filtroEmail, filtroTelefone);
-            } else {
-                // Se nenhum filtro, busca todos
-                administradores = administradorDAO.buscarTodos();
-            }
-
-            request.setAttribute("administradores", administradores);
-
-            // Mantém os parâmetros do filtro para mostrar no formulário
-            request.setAttribute("filtroId", filtroId);
-            request.setAttribute("filtroNome", filtroNome);
-            request.setAttribute("filtroCpf", filtroCpf);
-            request.setAttribute("filtroEmail", filtroEmail);
-            request.setAttribute("filtroTelefone", filtroTelefone);
-
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Administrator/processar_administrador.jsp");
-            rd.forward(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = "Erro ao filtrar administradores: " + e.getMessage();
-            request.setAttribute("errorMessage", errorMessage);
-            buscarTodos(request, response, "buscar", "buscar_todos");
-        }
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao_principal");
@@ -222,6 +175,53 @@ public class AdministradorServlet extends HttpServlet {
         }
 
         encaminhar(request, response, "Erro.jsp");
+    }
+
+    private void filtrarAdministradores(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String filtroId = request.getParameter("filtro_id");
+            String filtroNome = request.getParameter("filtro_nome");
+            String filtroCpf = request.getParameter("filtro_cpf");
+            String filtroEmail = request.getParameter("filtro_email");
+            String filtroTelefone = request.getParameter("filtro_telefone");
+
+            List<Administrador> administradores;
+
+            // Verifica se pelo menos um filtro foi preenchido
+            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
+                    (filtroNome != null && !filtroNome.trim().isEmpty()) ||
+                    (filtroCpf != null && !filtroCpf.trim().isEmpty()) ||
+                    (filtroEmail != null && !filtroEmail.trim().isEmpty()) ||
+                    (filtroTelefone != null && !filtroTelefone.trim().isEmpty());
+
+            if (algumFiltro) {
+                // Busca com filtros
+                administradores = administradorDAO.filtrarAdministradoresMultiplos(filtroId, filtroNome, filtroCpf,
+                        filtroEmail, filtroTelefone);
+            } else {
+                // Se nenhum filtro, busca todos
+                administradores = administradorDAO.buscarTodos();
+            }
+
+            request.setAttribute("administradores", administradores);
+
+            // Mantém os parâmetros do filtro para mostrar no formulário
+            request.setAttribute("filtroId", filtroId);
+            request.setAttribute("filtroNome", filtroNome);
+            request.setAttribute("filtroCpf", filtroCpf);
+            request.setAttribute("filtroEmail", filtroEmail);
+            request.setAttribute("filtroTelefone", filtroTelefone);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Administrator/processar_administrador.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "Erro ao filtrar administradores: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        }
     }
 
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {

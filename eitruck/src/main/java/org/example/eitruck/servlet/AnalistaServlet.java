@@ -49,56 +49,6 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
-    private void filtrarAnalistas(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            String filtroId = request.getParameter("filtro_id");
-            String filtroNomeUnidade = request.getParameter("filtro_nome_unidade");
-            String filtroNomeCompleto = request.getParameter("filtro_nome_completo");
-            String filtroCpf = request.getParameter("filtro_cpf");
-            String filtroEmail = request.getParameter("filtro_email");
-            String filtroCargo = request.getParameter("filtro_cargo");
-
-            List<Analista> analistas;
-
-            // Verifica se pelo menos um filtro foi preenchido
-            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
-                    (filtroNomeUnidade != null && !filtroNomeUnidade.trim().isEmpty()) ||
-                    (filtroNomeCompleto != null && !filtroNomeCompleto.trim().isEmpty()) ||
-                    (filtroCpf != null && !filtroCpf.trim().isEmpty()) ||
-                    (filtroEmail != null && !filtroEmail.trim().isEmpty()) ||
-                    (filtroCargo != null && !filtroCargo.trim().isEmpty());
-
-            if (algumFiltro) {
-                // Busca com filtros
-                analistas = analistaDAO.filtrarAnalistasMultiplos(filtroId, filtroNomeUnidade, filtroNomeCompleto,
-                        filtroCpf, filtroEmail, filtroCargo);
-            } else {
-                // Se nenhum filtro, busca todos
-                analistas = analistaDAO.buscarTodos();
-            }
-
-            request.setAttribute("analistas", analistas);
-
-            // Mantém os parâmetros do filtro para mostrar no formulário
-            request.setAttribute("filtroId", filtroId);
-            request.setAttribute("filtroNomeUnidade", filtroNomeUnidade);
-            request.setAttribute("filtroNomeCompleto", filtroNomeCompleto);
-            request.setAttribute("filtroCpf", filtroCpf);
-            request.setAttribute("filtroEmail", filtroEmail);
-            request.setAttribute("filtroCargo", filtroCargo);
-
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/processar_analista.jsp");
-            rd.forward(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = "Erro ao filtrar analistas: " + e.getMessage();
-            request.setAttribute("errorMessage", errorMessage);
-            buscarTodos(request, response, "buscar", "buscar_todos");
-        }
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao_principal");
@@ -246,6 +196,56 @@ public class AnalistaServlet extends HttpServlet {
         }
 
         encaminhar(request, response, "Erro.jsp");
+    }
+
+    private void filtrarAnalistas(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String filtroId = request.getParameter("filtro_id");
+            String filtroNomeUnidade = request.getParameter("filtro_nome_unidade");
+            String filtroNomeCompleto = request.getParameter("filtro_nome_completo");
+            String filtroCpf = request.getParameter("filtro_cpf");
+            String filtroEmail = request.getParameter("filtro_email");
+            String filtroCargo = request.getParameter("filtro_cargo");
+
+            List<Analista> analistas;
+
+            // Verifica se pelo menos um filtro foi preenchido
+            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
+                    (filtroNomeUnidade != null && !filtroNomeUnidade.trim().isEmpty()) ||
+                    (filtroNomeCompleto != null && !filtroNomeCompleto.trim().isEmpty()) ||
+                    (filtroCpf != null && !filtroCpf.trim().isEmpty()) ||
+                    (filtroEmail != null && !filtroEmail.trim().isEmpty()) ||
+                    (filtroCargo != null && !filtroCargo.trim().isEmpty());
+
+            if (algumFiltro) {
+                // Busca com filtros
+                analistas = analistaDAO.filtrarAnalistasMultiplos(filtroId, filtroNomeUnidade, filtroNomeCompleto,
+                        filtroCpf, filtroEmail, filtroCargo);
+            } else {
+                // Se nenhum filtro, busca todos
+                analistas = analistaDAO.buscarTodos();
+            }
+
+            request.setAttribute("analistas", analistas);
+
+            // Mantém os parâmetros do filtro para mostrar no formulário
+            request.setAttribute("filtroId", filtroId);
+            request.setAttribute("filtroNomeUnidade", filtroNomeUnidade);
+            request.setAttribute("filtroNomeCompleto", filtroNomeCompleto);
+            request.setAttribute("filtroCpf", filtroCpf);
+            request.setAttribute("filtroEmail", filtroEmail);
+            request.setAttribute("filtroCargo", filtroCargo);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "Erro ao filtrar analistas: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        }
     }
 
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {

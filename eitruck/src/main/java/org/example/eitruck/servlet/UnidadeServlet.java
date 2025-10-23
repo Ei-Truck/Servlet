@@ -46,49 +46,6 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
-    private void filtrarUnidades(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            String filtroId = request.getParameter("filtro_id");
-            String filtroNome = request.getParameter("filtro_nome");
-            String filtroNomeSegmento = request.getParameter("filtro_nome_segmento");
-            String filtroNomeEndereco = request.getParameter("filtro_nome_endereco");
-
-            List<Unidade> unidades;
-
-            // Verifica se pelo menos um filtro foi preenchido
-            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
-                    (filtroNome != null && !filtroNome.trim().isEmpty()) ||
-                    (filtroNomeSegmento != null && !filtroNomeSegmento.trim().isEmpty()) ||
-                    (filtroNomeEndereco != null && !filtroNomeEndereco.trim().isEmpty());
-
-            if (algumFiltro) {
-                // Busca com filtros
-                unidades = unidadeDao.filtrarUnidadesMultiplos(filtroId, filtroNome, filtroNomeSegmento, filtroNomeEndereco);
-            } else {
-                // Se nenhum filtro, busca todos
-                unidades = unidadeDao.buscarTodos();
-            }
-
-            request.setAttribute("unidades", unidades);
-
-            // Mantém os parâmetros do filtro para mostrar no formulário
-            request.setAttribute("filtroId", filtroId);
-            request.setAttribute("filtroNome", filtroNome);
-            request.setAttribute("filtroNomeSegmento", filtroNomeSegmento);
-            request.setAttribute("filtroNomeEndereco", filtroNomeEndereco);
-
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Units/processar_units.jsp");
-            rd.forward(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = "Erro ao filtrar unidades: " + e.getMessage();
-            request.setAttribute("errorMessage", errorMessage);
-            buscarTodos(request, response, "buscar", "buscar_todos");
-        }
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao_principal");
@@ -228,6 +185,49 @@ public class UnidadeServlet extends HttpServlet {
             rd.forward(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
+        }
+    }
+
+    private void filtrarUnidades(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String filtroId = request.getParameter("filtro_id");
+            String filtroNome = request.getParameter("filtro_nome");
+            String filtroNomeSegmento = request.getParameter("filtro_nome_segmento");
+            String filtroNomeEndereco = request.getParameter("filtro_nome_endereco");
+
+            List<Unidade> unidades;
+
+            // Verifica se pelo menos um filtro foi preenchido
+            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
+                    (filtroNome != null && !filtroNome.trim().isEmpty()) ||
+                    (filtroNomeSegmento != null && !filtroNomeSegmento.trim().isEmpty()) ||
+                    (filtroNomeEndereco != null && !filtroNomeEndereco.trim().isEmpty());
+
+            if (algumFiltro) {
+                // Busca com filtros
+                unidades = unidadeDao.filtrarUnidadesMultiplos(filtroId, filtroNome, filtroNomeSegmento, filtroNomeEndereco);
+            } else {
+                // Se nenhum filtro, busca todos
+                unidades = unidadeDao.buscarTodos();
+            }
+
+            request.setAttribute("unidades", unidades);
+
+            // Mantém os parâmetros do filtro para mostrar no formulário
+            request.setAttribute("filtroId", filtroId);
+            request.setAttribute("filtroNome", filtroNome);
+            request.setAttribute("filtroNomeSegmento", filtroNomeSegmento);
+            request.setAttribute("filtroNomeEndereco", filtroNomeEndereco);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Units/processar_units.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "Erro ao filtrar unidades: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            buscarTodos(request, response, "buscar", "buscar_todos");
         }
     }
 

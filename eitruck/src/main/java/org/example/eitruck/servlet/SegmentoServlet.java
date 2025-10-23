@@ -50,46 +50,6 @@ public class SegmentoServlet extends HttpServlet {
         }
     }
 
-    private void filtrarSegmentos(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            String filtroId = request.getParameter("filtro_id");
-            String filtroNome = request.getParameter("filtro_nome");
-            String filtroDescricao = request.getParameter("filtro_descricao");
-
-            List<Segmento> segmentos;
-
-            // Verifica se pelo menos um filtro foi preenchido
-            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
-                    (filtroNome != null && !filtroNome.trim().isEmpty()) ||
-                    (filtroDescricao != null && !filtroDescricao.trim().isEmpty());
-
-            if (algumFiltro) {
-                // Busca com filtros
-                segmentos = segmentoDAO.filtrarSegmentosMultiplos(filtroId, filtroNome, filtroDescricao);
-            } else {
-                // Se nenhum filtro, busca todos
-                segmentos = segmentoDAO.buscarTodos();
-            }
-
-            request.setAttribute("segmentos", segmentos);
-
-            // Mantém os parâmetros do filtro para mostrar no formulário
-            request.setAttribute("filtroId", filtroId);
-            request.setAttribute("filtroNome", filtroNome);
-            request.setAttribute("filtroDescricao", filtroDescricao);
-
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Segments/processar_segments.jsp");
-            rd.forward(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = "Erro ao filtrar segmentos: " + e.getMessage();
-            request.setAttribute("errorMessage", errorMessage);
-            buscarTodos(request, response, "buscar", "buscar_todos");
-        }
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao_principal");
@@ -211,6 +171,46 @@ public class SegmentoServlet extends HttpServlet {
         }
 
         encaminhar(request, response, "Erro.jsp");
+    }
+
+    private void filtrarSegmentos(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String filtroId = request.getParameter("filtro_id");
+            String filtroNome = request.getParameter("filtro_nome");
+            String filtroDescricao = request.getParameter("filtro_descricao");
+
+            List<Segmento> segmentos;
+
+            // Verifica se pelo menos um filtro foi preenchido
+            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
+                    (filtroNome != null && !filtroNome.trim().isEmpty()) ||
+                    (filtroDescricao != null && !filtroDescricao.trim().isEmpty());
+
+            if (algumFiltro) {
+                // Busca com filtros
+                segmentos = segmentoDAO.filtrarSegmentosMultiplos(filtroId, filtroNome, filtroDescricao);
+            } else {
+                // Se nenhum filtro, busca todos
+                segmentos = segmentoDAO.buscarTodos();
+            }
+
+            request.setAttribute("segmentos", segmentos);
+
+            // Mantém os parâmetros do filtro para mostrar no formulário
+            request.setAttribute("filtroId", filtroId);
+            request.setAttribute("filtroNome", filtroNome);
+            request.setAttribute("filtroDescricao", filtroDescricao);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Segments/processar_segments.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "Erro ao filtrar segmentos: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        }
     }
 
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {

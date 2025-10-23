@@ -50,50 +50,6 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
-    private void filtrarTiposOcorrencia(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            String filtroId = request.getParameter("filtro_id");
-            String filtroTipoEvento = request.getParameter("filtro_tipo_evento");
-            String filtroPontuacao = request.getParameter("filtro_pontuacao");
-            String filtroGravidade = request.getParameter("filtro_gravidade");
-
-            List<TipoOcorrencia> ocorrencias;
-
-            // Verifica se pelo menos um filtro foi preenchido
-            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
-                    (filtroTipoEvento != null && !filtroTipoEvento.trim().isEmpty()) ||
-                    (filtroPontuacao != null && !filtroPontuacao.trim().isEmpty()) ||
-                    (filtroGravidade != null && !filtroGravidade.trim().isEmpty());
-
-            if (algumFiltro) {
-                // Busca com filtros
-                ocorrencias = tipoOcorrenciaDAO.filtrarTiposOcorrenciaMultiplos(filtroId, filtroTipoEvento,
-                        filtroPontuacao, filtroGravidade);
-            } else {
-                // Se nenhum filtro, busca todos
-                ocorrencias = tipoOcorrenciaDAO.buscarTodos();
-            }
-
-            request.setAttribute("ocorrencias", ocorrencias);
-
-            // Mantém os parâmetros do filtro para mostrar no formulário
-            request.setAttribute("filtroId", filtroId);
-            request.setAttribute("filtroTipoEvento", filtroTipoEvento);
-            request.setAttribute("filtroPontuacao", filtroPontuacao);
-            request.setAttribute("filtroGravidade", filtroGravidade);
-
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/processar_occurrences.jsp");
-            rd.forward(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = "Erro ao filtrar tipos de ocorrência: " + e.getMessage();
-            request.setAttribute("errorMessage", errorMessage);
-            buscarTodos(request, response, "buscar", "buscar_todos");
-        }
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao_principal");
@@ -216,6 +172,50 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
 
         encaminhar(request, response, "Erro.jsp");
+    }
+
+    private void filtrarTiposOcorrencia(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String filtroId = request.getParameter("filtro_id");
+            String filtroTipoEvento = request.getParameter("filtro_tipo_evento");
+            String filtroPontuacao = request.getParameter("filtro_pontuacao");
+            String filtroGravidade = request.getParameter("filtro_gravidade");
+
+            List<TipoOcorrencia> ocorrencias;
+
+            // Verifica se pelo menos um filtro foi preenchido
+            boolean algumFiltro = (filtroId != null && !filtroId.trim().isEmpty()) ||
+                    (filtroTipoEvento != null && !filtroTipoEvento.trim().isEmpty()) ||
+                    (filtroPontuacao != null && !filtroPontuacao.trim().isEmpty()) ||
+                    (filtroGravidade != null && !filtroGravidade.trim().isEmpty());
+
+            if (algumFiltro) {
+                // Busca com filtros
+                ocorrencias = tipoOcorrenciaDAO.filtrarTiposOcorrenciaMultiplos(filtroId, filtroTipoEvento,
+                        filtroPontuacao, filtroGravidade);
+            } else {
+                // Se nenhum filtro, busca todos
+                ocorrencias = tipoOcorrenciaDAO.buscarTodos();
+            }
+
+            request.setAttribute("ocorrencias", ocorrencias);
+
+            // Mantém os parâmetros do filtro para mostrar no formulário
+            request.setAttribute("filtroId", filtroId);
+            request.setAttribute("filtroTipoEvento", filtroTipoEvento);
+            request.setAttribute("filtroPontuacao", filtroPontuacao);
+            request.setAttribute("filtroGravidade", filtroGravidade);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/processar_occurrences.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "Erro ao filtrar tipos de ocorrência: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            buscarTodos(request, response, "buscar", "buscar_todos");
+        }
     }
 
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
