@@ -478,7 +478,7 @@ public class AdministradorDAO extends DAO {
         Hash hash = new Hash();
         PreparedStatement pstmt;
         ResultSet rs;
-        String sql = "SELECT senha, nome FROM ADMINISTRADOR WHERE EMAIL = ?";
+        String sql = "SELECT senha, nome_completo FROM ADMINISTRADOR WHERE EMAIL = ?";
         String senhaBanco, senhaCriptografada, nome;
 
         try {
@@ -490,7 +490,7 @@ public class AdministradorDAO extends DAO {
             rs = pstmt.executeQuery();
             if (rs.next()){
                 senhaBanco = rs.getString("senha");
-                nome = rs.getString("nome");
+                nome = rs.getString("nome_completo");
                 senhaCriptografada = hash.criptografarSenha(senha);
 
                 if (senhaCriptografada.equals(senhaBanco)){
