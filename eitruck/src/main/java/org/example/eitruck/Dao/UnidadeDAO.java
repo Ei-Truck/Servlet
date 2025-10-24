@@ -71,6 +71,65 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    public List<Unidade> buscarPorId(int idUnidade) {
+        ResultSet rs;
+        List<Unidade> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM unidade WHERE id = ?";
+        Connection conn = null; // Adicionar esta linha
+
+        try {
+            conn = conexao.conectar(); // Inicializar a conexão
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idUnidade);
+            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
+            while (rs.next()){
+                Unidade unidade = new Unidade(
+                        rs.getInt("id"),
+                        rs.getInt("id_segmento"),
+                        rs.getInt("id_endereco"),
+                        rs.getString("nome")
+                );
+                listaRetorno.add(unidade);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle){
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn); // Usar a variável local conn
+        }
+    }
+
+    public int alterarTodos(int id, String nome, int idSegmento, int idEndereco) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE unidade SET nome = ?, id_segmento = ?, id_endereco = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, nome);
+            pstmt.setInt(2, idSegmento);
+            pstmt.setInt(3, idEndereco);
+            pstmt.setInt(4, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
+
     public List<Unidade> buscarTodos() {
         String comando = """
         SELECT 
@@ -210,33 +269,6 @@ public class UnidadeDAO extends DAO {
         }
     }
 
-    public int alterarTodos(int id, String nome, int idSegmento, int idEndereco) {
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(
-                    "UPDATE unidade SET nome = ?, id_segmento = ?, id_endereco = ? WHERE id = ?"
-            );
-
-            pstmt.setString(1, nome);
-            pstmt.setInt(2, idSegmento);
-            pstmt.setInt(3, idEndereco);
-            pstmt.setInt(4, id);
-
-            int linhasAfetadas = pstmt.executeUpdate();
-
-            if (linhasAfetadas > 0) {
-                return 1; // Sucesso - registro alterado
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1; // Erro
-        } finally {
-            conexao.desconectar(conn);
-        }
-        return 0; // Nenhum registro alterado
-    }
     public int alterarIdSegmento(Unidade unidade, int novoIdSegmento) {
         String comando = "UPDATE unidade SET id_segmento = ? WHERE id = ?";
 
@@ -306,31 +338,6 @@ public class UnidadeDAO extends DAO {
         catch (SQLException sqle){
             sqle.printStackTrace();
             return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<Unidade> buscarPorId(int idUnidade) {
-        ResultSet rs;
-        List<Unidade> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM unidade WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idUnidade);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()){
-                Unidade unidade = new Unidade(rs.getInt("id"), rs.getInt("id_segmento"), rs.getInt("id_endereco"), rs.getString("nome"));
-                listaRetorno.add(unidade);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return null;
         }
         finally {
             conexao.desconectar(conn);
