@@ -116,7 +116,7 @@ public class TipoOcorrenciaDAO extends DAO {
     public List<TipoOcorrencia> buscarTodos() {
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM tipo_ocorrencia";
+        String comando = "SELECT * FROM tipo_ocorrencia ORDER BY id";
 
         Connection conn = null;
         try {

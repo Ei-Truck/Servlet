@@ -126,7 +126,7 @@ public class SegmentoDAO extends DAO {
     public List<Segmento> buscarTodos() {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM segmento";
+        String comando = "SELECT * FROM segmento ORDER BY id";
 
         Connection conn = null;
         try {

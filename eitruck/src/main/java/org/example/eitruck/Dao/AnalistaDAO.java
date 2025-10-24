@@ -69,6 +69,7 @@ public class AnalistaDAO extends DAO {
             u.nome as nome_unidade
         FROM analista a
         INNER JOIN unidade u ON a.id_unidade = u.id
+        ORDER BY a.id
         """;
 
         Connection conn = null;

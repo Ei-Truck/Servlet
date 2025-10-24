@@ -139,6 +139,7 @@ public class UnidadeDAO extends DAO {
         FROM unidade u
         INNER JOIN segmento s ON u.id_segmento = s.id
         INNER JOIN endereco e ON u.id_endereco = e.id
+        ORDER BY id
         """;
 
         try {

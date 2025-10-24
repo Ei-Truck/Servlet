@@ -78,7 +78,7 @@ public class EnderecoDAO extends DAO {
     public List<Endereco> buscarTodos() {
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM endereco";
+        String comando = "SELECT * FROM endereco ORDER BY id";
 
         Connection conn = null;
         try {

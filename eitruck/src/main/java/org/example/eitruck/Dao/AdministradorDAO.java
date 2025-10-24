@@ -60,7 +60,7 @@ public class AdministradorDAO extends DAO {
     public List<Administrador> buscarTodos() {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM administrador";
+        String comando = "SELECT * FROM administrador ORDER BY id";
 
         Connection conn = null;
         try {
