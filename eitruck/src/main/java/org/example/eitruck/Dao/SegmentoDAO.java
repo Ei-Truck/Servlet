@@ -70,6 +70,59 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    public List<Segmento> buscarPorId(int idSegmento) {
+        ResultSet rs;
+        List<Segmento> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM segmento WHERE id = ?";
+        Connection conn = null; // Adicionar esta linha
+
+        try {
+            conn = conexao.conectar(); // Inicializar a conexão
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idSegmento);
+            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
+            while (rs.next()){
+                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
+                listaRetorno.add(segmento);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle){
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn); // Usar a variável local conn
+        }
+    }
+
+    public int alterarTodos(int id, String nome, String descricao) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE segmento SET nome = ?, descricao = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, nome);
+            pstmt.setString(2, descricao);
+            pstmt.setInt(3, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
+
     public List<Segmento> buscarTodos() {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();
@@ -183,33 +236,6 @@ public class SegmentoDAO extends DAO {
         }
     }
 
-    public int alterarTodos(int id, String nome, String descricao) {
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(
-                    "UPDATE segmento SET nome = ?, descricao = ? WHERE id = ?"
-            );
-
-            pstmt.setString(1, nome);
-            pstmt.setString(2, descricao);
-            pstmt.setInt(3, id);
-
-            int linhasAfetadas = pstmt.executeUpdate();
-
-            if (linhasAfetadas > 0) {
-                return 1; // Sucesso - registro alterado
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1; // Erro
-        } finally {
-            conexao.desconectar(conn);
-        }
-        return 0; // Nenhum registro alterado
-    }
-
 
     public int alterarNome(Segmento segmento, String novoNome) {
         String comando = "UPDATE segmento SET nome = ? WHERE id = ?";
@@ -255,31 +281,6 @@ public class SegmentoDAO extends DAO {
         catch (SQLException sqle){
             sqle.printStackTrace();
             return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<Segmento> buscarPorId(int idSegmento) {
-        ResultSet rs;
-        List<Segmento> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM segmento WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idSegmento);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()){
-                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
-                listaRetorno.add(segmento);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return null;
         }
         finally {
             conexao.desconectar(conn);

@@ -38,10 +38,13 @@ public class SegmentoServlet extends HttpServlet {
         String acao = request.getParameter("acao");
 
         switch (acao != null ? acao : "listar") {
+            case "editar":
+                carregarSegmentoParaEdicao(request, response);
+                break;
             case "buscar":
                 buscarTodos(request, response, acao, "buscar_todos");
                 break;
-            case "filtrar": // NOVO CASO PARA FILTRAR
+            case "filtrar":
                 filtrarSegmentos(request, response);
                 break;
             case "listar":
@@ -53,14 +56,13 @@ public class SegmentoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao_principal");
-        String sub_acao = request.getParameter("sub_acao");
 
         switch (acao) {
             case "inserir":
-                inserirSegmento(request, response, acao, sub_acao);
+                inserirSegmento(request, response, acao, request.getParameter("sub_acao"));
                 break;
             case "atualizar":
-                atualizarAnalista(request, response);
+                atualizarSegmento(request, response);
                 break;
             case "excluir":
                 excluirSegmento(request, response);
@@ -151,6 +153,62 @@ public class SegmentoServlet extends HttpServlet {
             String errorMessage = URLEncoder.encode("Erro interno ao excluir segmento.", "UTF-8");
             response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
         }
+    }
+
+    private void carregarSegmentoParaEdicao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            List<Segmento> segmentos = segmentoDAO.buscarPorId(id);
+
+            if (segmentos != null && !segmentos.isEmpty()) {
+                Segmento segmento = segmentos.get(0);
+                request.setAttribute("segmento", segmento);
+                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Segments/editar_segmento.jsp");
+                rd.forward(request, response);
+            } else {
+                String errorMessage = URLEncoder.encode("Segmento não encontrado.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro ao carregar segmento para edição.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
+    }
+
+    private void atualizarSegmento(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        String errorMessage = null;
+
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String nome = request.getParameter("nome");
+            String descricao = request.getParameter("descricao");
+
+            System.out.println("Atualizando segmento - ID: " + id + ", Nome: " + nome + ", Descrição: " + descricao);
+
+            int resultado = segmentoDAO.alterarTodos(id, nome, descricao);
+
+            if (resultado > 0) {
+                response.sendRedirect(request.getContextPath() + "/servlet-segmentos?acao_principal=buscar&sub_acao=buscar_todos");
+                return;
+            } else {
+                errorMessage = "Erro ao atualizar segmento no banco de dados.";
+            }
+        } catch (NumberFormatException e) {
+            errorMessage = "ID inválido.";
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        // Se houve erro, recarrega a página de edição com a mensagem de erro
+        request.setAttribute("errorMessage", errorMessage);
+        carregarSegmentoParaEdicao(request, response);
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
