@@ -40,10 +40,13 @@ public class EnderecoServlet extends HttpServlet {
         String acao = request.getParameter("acao");
 
         switch (acao != null ? acao : "listar") {
+            case "editar": // ADICIONE ESTE CASO
+                carregarEnderecoParaEdicao(request, response);
+                break;
             case "buscar":
                 buscarTodos(request, response, acao, "buscar_todos");
                 break;
-            case "filtrar": // NOVO CASO PARA FILTRAR
+            case "filtrar":
                 filtrarEnderecos(request, response);
                 break;
             case "listar":
@@ -61,13 +64,122 @@ public class EnderecoServlet extends HttpServlet {
             case "inserir":
                 inserirEndereco(request, response, acao, sub_acao);
                 break;
-            case "atualizar":
-                atualizarAnalista(request, response);
+            case "atualizar": // ATUALIZE ESTE CASO
+                atualizarEndereco(request, response);
                 break;
             case "excluir":
                 excluirEndereco(request, response);
                 break;
         }
+    }
+
+    private void carregarEnderecoParaEdicao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            List<Endereco> enderecos = enderecoDAO.buscarPorId(id);
+
+            if (enderecos != null && !enderecos.isEmpty()) {
+                Endereco endereco = enderecos.get(0);
+                request.setAttribute("endereco", endereco);
+                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Addresses/editar_endereco.jsp");
+                rd.forward(request, response);
+            } else {
+                String errorMessage = URLEncoder.encode("Endereço não encontrado.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro ao carregar endereço para edição.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
+    }
+
+    private void atualizarEndereco(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        String errorMessage = null;
+
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String cep = request.getParameter("cep");
+            String rua = request.getParameter("rua");
+            String numeroStr = request.getParameter("numero");
+            String bairro = request.getParameter("bairro");
+            String cidade = request.getParameter("cidade");
+            String estado = request.getParameter("estado");
+            String pais = request.getParameter("pais");
+
+            System.out.println("Atualizando endereço - ID: " + id + ", CEP: " + cep +
+                    ", Rua: " + rua + ", Número: " + numeroStr + ", Bairro: " + bairro +
+                    ", Cidade: " + cidade + ", Estado: " + estado + ", País: " + pais);
+
+            // Remove caracteres não numéricos do CEP
+            String cepNumeros = cep.replaceAll("[^0-9]", "");
+
+            // Validações
+            if (!cepNumeros.matches("\\d{8}")) {
+                errorMessage = "CEP deve ter exatamente 8 dígitos numéricos.";
+            } else if (rua == null || rua.trim().length() < 2 || rua.trim().length() > 100) {
+                errorMessage = "Rua deve ter entre 2 e 100 caracteres.";
+            } else if (numeroStr == null || numeroStr.trim().isEmpty()) {
+                errorMessage = "Número é obrigatório.";
+            } else if (bairro == null || bairro.trim().length() < 2 || bairro.trim().length() > 50) {
+                errorMessage = "Bairro deve ter entre 2 e 50 caracteres.";
+            } else if (cidade == null || cidade.trim().length() < 2 || cidade.trim().length() > 50) {
+                errorMessage = "Cidade deve ter entre 2 e 50 caracteres.";
+            } else if (estado == null || estado.trim().length() != 2) {
+                errorMessage = "Estado deve ter exatamente 2 caracteres (UF).";
+            } else if (pais == null || pais.trim().length() < 2 || pais.trim().length() > 50) {
+                errorMessage = "País deve ter entre 2 e 50 caracteres.";
+            } else {
+                try {
+                    int numero = Integer.parseInt(numeroStr);
+
+                    if (numero < 1 || numero > 99999) {
+                        errorMessage = "Número deve estar entre 1 e 99999.";
+                    } else {
+                        // Lista de UFs válidas do Brasil
+                        String[] ufsValidas = {"AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG",
+                                "PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"};
+                        boolean ufValida = false;
+                        for (String uf : ufsValidas) {
+                            if (uf.equalsIgnoreCase(estado.trim())) {
+                                ufValida = true;
+                                break;
+                            }
+                        }
+
+                        if (!ufValida) {
+                            errorMessage = "UF inválida. Use uma sigla de estado válida do Brasil.";
+                        } else {
+                            int resultado = enderecoDAO.alterarEndereco(id, cepNumeros, rua.trim(), numero,
+                                    bairro.trim(), cidade.trim(), estado.trim().toUpperCase(), pais.trim());
+
+                            if (resultado > 0) {
+                                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos");
+                                return;
+                            } else {
+                                errorMessage = "Erro ao atualizar endereço no banco de dados.";
+                            }
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    errorMessage = "Número deve ser um valor numérico válido.";
+                }
+            }
+        } catch (NumberFormatException e) {
+            errorMessage = "ID inválido.";
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        // Se houve erro, recarrega a página de edição com a mensagem de erro
+        request.setAttribute("errorMessage", errorMessage);
+        carregarEnderecoParaEdicao(request, response);
     }
 
     private void inserirEndereco(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
