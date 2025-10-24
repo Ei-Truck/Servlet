@@ -656,18 +656,6 @@
     function limparFiltro() {
         window.location.href = '${pageContext.request.contextPath}/servlet-segmentos?acao=buscar&sub_acao=buscar_todos';
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputs = document.querySelectorAll('.filter-input');
-        inputs.forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    document.querySelector('button[type="submit"]').click();
-                }
-            });
-        });
-    });
 </script>
 <%
     }
