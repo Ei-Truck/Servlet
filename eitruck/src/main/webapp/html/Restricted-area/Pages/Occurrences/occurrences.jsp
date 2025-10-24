@@ -425,7 +425,7 @@
             if (errorMessage != null) {
           %>
           <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
-            <strong>Erro em algum cadastro</strong>
+            <strong>Erro ao inserir pontuação</strong>
           </div>
           <%
             }
