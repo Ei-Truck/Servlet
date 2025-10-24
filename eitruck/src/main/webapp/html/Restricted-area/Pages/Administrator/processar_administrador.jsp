@@ -696,19 +696,6 @@
     function limparFiltro() {
         window.location.href = '${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos';
     }
-
-    // Opcional: enviar form ao pressionar Enter em qualquer campo
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputs = document.querySelectorAll('input[type="text"]');
-        inputs.forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    document.querySelector('button[type="submit"]').click();
-                }
-            });
-        });
-    });
 </script>
 <%
     }
