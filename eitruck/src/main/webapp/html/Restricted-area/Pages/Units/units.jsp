@@ -1,4 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    // Verifica se o usuário está logado
+    if (session == null || session.getAttribute("nomeAdimin") == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+
+    String nomeAdmin = (String) session.getAttribute("nomeAdimin");
+%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -374,7 +383,7 @@
                     </a>
                 </li>
 
-                <li><a href="../../../../login.jsp" class="nav-item logout"><span>🚪</span> Sair</a></li>
+                <li><a href="${pageContext.request.contextPath}/logout" class="nav-item logout"><span>🚪</span> Sair</a></li>
             </ul>
         </nav>
     </div>
