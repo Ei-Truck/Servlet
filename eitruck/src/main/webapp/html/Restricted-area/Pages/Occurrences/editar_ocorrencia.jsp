@@ -340,7 +340,7 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/html/Restricted-area/Pages/Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
@@ -403,12 +403,9 @@
                 <div class="crud-header">
                     <h2>Editar Tipo de Ocorrência</h2>
                     <div class="crud-actions">
-                        <form action="${pageContext.request.contextPath}/servlet-ocorrencias" method="get">
-                            <input type="hidden" name="acao_principal" value="buscar">
-                            <button type="submit" name="sub_acao" value="buscar_todos" class="btn btn-secondary">
-                                <span>←</span> Voltar para Lista
-                            </button>
-                        </form>
+                        <a href="${pageContext.request.contextPath}/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos" class="btn btn-secondary">
+                            <span>←</span> Voltar para Lista
+                        </a>
                     </div>
                 </div>
 
@@ -431,20 +428,23 @@
                         <div class="form-group">
                             <label for="tipo_evento">Tipo de Evento:</label>
                             <input type="text" name="tipo_evento" id="tipo_evento" class="form-control"
-                                   value="${ocorrencia.tipoEvento != null ? ocorrencia.tipoEvento : ''}" required>
+                                   value="${ocorrencia.tipoEvento != null ? ocorrencia.tipoEvento : ''}" required
+                                   placeholder="Digite o tipo de evento">
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="pontuacao">Pontuação:</label>
-                                <input type="text" name="pontuacao" id="pontuacao" class="form-control"
-                                       value="${ocorrencia.pontuacao != null ? ocorrencia.pontuacao : ''}" required>
+                                <input type="number" name="pontuacao" id="pontuacao" class="form-control"
+                                       value="${ocorrencia.pontuacao != null ? ocorrencia.pontuacao : ''}" required
+                                       min="0" max="10" step="1" placeholder="Pontuação numérica">
                             </div>
 
                             <div class="form-group">
                                 <label for="gravidade">Gravidade:</label>
                                 <input type="text" name="gravidade" id="gravidade" class="form-control"
-                                       value="${ocorrencia.gravidade != null ? ocorrencia.gravidade : ''}" required>
+                                       value="${ocorrencia.gravidade != null ? ocorrencia.gravidade : ''}" required
+                                       placeholder="Digite a gravidade">
                             </div>
                         </div>
 
@@ -459,5 +459,38 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Validação no envio do formulário
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const pontuacao = document.getElementById('pontuacao');
+        const tipoEvento = document.getElementById('tipo_evento');
+        const gravidade = document.getElementById('gravidade');
+
+        // Valida Pontuação
+        if (!pontuacao.value || pontuacao.value < 0) {
+            e.preventDefault();
+            alert('Pontuação deve ser um número válido maior ou igual a 0.');
+            pontuacao.focus();
+            return;
+        }
+
+        // Valida Tipo de Evento
+        if (!tipoEvento.value.trim()) {
+            e.preventDefault();
+            alert('Tipo de Evento é obrigatório.');
+            tipoEvento.focus();
+            return;
+        }
+
+        // Valida Gravidade
+        if (!gravidade.value.trim()) {
+            e.preventDefault();
+            alert('Gravidade é obrigatória.');
+            gravidade.focus();
+            return;
+        }
+    });
+</script>
 </body>
 </html>

@@ -331,7 +331,7 @@
     </div>
     <nav class="sidebar-nav">
       <ul>
-        <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+        <li><a href="${pageContext.request.contextPath}/html/Restricted-area/Pages/Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
 
         <li>
           <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
@@ -427,7 +427,7 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="pontuacao">Pontuação:</label>
-                <input type="text" name="pontuacao" id="pontuacao" class="form-control" value="${pontuacao != null ? pontuacao : ''}" required>
+                <input type="number" name="pontuacao" id="pontuacao" class="form-control" value="${pontuacao != null ? pontuacao : ''}" min="0" max="10" step="1" required>
               </div>
 
               <div class="form-group">

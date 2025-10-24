@@ -451,7 +451,7 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/html/Restricted-area/Pages/Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
@@ -560,7 +560,7 @@
                             <label for="filtroPontuacao">Pontuação</label>
                             <input type="text" id="filtroPontuacao" name="filtro_pontuacao" class="filter-input"
                                    value="<%= filtroPontuacao != null ? filtroPontuacao : "" %>"
-                                   placeholder="Ex: 10, 20">
+                                   placeholder="Ex: 5, 10">
                         </div>
 
                         <div class="filter-group">
