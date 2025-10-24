@@ -54,6 +54,65 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    public List<TipoOcorrencia> buscarPorId(int idTipoOcorrencia) {
+        ResultSet rs;
+        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM tipo_ocorrencia WHERE id = ?";
+        Connection conn = null; // Adicionar esta linha
+
+        try {
+            conn = conexao.conectar(); // Inicializar a conexão
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idTipoOcorrencia);
+            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
+            while (rs.next()) {
+                TipoOcorrencia tipo = new TipoOcorrencia(
+                        rs.getInt("id"),
+                        rs.getString("tipo_evento"),
+                        rs.getInt("pontuacao"),
+                        rs.getString("gravidade")
+                );
+                listaRetorno.add(tipo);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn); // Usar a variável local conn
+        }
+    }
+
+    public int alterarTodos(int id, String tipoEvento, int pontuacao, String gravidade) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE tipo_ocorrencia SET tipo_evento = ?, pontuacao = ?, gravidade = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, tipoEvento);
+            pstmt.setInt(2, pontuacao);
+            pstmt.setString(3, gravidade);
+            pstmt.setInt(4, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
+
     public List<TipoOcorrencia> buscarTodos() {
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
@@ -175,34 +234,6 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    public int alterarTodos(int id, String tipoEvento, int pontuacao, String gravidade) {
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(
-                    "UPDATE tipo_ocorrencia SET tipo_evento = ?, pontuacao = ?, gravidade = ? WHERE id = ?"
-            );
-
-            pstmt.setString(1, tipoEvento);
-            pstmt.setInt(2, pontuacao);
-            pstmt.setString(3, gravidade);
-            pstmt.setInt(4, id);
-
-            int linhasAfetadas = pstmt.executeUpdate();
-
-            if (linhasAfetadas > 0) {
-                return 1; // Sucesso - registro alterado
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1; // Erro
-        } finally {
-            conexao.desconectar(conn);
-        }
-        return 0; // Nenhum registro alterado
-    }
-
     public int alterarTipoEvento(TipoOcorrencia tipoOcorrencia, String novoTipoEvento) {
         String comando = "UPDATE tipo_ocorrencia SET tipo_evento = ? WHERE id = ?";
 
@@ -228,16 +259,18 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    public int alterarPontuacao(TipoOcorrencia tipoOcorrencia, String novaPontuacao) {
+    public int alterarPontuacao(TipoOcorrencia tipoOcorrencia, int novaPontuacao) { // Mudei para int
         String comando = "UPDATE tipo_ocorrencia SET pontuacao = ? WHERE id = ?";
+        Connection conn = null;
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novaPontuacao);
+            pstmt.setInt(1, novaPontuacao); // Mudei para setInt
             pstmt.setInt(2, tipoOcorrencia.getId());
             int execucao = pstmt.executeUpdate();
             if (execucao > 0) {
-                tipoOcorrencia.setGravidade(novaPontuacao);
+                tipoOcorrencia.setPontuacao(novaPontuacao); // Corrigido para setPontuacao
                 return 1;
             }
             else {
@@ -272,31 +305,6 @@ public class TipoOcorrenciaDAO extends DAO {
         catch (SQLException sqle){
             sqle.printStackTrace();
             return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<TipoOcorrencia> buscarPorId(int idTipoOcorrencia) {
-        ResultSet rs;
-        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM tipo_ocorrencia WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idTipoOcorrencia);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()) {
-                TipoOcorrencia tipo = new TipoOcorrencia(rs.getInt("id"), rs.getString("tipo_evento"), rs.getInt("pontuacao"), rs.getString("gravidade"));
-                listaRetorno.add(tipo);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
         }
         finally {
             conexao.desconectar(conn);
