@@ -351,7 +351,6 @@ public class AdministradorDAO extends DAO {
         return apagar(idAdmin);
     }
 
-    // CORREÇÃO nos métodos de busca - adicionar conexão
     public List<Administrador> buscarPorId(int idAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
@@ -369,7 +368,8 @@ public class AdministradorDAO extends DAO {
                         rs.getString("cpf"),
                         rs.getString("nome_completo"),
                         rs.getString("email"),
-                        rs.getString("senha")
+                        rs.getString("senha"),
+                        rs.getString("telefone") // Adicionando o telefone
                 );
                 listaRetorno.add(admin);
             }

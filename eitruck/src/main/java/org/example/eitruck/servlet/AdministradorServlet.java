@@ -39,10 +39,13 @@ public class AdministradorServlet extends HttpServlet {
         String acao = request.getParameter("acao");
 
         switch (acao != null ? acao : "listar") {
+            case "editar":
+                carregarAdministradorParaEdicao(request, response);
+                break;
             case "buscar":
                 buscarTodos(request, response, acao, "buscar_todos");
                 break;
-            case "filtrar": // NOVO CASO PARA FILTRAR
+            case "filtrar":
                 filtrarAdministradores(request, response);
                 break;
             case "listar":
@@ -61,12 +64,95 @@ public class AdministradorServlet extends HttpServlet {
                 inserirAdministrador(request, response, acao, sub_acao);
                 break;
             case "atualizar":
-                atualizarAnalista(request, response);
+                atualizarAdministrador(request, response); // Alterado para atualizarAdministrador
                 break;
             case "excluir":
                 excluirAdministrador(request, response);
                 break;
         }
+    }
+
+    private void carregarAdministradorParaEdicao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            List<Administrador> administradores = administradorDAO.buscarPorId(id);
+
+            if (administradores != null && !administradores.isEmpty()) {
+                Administrador administrador = administradores.get(0);
+                request.setAttribute("administrador", administrador);
+                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Administrator/editar_administrador.jsp");
+                rd.forward(request, response);
+            } else {
+                String errorMessage = URLEncoder.encode("Administrador não encontrado.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-administrador?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-administrador?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro ao carregar administrador para edição.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-administrador?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
+    }
+
+    private void atualizarAdministrador(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        String errorMessage = null;
+
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String cpf = request.getParameter("cpf");
+            String nomeCompleto = request.getParameter("nome_completo");
+            String email = request.getParameter("email");
+            String telefone = request.getParameter("telefone");
+
+            System.out.println("Atualizando administrador - ID: " + id + ", CPF: " + cpf +
+                    ", Nome: " + nomeCompleto + ", Email: " + email + ", Telefone: " + telefone);
+
+            // Remove caracteres não numéricos do CPF e telefone
+            String cpfNumeros = cpf.replaceAll("[^0-9]", "");
+            String telefoneNumeros = telefone.replaceAll("[^0-9]", "");
+
+            // Validações
+            if (cpfNumeros.length() < 8) {
+                errorMessage = "CPF deve ter pelo menos 8 dígitos numéricos (sem pontos ou traços).";
+            } else if (email == null || !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+                errorMessage = "Email inválido. Deve conter @ e domínio.";
+            } else if (telefoneNumeros.length() < 10) {
+                errorMessage = "Telefone deve ter pelo menos 10 dígitos (sem parênteses, espaços ou traços).";
+            } else {
+                // Buscar a senha atual para não alterá-la
+                List<Administrador> administradorAtual = administradorDAO.buscarPorId(id);
+                if (administradorAtual != null && !administradorAtual.isEmpty()) {
+                    String senhaAtual = administradorAtual.get(0).getSenha();
+
+                    System.out.println("Senha atual: " + senhaAtual);
+
+                    // Usar apenas números no update
+                    int resultado = administradorDAO.alterarTodos(id, cpfNumeros, nomeCompleto, email, senhaAtual, telefoneNumeros);
+
+                    if (resultado > 0) {
+                        response.sendRedirect(request.getContextPath() + "/servlet-administrador?acao_principal=buscar&sub_acao=buscar_todos");
+                        return;
+                    } else {
+                        errorMessage = "Erro ao atualizar administrador no banco de dados.";
+                    }
+                } else {
+                    errorMessage = "Administrador não encontrado.";
+                }
+            }
+        } catch (NumberFormatException e) {
+            errorMessage = "ID inválido.";
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        // Se houve erro, recarrega a página de edição com a mensagem de erro
+        request.setAttribute("errorMessage", errorMessage);
+        carregarAdministradorParaEdicao(request, response);
     }
 
     private void inserirAdministrador(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
