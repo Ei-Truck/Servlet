@@ -73,6 +73,108 @@ public class EnderecoServlet extends HttpServlet {
         }
     }
 
+    private void inserirEndereco(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
+        String errorMessage = null;
+        boolean success = false;
+        boolean isFormSubmission = false;
+
+        try {
+            String cep = request.getParameter("cep");
+            String rua = request.getParameter("rua");
+            String numero = request.getParameter("numero");
+            String bairro = request.getParameter("bairro");
+            String cidade = request.getParameter("cidade");
+            String estado = request.getParameter("estado");
+            String pais = request.getParameter("pais");
+
+            System.out.println("CEP: " + cep);
+            System.out.println("Rua: " + rua);
+            System.out.println("Numero: " + numero);
+            System.out.println("Bairro: " + bairro);
+            System.out.println("Cidade: " + cidade);
+            System.out.println("Estado: " + estado);
+            System.out.println("País: " + pais);
+
+            int numeroInt = Integer.parseInt(numero);
+
+            Endereco endereco = new Endereco(cep, rua, numeroInt, bairro, cidade, estado, pais);
+            success = enderecoDAO.cadastrar(endereco);
+
+            if (success) {
+                if (success) {
+                    response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos");
+                    return;
+                }
+                return;
+            } else {
+                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            }
+        } catch (NumberFormatException e) {
+            errorMessage = "ID da unidade deve ser um número válido.";
+        } catch (DateTimeParseException e) {
+            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (IllegalArgumentException e) {
+            // Já tem a mensagem de erro
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
+        }
+
+        if (errorMessage == null) {
+            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+        }
+
+        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("isFormSubmission", isFormSubmission);
+
+        request.setAttribute("cep", request.getParameter("cep"));
+        request.setAttribute("rua", request.getParameter("rua"));
+        request.setAttribute("bairro", request.getParameter("bairro"));
+        request.setAttribute("cidade", request.getParameter("cidade"));
+        request.setAttribute("estado", request.getParameter("estado"));
+        request.setAttribute("pais", request.getParameter("pais"));
+        request.setAttribute("numero", request.getParameter("numero"));
+
+        request.setAttribute("sub_acao", sub_acao);
+
+        if (acao != null) {
+            request.setAttribute("acao", acao);
+        }
+
+        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Addresses/addresses.jsp");
+        if (respacher != null) {
+            respacher.forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
+        }
+    }
+
+    private void excluirEndereco(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int resultado = enderecoDAO.apagar(id);
+
+            if (resultado > 0) {
+                // Sucesso: redireciona para a lista sem mensagem de erro
+                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos");
+            } else if (resultado == -2) {
+                // Erro específico: endereço está sendo usado por uma unidade
+                String errorMessage = URLEncoder.encode("Não é possível excluir esse endereço por ele estar instanciado em uma unidade.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            } else {
+                // Erro genérico
+                String errorMessage = URLEncoder.encode("Erro ao excluir endereço. Tente novamente.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro interno ao excluir endereço.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
+    }
+
     private void carregarEnderecoParaEdicao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -180,108 +282,6 @@ public class EnderecoServlet extends HttpServlet {
         // Se houve erro, recarrega a página de edição com a mensagem de erro
         request.setAttribute("errorMessage", errorMessage);
         carregarEnderecoParaEdicao(request, response);
-    }
-
-    private void inserirEndereco(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
-        String errorMessage = null;
-        boolean success = false;
-        boolean isFormSubmission = false;
-
-        try {
-            String cep = request.getParameter("cep");
-            String rua = request.getParameter("rua");
-            String numero = request.getParameter("numero");
-            String bairro = request.getParameter("bairro");
-            String cidade = request.getParameter("cidade");
-            String estado = request.getParameter("estado");
-            String pais = request.getParameter("pais");
-
-            System.out.println("CEP: " + cep);
-            System.out.println("Rua: " + rua);
-            System.out.println("Numero: " + numero);
-            System.out.println("Bairro: " + bairro);
-            System.out.println("Cidade: " + cidade);
-            System.out.println("Estado: " + estado);
-            System.out.println("País: " + pais);
-
-            int numeroInt = Integer.parseInt(numero);
-
-            Endereco endereco = new Endereco(cep, rua, numeroInt, bairro, cidade, estado, pais);
-            success = enderecoDAO.cadastrar(endereco);
-
-            if (success) {
-                if (success) {
-                    response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos");
-                    return;
-                }
-                return;
-            } else {
-                errorMessage = "Erro ao cadastrar analista no banco de dados.";
-            }
-        } catch (NumberFormatException e) {
-            errorMessage = "ID da unidade deve ser um número válido.";
-        } catch (DateTimeParseException e) {
-            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
-        } catch (IllegalArgumentException e) {
-            // Já tem a mensagem de erro
-        } catch (Exception e) {
-            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
-        }
-
-        if (errorMessage == null) {
-            errorMessage = "Erro ao cadastrar analista no banco de dados.";
-        }
-
-        request.setAttribute("errorMessage", errorMessage);
-        request.setAttribute("isFormSubmission", isFormSubmission);
-
-        request.setAttribute("cep", request.getParameter("cep"));
-        request.setAttribute("rua", request.getParameter("rua"));
-        request.setAttribute("bairro", request.getParameter("bairro"));
-        request.setAttribute("cidade", request.getParameter("cidade"));
-        request.setAttribute("estado", request.getParameter("estado"));
-        request.setAttribute("pais", request.getParameter("pais"));
-        request.setAttribute("numero", request.getParameter("numero"));
-
-        request.setAttribute("sub_acao", sub_acao);
-
-        if (acao != null) {
-            request.setAttribute("acao", acao);
-        }
-
-        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Addresses/addresses.jsp");
-        if (respacher != null) {
-            respacher.forward(request, response);
-        } else {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
-        }
-    }
-
-    private void excluirEndereco(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            int resultado = enderecoDAO.apagar(id);
-
-            if (resultado > 0) {
-                // Sucesso: redireciona para a lista sem mensagem de erro
-                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos");
-            } else if (resultado == -2) {
-                // Erro específico: endereço está sendo usado por uma unidade
-                String errorMessage = URLEncoder.encode("Não é possível excluir esse endereço por ele estar instanciado em uma unidade.", "UTF-8");
-                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-            } else {
-                // Erro genérico
-                String errorMessage = URLEncoder.encode("Erro ao excluir endereço. Tente novamente.", "UTF-8");
-                response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-            }
-        } catch (NumberFormatException e) {
-            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
-            response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = URLEncoder.encode("Erro interno ao excluir endereço.", "UTF-8");
-            response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-        }
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)

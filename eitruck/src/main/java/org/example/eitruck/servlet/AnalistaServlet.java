@@ -70,96 +70,6 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
-    private void carregarAnalistaParaEdicao(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            List<Analista> analistas = analistaDAO.buscarPorId(id);
-
-            if (analistas != null && !analistas.isEmpty()) {
-                Analista analista = analistas.get(0);
-                request.setAttribute("analista", analista);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/editar_analista.jsp");
-                rd.forward(request, response);
-            } else {
-                String errorMessage = URLEncoder.encode("Analista não encontrado.", "UTF-8");
-                response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-            }
-        } catch (NumberFormatException e) {
-            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
-            response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = URLEncoder.encode("Erro ao carregar analista para edição.", "UTF-8");
-            response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-        }
-    }
-
-    private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        String errorMessage = null;
-
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            int idUnidade = Integer.parseInt(request.getParameter("id_unidade"));
-            String cpf = request.getParameter("cpf");
-            String nomeCompleto = request.getParameter("nome_completo");
-            String email = request.getParameter("email");
-            String dataContratacaoStr = request.getParameter("data_contratacao");
-            String cargo = request.getParameter("cargo");
-            String telefone = request.getParameter("telefone");
-
-            // Remove formatação do CPF e telefone
-            String cpfNumeros = cpf.replaceAll("[^0-9]", "");
-            String telefoneNumeros = telefone.replaceAll("[^0-9]", "");
-
-            System.out.println("Atualizando analista - ID: " + id + ", ID Unidade: " + idUnidade +
-                    ", CPF: " + cpfNumeros + ", Nome: " + nomeCompleto +
-                    ", Email: " + email + ", Telefone: " + telefoneNumeros);
-
-            // Validações
-            if (dataContratacaoStr == null || dataContratacaoStr.trim().isEmpty()) {
-                errorMessage = "Data de contratação é obrigatória.";
-            } else if (cpfNumeros.length() < 8) {
-                errorMessage = "CPF deve ter pelo menos 8 dígitos numéricos (sem pontos ou traços).";
-            } else if (email == null || !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
-                errorMessage = "Email inválido. Deve conter @ e domínio.";
-            } else if (telefoneNumeros.length() < 10) {
-                errorMessage = "Telefone deve ter pelo menos 10 dígitos (sem parênteses, espaços ou traços).";
-            } else {
-                LocalDate dataContratacao = LocalDate.parse(dataContratacaoStr, DateTimeFormatter.ISO_LOCAL_DATE);
-
-                // Buscar a senha atual para não alterá-la
-                List<Analista> analistaAtual = analistaDAO.buscarPorId(id);
-                if (analistaAtual != null && !analistaAtual.isEmpty()) {
-                    String senhaAtual = analistaAtual.get(0).getSenha();
-
-                    int resultado = analistaDAO.alterarTodos(id, idUnidade, cpfNumeros, nomeCompleto, dataContratacao, email, senhaAtual, cargo, telefoneNumeros);
-
-                    if (resultado > 0) {
-                        response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
-                        return;
-                    } else {
-                        errorMessage = "Erro ao atualizar analista no banco de dados.";
-                    }
-                } else {
-                    errorMessage = "Analista não encontrado.";
-                }
-            }
-        } catch (NumberFormatException e) {
-            errorMessage = "ID da unidade deve ser um número válido.";
-        } catch (DateTimeParseException e) {
-            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
-        } catch (Exception e) {
-            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
-            e.printStackTrace();
-        }
-
-        // Se houve erro, recarrega a página de edição com a mensagem de erro
-        request.setAttribute("errorMessage", errorMessage);
-        carregarAnalistaParaEdicao(request, response);
-    }
-
     private void inserirAnalista(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -269,6 +179,96 @@ public class AnalistaServlet extends HttpServlet {
             String errorMessage = URLEncoder.encode("Erro interno ao excluir analista.", "UTF-8");
             response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
         }
+    }
+
+    private void carregarAnalistaParaEdicao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            List<Analista> analistas = analistaDAO.buscarPorId(id);
+
+            if (analistas != null && !analistas.isEmpty()) {
+                Analista analista = analistas.get(0);
+                request.setAttribute("analista", analista);
+                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/editar_analista.jsp");
+                rd.forward(request, response);
+            } else {
+                String errorMessage = URLEncoder.encode("Analista não encontrado.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro ao carregar analista para edição.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
+    }
+
+    private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        String errorMessage = null;
+
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int idUnidade = Integer.parseInt(request.getParameter("id_unidade"));
+            String cpf = request.getParameter("cpf");
+            String nomeCompleto = request.getParameter("nome_completo");
+            String email = request.getParameter("email");
+            String dataContratacaoStr = request.getParameter("data_contratacao");
+            String cargo = request.getParameter("cargo");
+            String telefone = request.getParameter("telefone");
+
+            // Remove formatação do CPF e telefone
+            String cpfNumeros = cpf.replaceAll("[^0-9]", "");
+            String telefoneNumeros = telefone.replaceAll("[^0-9]", "");
+
+            System.out.println("Atualizando analista - ID: " + id + ", ID Unidade: " + idUnidade +
+                    ", CPF: " + cpfNumeros + ", Nome: " + nomeCompleto +
+                    ", Email: " + email + ", Telefone: " + telefoneNumeros);
+
+            // Validações
+            if (dataContratacaoStr == null || dataContratacaoStr.trim().isEmpty()) {
+                errorMessage = "Data de contratação é obrigatória.";
+            } else if (cpfNumeros.length() < 8) {
+                errorMessage = "CPF deve ter pelo menos 8 dígitos numéricos (sem pontos ou traços).";
+            } else if (email == null || !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+                errorMessage = "Email inválido. Deve conter @ e domínio.";
+            } else if (telefoneNumeros.length() < 10) {
+                errorMessage = "Telefone deve ter pelo menos 10 dígitos (sem parênteses, espaços ou traços).";
+            } else {
+                LocalDate dataContratacao = LocalDate.parse(dataContratacaoStr, DateTimeFormatter.ISO_LOCAL_DATE);
+
+                // Buscar a senha atual para não alterá-la
+                List<Analista> analistaAtual = analistaDAO.buscarPorId(id);
+                if (analistaAtual != null && !analistaAtual.isEmpty()) {
+                    String senhaAtual = analistaAtual.get(0).getSenha();
+
+                    int resultado = analistaDAO.alterarTodos(id, idUnidade, cpfNumeros, nomeCompleto, dataContratacao, email, senhaAtual, cargo, telefoneNumeros);
+
+                    if (resultado > 0) {
+                        response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
+                        return;
+                    } else {
+                        errorMessage = "Erro ao atualizar analista no banco de dados.";
+                    }
+                } else {
+                    errorMessage = "Analista não encontrado.";
+                }
+            }
+        } catch (NumberFormatException e) {
+            errorMessage = "ID da unidade deve ser um número válido.";
+        } catch (DateTimeParseException e) {
+            errorMessage = "Data de contratação inválida. Use o formato AAAA-MM-DD.";
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        // Se houve erro, recarrega a página de edição com a mensagem de erro
+        request.setAttribute("errorMessage", errorMessage);
+        carregarAnalistaParaEdicao(request, response);
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)

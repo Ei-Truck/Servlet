@@ -57,6 +57,76 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    public int alterarTodos(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE administrador SET cpf = ?, nome_completo = ?, email = ?, senha = ?, telefone = ? WHERE id = ?"
+            );
+
+            pstmt.setString(1, cpf);
+            pstmt.setString(2, nomeCompleto);
+            pstmt.setString(3, email);
+            pstmt.setString(4, senha);
+            pstmt.setString(5, telefone);
+            pstmt.setInt(6, id);
+
+            int linhasAfetadas = pstmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                return 1; // Sucesso - registro alterado
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Erro
+        } finally {
+            conexao.desconectar(conn);
+        }
+        return 0; // Nenhum registro alterado
+    }
+
+
+    public boolean atualizar(Administrador admin, String novaSenha) {
+        String comando;
+        if (novaSenha != null && !novaSenha.isEmpty()) {
+            comando = """
+                UPDATE administrador 
+                SET cpf = ?, nome_completo = ?, email = ?, senha = ?
+                WHERE id = ?""";
+        } else {
+            comando = """
+                UPDATE administrador 
+                SET cpf = ?, nome_completo = ?, email = ?
+                WHERE id = ?""";
+        }
+
+        Connection conn = null;
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setString(1, admin.getCpf());
+            pstmt.setString(2, admin.getNomeCompleto());
+            pstmt.setString(3, admin.getEmail());
+
+            if (novaSenha != null && !novaSenha.isEmpty()) {
+                pstmt.setString(4, novaSenha);
+                pstmt.setInt(5, admin.getId());
+            } else {
+                pstmt.setInt(4, admin.getId());
+            }
+
+            int execucao = pstmt.executeUpdate();
+            return execucao > 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return false;
+        } finally {
+            conexao.desconectar(conn);
+        }
+    }
+
     public List<Administrador> buscarTodos() {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
@@ -178,78 +248,6 @@ public class AdministradorDAO extends DAO {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Método de atualização consolidado (FALTANTE)
-
-    public int alterarTodos(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(
-                    "UPDATE administrador SET cpf = ?, nome_completo = ?, email = ?, senha = ?, telefone = ? WHERE id = ?"
-            );
-
-            pstmt.setString(1, cpf);
-            pstmt.setString(2, nomeCompleto);
-            pstmt.setString(3, email);
-            pstmt.setString(4, senha);
-            pstmt.setString(5, telefone);
-            pstmt.setInt(6, id);
-
-            int linhasAfetadas = pstmt.executeUpdate();
-
-            if (linhasAfetadas > 0) {
-                return 1; // Sucesso - registro alterado
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1; // Erro
-        } finally {
-            conexao.desconectar(conn);
-        }
-        return 0; // Nenhum registro alterado
-    }
-
-
-    public boolean atualizar(Administrador admin, String novaSenha) {
-        String comando;
-        if (novaSenha != null && !novaSenha.isEmpty()) {
-            comando = """
-                UPDATE administrador 
-                SET cpf = ?, nome_completo = ?, email = ?, senha = ?
-                WHERE id = ?""";
-        } else {
-            comando = """
-                UPDATE administrador 
-                SET cpf = ?, nome_completo = ?, email = ?
-                WHERE id = ?""";
-        }
-
-        Connection conn = null;
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, admin.getCpf());
-            pstmt.setString(2, admin.getNomeCompleto());
-            pstmt.setString(3, admin.getEmail());
-
-            if (novaSenha != null && !novaSenha.isEmpty()) {
-                pstmt.setString(4, novaSenha);
-                pstmt.setInt(5, admin.getId());
-            } else {
-                pstmt.setInt(4, admin.getId());
-            }
-
-            int execucao = pstmt.executeUpdate();
-            return execucao > 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return false;
         } finally {
             conexao.desconectar(conn);
         }

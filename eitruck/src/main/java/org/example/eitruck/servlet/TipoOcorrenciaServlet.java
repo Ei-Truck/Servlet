@@ -70,70 +70,6 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
-    private void carregarOcorrenciaParaEdicao(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            System.out.println("Carregando tipo de ocorrência para edição, ID: " + id);
-
-            List<TipoOcorrencia> ocorrencias = tipoOcorrenciaDAO.buscarPorId(id);
-
-            System.out.println("Resultado da busca: " + (ocorrencias != null ? ocorrencias.size() : "null"));
-
-            if (ocorrencias != null && !ocorrencias.isEmpty()) {
-                TipoOcorrencia ocorrencia = ocorrencias.get(0);
-                System.out.println("Tipo de ocorrência encontrado: " + ocorrencia.getTipoEvento());
-                request.setAttribute("ocorrencia", ocorrencia);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/editar_ocorrencia.jsp");
-                rd.forward(request, response);
-            } else {
-                System.out.println("Tipo de ocorrência não encontrado para o ID: " + id);
-                String errorMessage = URLEncoder.encode("Tipo de ocorrência não encontrado.", "UTF-8");
-                response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Erro de parse do ID");
-            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
-            response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = URLEncoder.encode("Erro ao carregar tipo de ocorrência para edição: " + e.getMessage(), "UTF-8");
-            response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
-        }
-    }
-
-    private void atualizarOcorrencia(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        String errorMessage = null;
-
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            String tipoEvento = request.getParameter("tipo_evento");
-            int pontuacao = Integer.parseInt(request.getParameter("pontuacao"));
-            String gravidade = request.getParameter("gravidade");
-
-            System.out.println("Atualizando tipo de ocorrência - ID: " + id + ", Tipo Evento: " + tipoEvento + ", Pontuação: " + pontuacao + ", Gravidade: " + gravidade);
-
-            int resultado = tipoOcorrenciaDAO.alterarTodos(id, tipoEvento, pontuacao, gravidade);
-
-            if (resultado > 0) {
-                response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos");
-                return;
-            } else {
-                errorMessage = "Erro ao atualizar tipo de ocorrência no banco de dados.";
-            }
-        } catch (NumberFormatException e) {
-            errorMessage = "Pontuação deve ser um número válido.";
-        } catch (Exception e) {
-            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
-            e.printStackTrace();
-        }
-
-        // Se houve erro, recarrega a página de edição com a mensagem de erro
-        request.setAttribute("errorMessage", errorMessage);
-        carregarOcorrenciaParaEdicao(request, response);
-    }
-
     private void inserirTipoOcorrencia(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -218,6 +154,70 @@ public class TipoOcorrenciaServlet extends HttpServlet {
             String errorMessage = URLEncoder.encode("Erro interno ao excluir tipo de ocorrência.", "UTF-8");
             response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
         }
+    }
+
+    private void carregarOcorrenciaParaEdicao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            System.out.println("Carregando tipo de ocorrência para edição, ID: " + id);
+
+            List<TipoOcorrencia> ocorrencias = tipoOcorrenciaDAO.buscarPorId(id);
+
+            System.out.println("Resultado da busca: " + (ocorrencias != null ? ocorrencias.size() : "null"));
+
+            if (ocorrencias != null && !ocorrencias.isEmpty()) {
+                TipoOcorrencia ocorrencia = ocorrencias.get(0);
+                System.out.println("Tipo de ocorrência encontrado: " + ocorrencia.getTipoEvento());
+                request.setAttribute("ocorrencia", ocorrencia);
+                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/editar_ocorrencia.jsp");
+                rd.forward(request, response);
+            } else {
+                System.out.println("Tipo de ocorrência não encontrado para o ID: " + id);
+                String errorMessage = URLEncoder.encode("Tipo de ocorrência não encontrado.", "UTF-8");
+                response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Erro de parse do ID");
+            String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = URLEncoder.encode("Erro ao carregar tipo de ocorrência para edição: " + e.getMessage(), "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
+        }
+    }
+
+    private void atualizarOcorrencia(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        String errorMessage = null;
+
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String tipoEvento = request.getParameter("tipo_evento");
+            int pontuacao = Integer.parseInt(request.getParameter("pontuacao"));
+            String gravidade = request.getParameter("gravidade");
+
+            System.out.println("Atualizando tipo de ocorrência - ID: " + id + ", Tipo Evento: " + tipoEvento + ", Pontuação: " + pontuacao + ", Gravidade: " + gravidade);
+
+            int resultado = tipoOcorrenciaDAO.alterarTodos(id, tipoEvento, pontuacao, gravidade);
+
+            if (resultado > 0) {
+                response.sendRedirect(request.getContextPath() + "/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos");
+                return;
+            } else {
+                errorMessage = "Erro ao atualizar tipo de ocorrência no banco de dados.";
+            }
+        } catch (NumberFormatException e) {
+            errorMessage = "Pontuação deve ser um número válido.";
+        } catch (Exception e) {
+            errorMessage = "Ocorreu um erro inesperado: " + e.getMessage();
+            e.printStackTrace();
+        }
+
+        // Se houve erro, recarrega a página de edição com a mensagem de erro
+        request.setAttribute("errorMessage", errorMessage);
+        carregarOcorrenciaParaEdicao(request, response);
     }
 
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
