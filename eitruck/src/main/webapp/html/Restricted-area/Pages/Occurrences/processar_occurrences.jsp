@@ -451,7 +451,7 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/html/Restricted-area/Pages/Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
                 <li>
                     <form action="${pageContext.request.contextPath}/servlet-administrador" method="get" style="display: contents;">
                         <input type="hidden" name="acao_principal" value="buscar">
