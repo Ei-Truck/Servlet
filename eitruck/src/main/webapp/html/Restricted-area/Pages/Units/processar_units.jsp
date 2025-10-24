@@ -26,17 +26,316 @@
             (filtroNomeSegmento != null && !filtroNomeSegmento.isEmpty()) ||
             (filtroNomeEndereco != null && !filtroNomeEndereco.isEmpty());
 %>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-    <title>Buscar todos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidades - Ei Truck</title>
     <style>
+        :root {
+            --brand-blue: #022B3A;
+            --brand-blue-2: #00546B;
+            --brand-green: #00b377;
+            --sidebar-width: 280px;
+            --header-height: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--brand-blue);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .nav-item span {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--brand-green);
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border-left-color: var(--brand-green);
+        }
+
+        .nav-item.logout {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            color: #ff6b6b;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: white;
+            padding: 0 30px;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .header-left h1 {
+            font-size: 24px;
+            color: var(--brand-blue);
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--brand-blue);
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: 30px;
+        }
+
+        /* CRUD Section */
+        .crud-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .crud-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .crud-header h2 {
+            color: var(--brand-blue);
+            font-size: 20px;
+        }
+
+        .crud-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Filters */
+        .filters {
+            padding: 20px 30px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .filter-input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            width: 180px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--brand-blue);
+        }
+
+        /* Table */
+        .table-container {
+            padding: 0 30px 30px;
+        }
+
+        .crud-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .crud-table th {
+            background-color: #f8f9fa;
+            color: var(--brand-blue);
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .crud-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .crud-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--brand-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--brand-blue-2);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: var(--brand-green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #00a366;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Error Notification */
         .error-notification {
-            background-color: #ffebee;
-            border: 1px solid #f44336;
+            background: #ffebee;
             color: #c62828;
-            padding: 12px 16px;
-            border-radius: 4px;
-            margin: 10px 0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 0 30px 20px;
+            border: 1px solid #ef5350;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -50,111 +349,91 @@
             cursor: pointer;
         }
 
-        .error-notification button:hover {
-            color: #b71c1c;
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-input {
+                width: 100%;
+            }
+
+            .filter-group:last-child {
+                flex-direction: row;
+                gap: 10px;
+            }
         }
 
-        .filtro-container {
-            margin: 20px 0;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: visible;
+            }
+
+            .sidebar-header h2,
+            .sidebar-header p,
+            .nav-item span:last-child {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 15px;
+            }
+
+            .nav-item span:first-child {
+                margin-right: 0;
+                font-size: 20px;
+            }
+
+            .crud-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .crud-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
         }
 
-        .filtro-item {
-            display: flex;
-            flex-direction: column;
-        }
+        @media (max-width: 480px) {
+            .page-content {
+                padding: 15px;
+            }
 
-        .filtro-item label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 12px;
-        }
+            .content-header {
+                padding: 0 15px;
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+                gap: 10px;
+            }
 
-        .filtro-input {
-            padding: 6px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
+            .header-left,
+            .header-right {
+                width: 100%;
+            }
 
-        .filtro-linha {
-            display: flex;
-            gap: 10px;
-            align-items: end;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
+            .filters,
+            .table-container {
+                padding: 15px;
+            }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        table tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        button {
-            padding: 6px 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-limpar {
-            background-color: #6c757d;
-        }
-
-        .btn-limpar:hover {
-            background-color: #545b62;
-        }
-
-        .btn-excluir {
-            background-color: #dc3545;
-        }
-
-        .btn-excluir:hover {
-            background-color: #c82333;
-        }
-        .btn-editar {
-            background-color: #28a745;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-editar:hover {
-            background-color: #218838;
+            .crud-header {
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -162,162 +441,243 @@
 <%
     if ("buscar_todos".equals(subAcao)) {
 %>
+<div class="admin-container">
+    <!-- Menu Lateral -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Ei Truck</h2>
+            <p>Painel Administrativo</p>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+                <li>
+                    <form action="${pageContext.request.contextPath}/servlet-administrador" method="get" style="display: contents;">
+                        <input type="hidden" name="acao_principal" value="buscar">
+                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
+                            <span>👨‍💼</span> Gerenciar Administradores
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form action="${pageContext.request.contextPath}/servlet-analista" method="get" style="display: contents;">
+                        <input type="hidden" name="acao_principal" value="buscar">
+                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
+                            <span>👥</span> Gerenciar Analistas
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form action="${pageContext.request.contextPath}/servlet-segmentos" method="get" style="display: contents;">
+                        <input type="hidden" name="acao_principal" value="buscar">
+                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
+                            <span>📁</span> Gerenciar Segmentos
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form action="${pageContext.request.contextPath}/servlet-unidade" method="get" style="display: contents;">
+                        <input type="hidden" name="acao_principal" value="buscar">
+                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item active">
+                            <span>🏢</span> Gerenciar Unidades
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form action="${pageContext.request.contextPath}/servlet-enderecos" method="get" style="display: contents;">
+                        <input type="hidden" name="acao_principal" value="buscar">
+                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
+                            <span>📍</span> Gerenciar Endereços
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form action="${pageContext.request.contextPath}/servlet-ocorrencias" method="get" style="display: contents;">
+                        <input type="hidden" name="acao_principal" value="buscar">
+                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
+                            <span>⚠️</span> Gerenciar Tipos de Ocorrência
+                        </button>
+                    </form>
+                </li>
+                <li><a href="../../../../login.jsp" class="nav-item logout"><span>🚪</span> Sair</a></li>
+            </ul>
+        </nav>
+    </div>
 
-<button onclick="window.location.href='html/Restricted-area/Pages/Units/units.jsp'">Adicionar Unidade</button>
-
-<%-- Notificação de erro --%>
-<% if (errorMessage != null || errorParam != null) { %>
-<div class="error-notification" id="errorNotification">
-    <span>Erro: <%= errorMessage != null ? errorMessage : errorParam %></span>
-    <button onclick="document.getElementById('errorNotification').style.display='none'">×</button>
-</div>
-
-<script>
-    // Opcional: remover automaticamente após 5 segundos
-    setTimeout(function() {
-        var notification = document.getElementById('errorNotification');
-        if (notification) {
-            notification.style.display = 'none';
-        }
-    }, 5000);
-</script>
-<% } %>
-
-<h1>Exibindo todas as Unidades</h1>
-
-<%-- Formulário de Filtro com Múltiplos Campos --%>
-<div class="filtro-container">
-    <form action="${pageContext.request.contextPath}/servlet-unidade" method="get" style="margin: 20px 0;">
-        <input type="hidden" name="acao" value="filtrar">
-        <input type="hidden" name="sub_acao" value="buscar_todos">
-
-        <div class="filtro-linha">
-            <div class="filtro-item">
-                <label for="filtroId">ID:</label>
-                <input type="text" id="filtroId" name="filtro_id" class="filtro-input"
-                       value="<%= filtroId != null ? filtroId : "" %>"
-                       placeholder="Ex: 1, 2"
-                       style="width: 80px;">
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <header class="content-header">
+            <div class="header-left">
+                <h1>Gerenciar Unidades</h1>
+                <p>Cadastre e gerencie as unidades do sistema</p>
             </div>
-
-            <div class="filtro-item">
-                <label for="filtroNome">Nome:</label>
-                <input type="text" id="filtroNome" name="filtro_nome" class="filtro-input"
-                       value="<%= filtroNome != null ? filtroNome : "" %>"
-                       placeholder="Ex: Unidade A"
-                       style="width: 150px;">
+            <div class="header-right">
+                <div class="user-info">
+                    <span>Administrador</span>
+                </div>
             </div>
+        </header>
 
-            <div class="filtro-item">
-                <label for="filtroNomeSegmento">Nome Segmento:</label>
-                <input type="text" id="filtroNomeSegmento" name="filtro_nome_segmento" class="filtro-input"
-                       value="<%= filtroNomeSegmento != null ? filtroNomeSegmento : "" %>"
-                       placeholder="Ex: Transporte"
-                       style="width: 150px;">
-            </div>
+        <div class="page-content">
+            <div class="crud-section">
+                <div class="crud-header">
+                    <h2>Unidades</h2>
+                    <div class="crud-actions">
+                        <button onclick="window.location.href='html/Restricted-area/Pages/Units/units.jsp'" class="btn btn-primary">
+                            <span>➕</span> Adicionar Unidade
+                        </button>
+                    </div>
+                </div>
 
-            <div class="filtro-item">
-                <label for="filtroNomeEndereco">Nome Endereço:</label>
-                <input type="text" id="filtroNomeEndereco" name="filtro_nome_endereco" class="filtro-input"
-                       value="<%= filtroNomeEndereco != null ? filtroNomeEndereco : "" %>"
-                       placeholder="Ex: São Paulo"
-                       style="width: 150px;">
-            </div>
+                <%-- Notificação de erro --%>
+                <% if (errorMessage != null || errorParam != null) { %>
+                <div class="error-notification" id="errorNotification">
+                    <span>Erro: <%= errorMessage != null ? errorMessage : errorParam %></span>
+                    <button onclick="document.getElementById('errorNotification').style.display='none'">×</button>
+                </div>
 
-            <div class="filtro-item" style="display: flex; gap: 10px; margin-left: 20px;">
-                <button type="submit"
-                        style="padding: 8px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                    Aplicar Filtro
-                </button>
+                <script>
+                    // Opcional: remover automaticamente após 5 segundos
+                    setTimeout(function() {
+                        var notification = document.getElementById('errorNotification');
+                        if (notification) {
+                            notification.style.display = 'none';
+                        }
+                    }, 5000);
+                </script>
+                <% } %>
 
-                <button type="button" onclick="limparFiltro()"
-                        style="padding: 8px 20px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                    Limpar
-                </button>
+                <div class="filters">
+                    <form action="${pageContext.request.contextPath}/servlet-unidade" method="get" style="display: contents;">
+                        <input type="hidden" name="acao" value="filtrar">
+                        <input type="hidden" name="sub_acao" value="buscar_todos">
+
+                        <div class="filter-group">
+                            <label for="filtroId">ID</label>
+                            <input type="text" id="filtroId" name="filtro_id" class="filter-input"
+                                   value="<%= filtroId != null ? filtroId : "" %>"
+                                   placeholder="Ex: 1, 2">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filtroNome">Nome</label>
+                            <input type="text" id="filtroNome" name="filtro_nome" class="filter-input"
+                                   value="<%= filtroNome != null ? filtroNome : "" %>"
+                                   placeholder="Ex: Unidade A">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filtroNomeSegmento">Nome Segmento</label>
+                            <input type="text" id="filtroNomeSegmento" name="filtro_nome_segmento" class="filter-input"
+                                   value="<%= filtroNomeSegmento != null ? filtroNomeSegmento : "" %>"
+                                   placeholder="Ex: Transporte">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filtroNomeEndereco">Nome Endereço</label>
+                            <input type="text" id="filtroNomeEndereco" name="filtro_nome_endereco" class="filter-input"
+                                   value="<%= filtroNomeEndereco != null ? filtroNomeEndereco : "" %>"
+                                   placeholder="Ex: São Paulo">
+                        </div>
+
+                        <div class="filter-group" style="flex-direction: row; align-items: end; gap: 10px;">
+                            <button type="submit" class="btn btn-secondary">
+                                <span>🔍</span> Aplicar Filtros
+                            </button>
+
+                            <button type="button" onclick="limparFiltro()" class="btn btn-secondary">
+                                <span>🔄</span> Limpar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div style="padding: 0 30px 15px; font-size: 14px; color: #333; margin-top: 35px">
+                    <strong>
+                        <%
+                            if (unidades != null) {
+                                if (algumFiltro) {
+                                    out.print("Registros filtrados: " + unidades.size());
+
+                                    // Mostra os filtros ativos
+                                    out.print(" | Filtros: ");
+                                    List<String> filtrosAtivos = new ArrayList<>();
+                                    if (filtroId != null && !filtroId.isEmpty()) filtrosAtivos.add("ID: " + filtroId);
+                                    if (filtroNome != null && !filtroNome.isEmpty()) filtrosAtivos.add("Nome: " + filtroNome);
+                                    if (filtroNomeSegmento != null && !filtroNomeSegmento.isEmpty()) filtrosAtivos.add("Nome Segmento: " + filtroNomeSegmento);
+                                    if (filtroNomeEndereco != null && !filtroNomeEndereco.isEmpty()) filtrosAtivos.add("Nome Endereço: " + filtroNomeEndereco);
+                                    out.print(String.join(", ", filtrosAtivos));
+                                } else {
+                                    out.print("Total de registros: " + unidades.size());
+                                }
+                            }
+                        %>
+                    </strong>
+                </div>
+
+                <div class="table-container">
+                    <table class="crud-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Nome Segmento</th>
+                            <th>Nome Endereço</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            if (unidades != null && !unidades.isEmpty()) {
+                                for (int i=0; i < unidades.size(); i++){
+                        %>
+                        <tr>
+                            <td><%=unidades.get(i).getId()%></td>
+                            <td><%=unidades.get(i).getNome()%></td>
+                            <td><%=unidades.get(i).getNomeSegmento()%></td>
+                            <td><%=unidades.get(i).getNomeEndereco()%></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <form action="${pageContext.request.contextPath}/servlet-unidade" method="get" style="display:inline;">
+                                        <input type="hidden" name="acao" value="editar">
+                                        <input type="hidden" name="id" value="<%= unidades.get(i).getId() %>">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <span>✏️</span> Editar
+                                        </button>
+                                    </form>
+                                    <form action="${pageContext.request.contextPath}/servlet-unidade" method="post" style="display:inline;">
+                                        <input type="hidden" name="acao_principal" value="excluir">
+                                        <input type="hidden" name="id" value="<%= unidades.get(i).getId() %>">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta unidade?')">
+                                            <span>🗑️</span> Excluir
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        } else {
+                        %>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 30px;">
+                                <% if (algumFiltro) { %>
+                                Nenhuma unidade encontrada com os filtros aplicados.
+                                <% } else { %>
+                                Nenhuma unidade encontrada ou erro ao carregar dados.
+                                <% } %>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
-        <div style="margin-top: 10px; font-size: 12px; color: #666;">
-            <em>Preencha um ou mais campos para filtrar. Os filtros são combinados (AND).</em>
-        </div>
-    </form>
-
-    <div style="margin-top: 5px; font-size: 14px; color: #333;">
-        <strong>
-            <%
-                if (unidades != null) {
-                    if (algumFiltro) {
-                        out.print("Registros filtrados: " + unidades.size());
-
-                        // Mostra os filtros ativos
-                        out.print(" | Filtros: ");
-                        List<String> filtrosAtivos = new ArrayList<>();
-                        if (filtroId != null && !filtroId.isEmpty()) filtrosAtivos.add("ID: " + filtroId);
-                        if (filtroNome != null && !filtroNome.isEmpty()) filtrosAtivos.add("Nome: " + filtroNome);
-                        if (filtroNomeSegmento != null && !filtroNomeSegmento.isEmpty()) filtrosAtivos.add("Nome Segmento: " + filtroNomeSegmento);
-                        if (filtroNomeEndereco != null && !filtroNomeEndereco.isEmpty()) filtrosAtivos.add("Nome Endereço: " + filtroNomeEndereco);
-                        out.print(String.join(", ", filtrosAtivos));
-                    } else {
-                        out.print("Total de registros: " + unidades.size());
-                    }
-                }
-            %>
-        </strong>
     </div>
 </div>
-
-<table>
-    <thead>
-    <tr>
-        <th><strong>ID</strong></th>
-        <th><strong>NOME</strong></th>
-        <th><strong>NOME SEGMENTO</strong></th>
-        <th><strong>NOME ENDEREÇO</strong></th>
-        <th><strong>AÇÕES</strong></th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <%
-        if (unidades != null && !unidades.isEmpty()) {
-            for (int i=0; i < unidades.size(); i++){
-    %>
-    <tr>
-        <td><%=unidades.get(i).getId()%></td>
-        <td><%=unidades.get(i).getNome()%></td>
-        <td><%=unidades.get(i).getNomeSegmento()%></td>
-        <td><%=unidades.get(i).getNomeEndereco()%></td>
-        <td>
-            <form action="${pageContext.request.contextPath}/servlet-unidade" method="get" style="display:inline;">
-                <input type="hidden" name="acao" value="editar">
-                <input type="hidden" name="id" value="<%= unidades.get(i).getId() %>">
-                <button type="submit" class="btn-editar" style="background-color: #28a745; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-left: 5px;">Editar</button>
-            </form>
-            <form action="${pageContext.request.contextPath}/servlet-unidade" method="post" style="display:inline;">
-                <input type="hidden" name="acao_principal" value="excluir">
-                <input type="hidden" name="id" value="<%= unidades.get(i).getId() %>">
-                <button type="submit" class="btn-excluir" onclick="return confirm('Tem certeza que deseja excluir esta unidade?')">Excluir</button>
-            </form>
-        </td>
-    </tr>
-    <%
-        }
-    } else {
-    %>
-    <tr>
-        <td colspan="5">
-            <% if (algumFiltro) { %>
-            Nenhuma unidade encontrada com os filtros aplicados.
-            <% } else { %>
-            Nenhuma unidade encontrada ou erro ao carregar dados.
-            <% } %>
-        </td>
-    </tr>
-    <%
-        }
-    %>
-    </tbody>
-</table>
 
 <script>
     function limparFiltro() {
@@ -326,7 +686,7 @@
 
     // Opcional: enviar form ao pressionar Enter em qualquer campo
     document.addEventListener('DOMContentLoaded', function() {
-        const inputs = document.querySelectorAll('input[type="text"]');
+        const inputs = document.querySelectorAll('.filter-input');
         inputs.forEach(input => {
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {

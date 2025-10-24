@@ -433,7 +433,7 @@
                         if (errorMessage != null) {
                     %>
                     <div class="error-notification">
-                        <strong>Erro:</strong> <%= errorMessage %>
+                        <strong>Erro:</strong> ID do segmento e/ou ID do endereço inválido.
                     </div>
                     <%
                         }
