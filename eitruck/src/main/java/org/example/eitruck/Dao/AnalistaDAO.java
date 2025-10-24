@@ -69,7 +69,7 @@ public class AnalistaDAO extends DAO {
             u.nome as nome_unidade
         FROM analista a
         INNER JOIN unidade u ON a.id_unidade = u.id
-        ORDER BY a.id
+        ORDER BY id
         """;
 
         Connection conn = null;
@@ -309,7 +309,7 @@ public class AnalistaDAO extends DAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
+                        rs.getString("nome_completo"), // Corrigido de "nome" para "nome_completo"
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),

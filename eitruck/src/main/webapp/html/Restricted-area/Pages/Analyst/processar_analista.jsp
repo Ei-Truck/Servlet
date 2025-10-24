@@ -305,6 +305,11 @@
         <td><%=analistas.get(i).getDtContratacao()%></td>
         <td><%=analistas.get(i).getCargo()%></td>
         <td>
+            <form action="${pageContext.request.contextPath}/servlet-analista" method="get" style="display:inline;">
+                <input type="hidden" name="acao" value="editar">
+                <input type="hidden" name="id" value="<%= analistas.get(i).getId() %>">
+                <button type="submit" class="btn-editar" style="background-color: #28a745; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">Editar</button>
+            </form>
             <form action="${pageContext.request.contextPath}/servlet-analista" method="post" style="display:inline;">
                 <input type="hidden" name="acao_principal" value="excluir">
                 <input type="hidden" name="id" value="<%= analistas.get(i).getId() %>">
