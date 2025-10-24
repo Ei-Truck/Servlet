@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tipos de Ocorrência - Ei Truck</title>
+  <title>Cadastrar Tipos de Ocorrência - Ei Truck</title>
+  <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/image/Group%2036941.png">
   <style>
     :root {
       --brand-blue: #022B3A;
@@ -31,7 +32,6 @@
       min-height: 100vh;
     }
 
-    /* Sidebar */
     .sidebar {
       width: var(--sidebar-width);
       background: var(--brand-blue);
@@ -106,7 +106,6 @@
       color: #ff6b6b;
     }
 
-    /* Main Content */
     .main-content {
       flex: 1;
       margin-left: var(--sidebar-width);
@@ -143,12 +142,10 @@
       color: var(--brand-blue);
     }
 
-    /* Page Content */
     .page-content {
       padding: 30px;
     }
 
-    /* CRUD Section */
     .crud-section {
       background: white;
       border-radius: 12px;
@@ -261,7 +258,6 @@
       background: #00a366;
     }
 
-    /* Responsividade */
     @media (max-width: 768px) {
       .sidebar {
         width: 70px;

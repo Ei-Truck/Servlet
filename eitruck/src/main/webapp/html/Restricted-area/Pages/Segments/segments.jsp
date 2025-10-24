@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Segmentos - Ei Truck</title>
+  <title>Cadastrar Segmentos - Ei Truck</title>
+  <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/image/Group%2036941.png">
   <style>
     :root {
       --brand-blue: #022B3A;

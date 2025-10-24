@@ -32,6 +32,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tipos de Ocorrência - Ei Truck</title>
+    <link rel="icon" type="image/png" href="../../../image/Group 36941.png">
     <style>
         :root {
             --brand-blue: #022B3A;
@@ -684,7 +685,6 @@
         window.location.href = '${pageContext.request.contextPath}/servlet-ocorrencias?acao=buscar&sub_acao=buscar_todos';
     }
 
-    // Opcional: enviar form ao pressionar Enter em qualquer campo
     document.addEventListener('DOMContentLoaded', function() {
         const inputs = document.querySelectorAll('.filter-input');
         inputs.forEach(input => {
