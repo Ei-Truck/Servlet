@@ -262,6 +262,15 @@
       background: #00a366;
     }
 
+    .error-notification {
+      background-color: #ffebee;
+      border: 1px solid #f44336;
+      color: #c62828;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
     /* Responsividade */
     @media (max-width: 768px) {
       .sidebar {
@@ -337,54 +346,43 @@
     <nav class="sidebar-nav">
       <ul>
         <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+
         <li>
-          <form action="${pageContext.request.contextPath}/servlet-administrador" method="get" style="display: contents;">
-            <input type="hidden" name="acao_principal" value="buscar">
-            <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-              <span>👨‍💼</span> Gerenciar Administradores
-            </button>
-          </form>
+          <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+            <span>👨‍💼</span> Gerenciar Administradores
+          </a>
         </li>
+
         <li>
-          <form action="${pageContext.request.contextPath}/servlet-analista" method="get" style="display: contents;">
-            <input type="hidden" name="acao_principal" value="buscar">
-            <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-              <span>👥</span> Gerenciar Analistas
-            </button>
-          </form>
+          <a href="${pageContext.request.contextPath}/servlet-analista?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+            <span>👥</span> Gerenciar Analistas
+          </a>
         </li>
+
         <li>
-          <form action="${pageContext.request.contextPath}/servlet-segmentos" method="get" style="display: contents;">
-            <input type="hidden" name="acao_principal" value="buscar">
-            <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-              <span>📁</span> Gerenciar Segmentos
-            </button>
-          </form>
+          <a href="${pageContext.request.contextPath}/servlet-segmentos?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+            <span>📁</span> Gerenciar Segmentos
+          </a>
         </li>
+
         <li>
-          <form action="${pageContext.request.contextPath}/servlet-unidade" method="get" style="display: contents;">
-            <input type="hidden" name="acao_principal" value="buscar">
-            <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-              <span>🏢</span> Gerenciar Unidades
-            </button>
-          </form>
+          <a href="${pageContext.request.contextPath}/servlet-unidade?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+            <span>🏢</span> Gerenciar Unidades
+          </a>
         </li>
+
         <li>
-          <form action="${pageContext.request.contextPath}/servlet-enderecos" method="get" style="display: contents;">
-            <input type="hidden" name="acao_principal" value="buscar">
-            <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item active">
-              <span>📍</span> Gerenciar Endereços
-            </button>
-          </form>
+          <a href="${pageContext.request.contextPath}/servlet-enderecos?acao=buscar&sub_acao=buscar_todos" class="nav-item active">
+            <span>📍</span> Gerenciar Endereços
+          </a>
         </li>
+
         <li>
-          <form action="${pageContext.request.contextPath}/servlet-ocorrencias" method="get" style="display: contents;">
-            <input type="hidden" name="acao_principal" value="buscar">
-            <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-              <span>⚠️</span> Gerenciar Tipos de Ocorrência
-            </button>
-          </form>
+          <a href="${pageContext.request.contextPath}/servlet-ocorrencias?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+            <span>⚠️</span> Gerenciar Tipos de Ocorrência
+          </a>
         </li>
+
         <li><a href="../../../../login.jsp" class="nav-item logout"><span>🚪</span> Sair</a></li>
       </ul>
     </nav>
@@ -410,12 +408,9 @@
         <div class="crud-header">
           <h2>Cadastrar Novo Endereço</h2>
           <div class="crud-actions">
-            <form action="${pageContext.request.contextPath}/servlet-enderecos" method="get">
-              <input type="hidden" name="acao_principal" value="buscar">
-              <button type="submit" name="sub_acao" value="buscar_todos" class="btn btn-secondary">
-                <span>←</span> Voltar para Lista
-              </button>
-            </form>
+            <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos'" class="btn btn-secondary">
+              <span>←</span> Voltar para Lista
+            </button>
           </div>
         </div>
 
@@ -425,8 +420,8 @@
 
             if (errorMessage != null) {
           %>
-          <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
-            <strong>Erro em algum cadastro</strong>
+          <div class="error-notification">
+            <strong>Erro:</strong> <%= errorMessage %>
           </div>
           <%
             }
@@ -438,41 +433,58 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="cep">CEP:</label>
-                <input type="text" name="cep" id="cep" class="form-control" value="${cep != null ? cep : ''}" required>
+                <input type="text" name="cep" id="cep" class="form-control"
+                       value="${cep != null ? cep.replaceAll('[^0-9]', '') : ''}"
+                       required maxlength="8" oninput="validarCEP(this)"
+                       placeholder="Apenas números (ex: 12345678)">
               </div>
 
               <div class="form-group">
                 <label for="numero">Número:</label>
-                <input type="text" name="numero" id="numero" class="form-control" value="${numero != null ? numero : ''}" required>
+                <input type="number" name="numero" id="numero" class="form-control"
+                       value="${numero != null ? numero : ''}" required
+                       oninput="validarNumero(this)" placeholder="Número do endereço"
+                       min="1" max="99999">
               </div>
             </div>
 
             <div class="form-group">
               <label for="rua">Rua:</label>
-              <input type="text" name="rua" id="rua" class="form-control" value="${rua != null ? rua : ''}" required>
+              <input type="text" name="rua" id="rua" class="form-control"
+                     value="${rua != null ? rua : ''}" required
+                     oninput="validarRua(this)" placeholder="Nome da rua">
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="bairro">Bairro:</label>
-                <input type="text" name="bairro" id="bairro" class="form-control" value="${bairro != null ? bairro : ''}" required>
+                <input type="text" name="bairro" id="bairro" class="form-control"
+                       value="${bairro != null ? bairro : ''}" required
+                       oninput="validarBairro(this)" placeholder="Nome do bairro">
               </div>
 
               <div class="form-group">
                 <label for="cidade">Cidade:</label>
-                <input type="text" name="cidade" id="cidade" class="form-control" value="${cidade != null ? cidade : ''}" required>
+                <input type="text" name="cidade" id="cidade" class="form-control"
+                       value="${cidade != null ? cidade : ''}" required
+                       oninput="validarCidade(this)" placeholder="Nome da cidade">
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="estado">Estado:</label>
-                <input type="text" name="estado" id="estado" class="form-control" value="${estado != null ? estado : ''}" required>
+                <label for="estado">Estado (UF):</label>
+                <input type="text" name="estado" id="estado" class="form-control"
+                       value="${estado != null ? estado : ''}" required
+                       maxlength="2" oninput="validarEstado(this)"
+                       placeholder="UF (ex: SP, RJ)">
               </div>
 
               <div class="form-group">
                 <label for="pais">País:</label>
-                <input type="text" name="pais" id="pais" class="form-control" value="${pais != null ? pais : ''}" required>
+                <input type="text" name="pais" id="pais" class="form-control"
+                       value="${pais != null ? pais : ''}" required
+                       oninput="validarPais(this)" placeholder="Nome do país">
               </div>
             </div>
 
@@ -485,5 +497,168 @@
     </div>
   </div>
 </div>
+
+<script>
+  function validarCEP(input) {
+    // Remove TODOS os caracteres não numéricos
+    let cep = input.value.replace(/[^0-9]/g, '');
+
+    // Atualiza o campo APENAS com números
+    input.value = cep;
+
+    // Validação do formato: exatamente 8 dígitos
+    const cepRegex = /^\d{8}$/;
+
+    if (cep.length > 0 && !cepRegex.test(cep)) {
+      input.setCustomValidity('CEP deve ter exatamente 8 dígitos numéricos.');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+
+  function validarRua(input) {
+    const rua = input.value.trim();
+    // Permite letras, números, espaços e alguns caracteres especiais comuns em endereços
+    const ruaRegex = /^[a-zA-ZÀ-ÿ0-9\s.,'-]{2,100}$/;
+
+    if (rua && !ruaRegex.test(rua)) {
+      input.setCustomValidity('Nome da rua deve conter entre 2 e 100 caracteres válidos.');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+
+  function validarNumero(input) {
+    const numero = input.value;
+    // Valida que é um número positivo e dentro de um range razoável
+    if (numero && (numero < 1 || numero > 99999)) {
+      input.setCustomValidity('Número deve estar entre 1 e 99999.');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+
+  function validarBairro(input) {
+    const bairro = input.value.trim();
+    const bairroRegex = /^[a-zA-ZÀ-ÿ0-9\s.,'-]{2,50}$/;
+
+    if (bairro && !bairroRegex.test(bairro)) {
+      input.setCustomValidity('Nome do bairro deve conter entre 2 e 50 caracteres válidos.');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+
+  function validarCidade(input) {
+    const cidade = input.value.trim();
+    const cidadeRegex = /^[a-zA-ZÀ-ÿ\s.'-]{2,50}$/;
+
+    if (cidade && !cidadeRegex.test(cidade)) {
+      input.setCustomValidity('Nome da cidade deve conter entre 2 e 50 caracteres válidos (apenas letras).');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+
+  function validarEstado(input) {
+    const estado = input.value.toUpperCase().trim();
+    // Atualiza o valor para maiúsculas
+    input.value = estado;
+
+    // Lista de UFs válidas do Brasil
+    const ufsValidas = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+
+    if (estado && !ufsValidas.includes(estado)) {
+      input.setCustomValidity('UF inválida. Use uma sigla de estado válida do Brasil.');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+
+  function validarPais(input) {
+    const pais = input.value.trim();
+    const paisRegex = /^[a-zA-ZÀ-ÿ\s.'-]{2,50}$/;
+
+    if (pais && !paisRegex.test(pais)) {
+      input.setCustomValidity('Nome do país deve conter entre 2 e 50 caracteres válidos (apenas letras).');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+
+  // Validação no envio do formulário
+  document.querySelector('form').addEventListener('submit', function(e) {
+    const cep = document.getElementById('cep');
+    const rua = document.getElementById('rua');
+    const numero = document.getElementById('numero');
+    const bairro = document.getElementById('bairro');
+    const cidade = document.getElementById('cidade');
+    const estado = document.getElementById('estado');
+    const pais = document.getElementById('pais');
+
+    // Valida CEP (exatamente 8 dígitos)
+    const cepNumeros = cep.value.replace(/[^0-9]/g, '');
+    const cepRegex = /^\d{8}$/;
+    if (!cepRegex.test(cepNumeros)) {
+      e.preventDefault();
+      alert('CEP deve ter exatamente 8 dígitos numéricos.');
+      cep.focus();
+      return;
+    }
+
+    // Valida Rua
+    const ruaRegex = /^[a-zA-ZÀ-ÿ0-9\s.,'-]{2,100}$/;
+    if (!ruaRegex.test(rua.value.trim())) {
+      e.preventDefault();
+      alert('Nome da rua deve conter entre 2 e 100 caracteres válidos.');
+      rua.focus();
+      return;
+    }
+
+    // Valida Número
+    if (!numero.value || numero.value < 1 || numero.value > 99999) {
+      e.preventDefault();
+      alert('Número deve estar entre 1 e 99999.');
+      numero.focus();
+      return;
+    }
+
+    // Valida Bairro
+    const bairroRegex = /^[a-zA-ZÀ-ÿ0-9\s.,'-]{2,50}$/;
+    if (!bairroRegex.test(bairro.value.trim())) {
+      e.preventDefault();
+      alert('Nome do bairro deve conter entre 2 e 50 caracteres válidos.');
+      bairro.focus();
+      return;
+    }
+
+    // Valida Cidade
+    const cidadeRegex = /^[a-zA-ZÀ-ÿ\s.'-]{2,50}$/;
+    if (!cidadeRegex.test(cidade.value.trim())) {
+      e.preventDefault();
+      alert('Nome da cidade deve conter entre 2 e 50 caracteres válidos (apenas letras).');
+      cidade.focus();
+      return;
+    }
+
+    // Valida Estado (UF)
+    const ufsValidas = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+    if (!ufsValidas.includes(estado.value.toUpperCase().trim())) {
+      e.preventDefault();
+      alert('UF inválida. Use uma sigla de estado válida do Brasil.');
+      estado.focus();
+      return;
+    }
+
+    // Valida País
+    const paisRegex = /^[a-zA-ZÀ-ÿ\s.'-]{2,50}$/;
+    if (!paisRegex.test(pais.value.trim())) {
+      e.preventDefault();
+      alert('Nome do país deve conter entre 2 e 50 caracteres válidos (apenas letras).');
+      pais.focus();
+      return;
+    }
+  });
+</script>
 </body>
 </html>

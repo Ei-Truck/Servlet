@@ -346,54 +346,43 @@
         <nav class="sidebar-nav">
             <ul>
                 <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+
                 <li>
-                    <form action="${pageContext.request.contextPath}/servlet-administrador" method="get" style="display: contents;">
-                        <input type="hidden" name="acao_principal" value="buscar">
-                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-                            <span>👨‍💼</span> Gerenciar Administradores
-                        </button>
-                    </form>
+                    <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+                        <span>👨‍💼</span> Gerenciar Administradores
+                    </a>
                 </li>
+
                 <li>
-                    <form action="${pageContext.request.contextPath}/servlet-analista" method="get" style="display: contents;">
-                        <input type="hidden" name="acao_principal" value="buscar">
-                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-                            <span>👥</span> Gerenciar Analistas
-                        </button>
-                    </form>
+                    <a href="${pageContext.request.contextPath}/servlet-analista?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+                        <span>👥</span> Gerenciar Analistas
+                    </a>
                 </li>
+
                 <li>
-                    <form action="${pageContext.request.contextPath}/servlet-segmentos" method="get" style="display: contents;">
-                        <input type="hidden" name="acao_principal" value="buscar">
-                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item active">
-                            <span>📁</span> Gerenciar Segmentos
-                        </button>
-                    </form>
+                    <a href="${pageContext.request.contextPath}/servlet-segmentos?acao=buscar&sub_acao=buscar_todos" class="nav-item active">
+                        <span>📁</span> Gerenciar Segmentos
+                    </a>
                 </li>
+
                 <li>
-                    <form action="${pageContext.request.contextPath}/servlet-unidade" method="get" style="display: contents;">
-                        <input type="hidden" name="acao_principal" value="buscar">
-                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-                            <span>🏢</span> Gerenciar Unidades
-                        </button>
-                    </form>
+                    <a href="${pageContext.request.contextPath}/servlet-unidade?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+                        <span>🏢</span> Gerenciar Unidades
+                    </a>
                 </li>
+
                 <li>
-                    <form action="${pageContext.request.contextPath}/servlet-enderecos" method="get" style="display: contents;">
-                        <input type="hidden" name="acao_principal" value="buscar">
-                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-                            <span>📍</span> Gerenciar Endereços
-                        </button>
-                    </form>
+                    <a href="${pageContext.request.contextPath}/servlet-enderecos?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+                        <span>📍</span> Gerenciar Endereços
+                    </a>
                 </li>
+
                 <li>
-                    <form action="${pageContext.request.contextPath}/servlet-ocorrencias" method="get" style="display: contents;">
-                        <input type="hidden" name="acao_principal" value="buscar">
-                        <button type="submit" name="sub_acao" value="buscar_todos" class="nav-item">
-                            <span>⚠️</span> Gerenciar Tipos de Ocorrência
-                        </button>
-                    </form>
+                    <a href="${pageContext.request.contextPath}/servlet-ocorrencias?acao=buscar&sub_acao=buscar_todos" class="nav-item">
+                        <span>⚠️</span> Gerenciar Tipos de Ocorrência
+                    </a>
                 </li>
+
                 <li><a href="../../../../login.jsp" class="nav-item logout"><span>🚪</span> Sair</a></li>
             </ul>
         </nav>

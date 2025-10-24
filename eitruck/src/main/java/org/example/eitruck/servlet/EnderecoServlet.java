@@ -179,18 +179,24 @@ public class EnderecoServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
+            System.out.println("Carregando endereço para edição - ID: " + id);
+
             List<Endereco> enderecos = enderecoDAO.buscarPorId(id);
+            System.out.println("Quantidade de endereços encontrados: " + (enderecos != null ? enderecos.size() : "null"));
 
             if (enderecos != null && !enderecos.isEmpty()) {
                 Endereco endereco = enderecos.get(0);
+                System.out.println("Endereço encontrado: " + endereco.getRua() + ", " + endereco.getNumero());
                 request.setAttribute("endereco", endereco);
                 RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Addresses/editar_endereco.jsp");
                 rd.forward(request, response);
             } else {
+                System.out.println("Nenhum endereço encontrado para ID: " + id);
                 String errorMessage = URLEncoder.encode("Endereço não encontrado.", "UTF-8");
                 response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
             }
         } catch (NumberFormatException e) {
+            System.out.println("Erro de parse no ID");
             String errorMessage = URLEncoder.encode("ID inválido.", "UTF-8");
             response.sendRedirect(request.getContextPath() + "/servlet-enderecos?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);
         } catch (Exception e) {

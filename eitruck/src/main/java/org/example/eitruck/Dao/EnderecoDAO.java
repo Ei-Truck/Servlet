@@ -375,29 +375,42 @@ public class EnderecoDAO extends DAO {
     }
 
     public List<Endereco> buscarPorId(int idEndereco) {
-        ResultSet rs;
+        ResultSet rs = null;
+        PreparedStatement pstmt = null;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco WHERE id = ?";
 
         try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idEndereco);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()){
-                Endereco endereco = new Endereco(rs.getInt("id"), rs.getString("cep"), rs.getString("rua"),
-                        rs.getInt("numero"), rs.getString("bairro"), rs.getString("cidade"),
-                        rs.getString("estado"), rs.getString("pais"));
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Endereco endereco = new Endereco(
+                        rs.getInt("id"),
+                        rs.getString("cep"),
+                        rs.getString("rua"),
+                        rs.getInt("numero"),
+                        rs.getString("bairro"),
+                        rs.getString("cidade"),
+                        rs.getString("estado"),
+                        rs.getString("pais")
+                );
                 listaRetorno.add(endereco);
             }
             return listaRetorno;
-        }
-        catch (SQLException sqle){
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        }
-        finally {
-            conexao.desconectar(conn);
+        } finally {
+            // Fecha apenas o ResultSet e PreparedStatement, NÃO a conexão
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // REMOVA esta linha: conexao.desconectar(conn);
         }
     }
 
