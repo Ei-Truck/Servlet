@@ -109,15 +109,23 @@ public class AnalistaServlet extends HttpServlet {
             String cargo = request.getParameter("cargo");
             String telefone = request.getParameter("telefone");
 
+            // Remove formatação do CPF e telefone
+            String cpfNumeros = cpf.replaceAll("[^0-9]", "");
+            String telefoneNumeros = telefone.replaceAll("[^0-9]", "");
+
+            System.out.println("Atualizando analista - ID: " + id + ", ID Unidade: " + idUnidade +
+                    ", CPF: " + cpfNumeros + ", Nome: " + nomeCompleto +
+                    ", Email: " + email + ", Telefone: " + telefoneNumeros);
+
             // Validações
             if (dataContratacaoStr == null || dataContratacaoStr.trim().isEmpty()) {
                 errorMessage = "Data de contratação é obrigatória.";
-            } else if (cpf == null || cpf.replaceAll("[^0-9]", "").length() < 8) {
-                errorMessage = "CPF deve ter pelo menos 8 dígitos numéricos.";
-            } else if (email == null || !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            } else if (cpfNumeros.length() < 8) {
+                errorMessage = "CPF deve ter pelo menos 8 dígitos numéricos (sem pontos ou traços).";
+            } else if (email == null || !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
                 errorMessage = "Email inválido. Deve conter @ e domínio.";
-            } else if (telefone == null || !telefone.matches("^[0-9]{10,11}$")) {
-                errorMessage = "Telefone inválido. Deve conter pelo menos 10 números";
+            } else if (telefoneNumeros.length() < 10) {
+                errorMessage = "Telefone deve ter pelo menos 10 dígitos (sem parênteses, espaços ou traços).";
             } else {
                 LocalDate dataContratacao = LocalDate.parse(dataContratacaoStr, DateTimeFormatter.ISO_LOCAL_DATE);
 
@@ -126,7 +134,7 @@ public class AnalistaServlet extends HttpServlet {
                 if (analistaAtual != null && !analistaAtual.isEmpty()) {
                     String senhaAtual = analistaAtual.get(0).getSenha();
 
-                    int resultado = analistaDAO.alterarTodos(id, idUnidade, cpf, nomeCompleto, dataContratacao, email, senhaAtual, cargo, telefone);
+                    int resultado = analistaDAO.alterarTodos(id, idUnidade, cpfNumeros, nomeCompleto, dataContratacao, email, senhaAtual, cargo, telefoneNumeros);
 
                     if (resultado > 0) {
                         response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");

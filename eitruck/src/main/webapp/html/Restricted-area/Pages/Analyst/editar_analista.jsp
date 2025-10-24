@@ -449,14 +449,14 @@
                                 <label for="id_unidade">ID Unidade:</label>
                                 <input type="number" name="id_unidade" id="id_unidade" class="form-control"
                                        value="${analista.idUnidade != null ? analista.idUnidade : ''}" required
-                                       min="1" oninput="validarNumero(this)">
+                                       min="1" oninput="validarNumero(this)" placeholder="Apenas números (ex: 1)">
                             </div>
 
                             <div class="form-group">
                                 <label for="cpf">CPF:</label>
                                 <input type="text" name="cpf" id="cpf" class="form-control"
-                                       value="${analista.cpf != null ? analista.cpf : ''}" required
-                                       maxlength="14" oninput="validarCPF(this)">
+                                       value="${analista.cpf != null ? analista.cpf.replaceAll('[^0-9]', '') : ''}" required
+                                       maxlength="11" oninput="validarCPF(this)" placeholder="Apenas números (ex: 12345678901)">
                             </div>
                         </div>
 
@@ -470,7 +470,7 @@
                             <label for="email">Email:</label>
                             <input type="email" name="email" id="email" class="form-control"
                                    value="${analista.email != null ? analista.email : ''}" required
-                                   oninput="validarEmail(this)">
+                                   oninput="validarEmail(this)" placeholder="exemplo@email.com">
                         </div>
 
                         <div class="form-row">
@@ -490,7 +490,8 @@
                         <div class="form-group">
                             <label for="telefone">Telefone:</label>
                             <input type="text" name="telefone" id="telefone" class="form-control"
-                                   value="${analista.telefone != null ? analista.telefone : ''}" required>
+                                   value="${analista.telefone != null ? analista.telefone.replaceAll('[^0-9]', '') : ''}" required
+                                   maxlength="11" oninput="validarTelefone(this)" placeholder="Apenas números (ex: 11999999999)">
                         </div>
 
                         <div class="form-actions">
@@ -517,26 +518,15 @@
     }
 
     function validarCPF(input) {
-        // Remove caracteres não numéricos
+        // Remove TODOS os caracteres não numéricos (incluindo pontos e traços)
         let cpf = input.value.replace(/[^0-9]/g, '');
 
-        // Formata o CPF (opcional)
-        if (cpf.length <= 11) {
-            if (cpf.length > 3 && cpf.length <= 6) {
-                cpf = cpf.replace(/(\d{3})(\d{1,3})/, '$1.$2');
-            } else if (cpf.length > 6 && cpf.length <= 9) {
-                cpf = cpf.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-            } else if (cpf.length > 9) {
-                cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-            }
-        }
-
+        // Atualiza o campo APENAS com números
         input.value = cpf;
 
         // Validação básica de tamanho
-        let cpfNumeros = cpf.replace(/[^0-9]/g, '');
-        if (cpfNumeros.length < 8 && cpfNumeros.length > 0) {
-            input.setCustomValidity('CPF deve ter pelo menos 8 dígitos');
+        if (cpf.length < 8 && cpf.length > 0) {
+            input.setCustomValidity('CPF deve ter pelo menos 8 dígitos numéricos.');
         } else {
             input.setCustomValidity('');
         }
@@ -544,10 +534,25 @@
 
     function validarEmail(input) {
         const email = input.value;
-        const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (email && !emailRegex.test(email)) {
             input.setCustomValidity('Email inválido. Deve conter @ e domínio.');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+
+    function validarTelefone(input) {
+        // Remove TODOS os caracteres não numéricos
+        let telefone = input.value.replace(/[^0-9]/g, '');
+
+        // Atualiza o campo APENAS com números
+        input.value = telefone;
+
+        // Validação básica de tamanho
+        if (telefone.length < 10 && telefone.length > 0) {
+            input.setCustomValidity('Telefone deve ter pelo menos 10 dígitos.');
         } else {
             input.setCustomValidity('');
         }
@@ -558,6 +563,7 @@
         const idUnidade = document.getElementById('id_unidade');
         const cpf = document.getElementById('cpf');
         const email = document.getElementById('email');
+        const telefone = document.getElementById('telefone');
 
         // Valida ID da unidade
         if (!idUnidade.value || idUnidade.value < 1) {
@@ -567,21 +573,30 @@
             return;
         }
 
-        // Valida CPF
+        // Valida CPF (apenas números)
         const cpfNumeros = cpf.value.replace(/[^0-9]/g, '');
         if (cpfNumeros.length < 8) {
             e.preventDefault();
-            alert('CPF deve ter pelo menos 8 dígitos numéricos.');
+            alert('CPF deve ter pelo menos 8 dígitos numéricos (sem pontos ou traços).');
             cpf.focus();
             return;
         }
 
         // Valida email
-        const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email.value)) {
             e.preventDefault();
             alert('Email inválido. Deve conter @ e domínio.');
             email.focus();
+            return;
+        }
+
+        // Valida telefone (apenas números)
+        const telefoneNumeros = telefone.value.replace(/[^0-9]/g, '');
+        if (telefoneNumeros.length < 10) {
+            e.preventDefault();
+            alert('Telefone deve ter pelo menos 10 dígitos (sem parênteses, espaços ou traços).');
+            telefone.focus();
             return;
         }
     });

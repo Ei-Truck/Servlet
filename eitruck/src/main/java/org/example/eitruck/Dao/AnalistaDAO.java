@@ -345,7 +345,7 @@ public class AnalistaDAO extends DAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
+                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -381,7 +381,7 @@ public class AnalistaDAO extends DAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
+                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -404,7 +404,7 @@ public class AnalistaDAO extends DAO {
     public List<Analista> buscarPorNome(String nome) {
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM analista WHERE nome = ?";
+        String comando = "SELECT * FROM analista WHERE nome_completo = ?"; // CORRIGIDO: de "nome" para "nome_completo"
 
         Connection conn = null;
         try {
@@ -417,7 +417,7 @@ public class AnalistaDAO extends DAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
+                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -453,7 +453,7 @@ public class AnalistaDAO extends DAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
+                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -509,32 +509,6 @@ public class AnalistaDAO extends DAO {
         }
     }
 
-    // Método para autenticação
-    public String ehAnalista(String email, String senha){
-        Connection conn = null;
-        PreparedStatement pstmt;
-        ResultSet rs;
-        String sql = "SELECT senha, nome FROM analista WHERE email = ?";
-        String senhaBanco, nome;
-
-        try {
-            conn = conexao.conectar();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, email);
-            rs = pstmt.executeQuery();
-            if (rs.next()){
-                senhaBanco = rs.getString("senha");
-                nome = rs.getString("nome");
-                if (senha.equals(senhaBanco)){
-                    return nome;
-                }
-            } return null;
-        } catch (SQLException sqle){
-            sqle.printStackTrace();
-        } finally {
-            conexao.desconectar(conn);
-        } return null;
-    }
     public boolean verificarEmailExistente(String email) {
         String comando = "SELECT COUNT(*) FROM analista WHERE email = ?";
         Connection conn = null;
