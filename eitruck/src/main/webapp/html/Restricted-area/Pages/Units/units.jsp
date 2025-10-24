@@ -336,7 +336,7 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="../Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/html/Restricted-area/Pages/Dashboard/dashboard.jsp" class="nav-item"><span>📊</span> Dashboard</a></li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
@@ -427,12 +427,16 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="id_segmento">ID do Segmento:</label>
-                                <input type="text" name="id_segmento" id="id_segmento" class="form-control" value="${id_segmento != null ? id_segmento : ''}" required>
+                                <input type="number" name="id_segmento" id="id_segmento" class="form-control"
+                                       value="${id_segmento != null ? id_segmento : ''}"
+                                       min="1" step="1" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="id_endereco">ID do Endereço:</label>
-                                <input type="text" name="id_endereco" id="id_endereco" class="form-control" value="${id_endereco != null ? id_endereco : ''}" required>
+                                <input type="number" name="id_endereco" id="id_endereco" class="form-control"
+                                       value="${id_endereco != null ? id_endereco : ''}"
+                                       min="1" step="1" required>
                             </div>
                         </div>
 
