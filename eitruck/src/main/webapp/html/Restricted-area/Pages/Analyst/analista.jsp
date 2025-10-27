@@ -509,9 +509,14 @@
 
                             <div class="form-group">
                                 <label for="cargo">Cargo:</label>
-                                <input type="text" name="cargo" id="cargo" class="form-control" required
-                                       value="${cargo != null ? cargo : ''}"
-                                       oninput="validarCargo(this)" placeholder="Cargo do analista">
+                                <select name="cargo" id="cargo" class="form-control" required>
+                                    <option value="">Selecione um cargo</option>
+                                    <option value="Administrador" ${cargo == 'Administrador' ? 'selected' : ''}>Administrador</option>
+                                    <option value="Gerente de Análise" ${cargo == 'Gerente de Análise' ? 'selected' : ''}>Gerente de Análise</option>
+                                    <option value="Analista Regional" ${cargo == 'Analista Regional' ? 'selected' : ''}>Analista Regional</option>
+                                    <option value="Analista Local" ${cargo == 'Analista Local' ? 'selected' : ''}>Analista Local</option>
+                                    <option value="Analista Segmento" ${cargo == 'Analista Segmento' ? 'selected' : ''}>Analista Segmento</option>
+                                </select>
                             </div>
                         </div>
 
@@ -598,14 +603,11 @@
         }
     }
 
-    function validarCargo(input) {
-        const cargo = input.value.trim();
-        const cargoRegex = /^[a-zA-ZÀ-ÿ\s']{2,50}$/;
-
-        if (cargo && !cargoRegex.test(cargo)) {
-            input.setCustomValidity('Cargo deve conter entre 2 e 50 caracteres válidos.');
+    function validarCargo(select) {
+        if (select.value === "") {
+            select.setCustomValidity('Por favor, selecione um cargo.');
         } else {
-            input.setCustomValidity('');
+            select.setCustomValidity('');
         }
     }
 

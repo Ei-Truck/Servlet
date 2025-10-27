@@ -480,8 +480,14 @@
 
                             <div class="form-group">
                                 <label for="cargo">Cargo:</label>
-                                <input type="text" name="cargo" id="cargo" class="form-control"
-                                       value="${analista.cargo != null ? analista.cargo : ''}" required>
+                                <select name="cargo" id="cargo" class="form-control" required>
+                                    <option value="">Selecione um cargo</option>
+                                    <option value="Administrador" ${analista.cargo == 'Administrador' ? 'selected' : ''}>Administrador</option>
+                                    <option value="Gerente de Análise" ${analista.cargo == 'Gerente de Análise' ? 'selected' : ''}>Gerente de Análise</option>
+                                    <option value="Analista Regional" ${analista.cargo == 'Analista Regional' ? 'selected' : ''}>Analista Regional</option>
+                                    <option value="Analista Local" ${analista.cargo == 'Analista Local' ? 'selected' : ''}>Analista Local</option>
+                                    <option value="Analista Segmento" ${analista.cargo == 'Analista Segmento' ? 'selected' : ''}>Analista Segmento</option>
+                                </select>
                             </div>
                         </div>
 
@@ -556,12 +562,21 @@
         }
     }
 
+    function validarCargo(select) {
+        if (select.value === "") {
+            select.setCustomValidity('Por favor, selecione um cargo.');
+        } else {
+            select.setCustomValidity('');
+        }
+    }
+
     // Validação no envio do formulário
     document.querySelector('form').addEventListener('submit', function(e) {
         const idUnidade = document.getElementById('id_unidade');
         const cpf = document.getElementById('cpf');
         const email = document.getElementById('email');
         const telefone = document.getElementById('telefone');
+        const cargo = document.getElementById('cargo');
 
         // Valida ID da unidade
         if (!idUnidade.value || idUnidade.value < 1) {
@@ -595,6 +610,14 @@
             e.preventDefault();
             alert('Telefone deve ter pelo menos 10 dígitos (sem parênteses, espaços ou traços).');
             telefone.focus();
+            return;
+        }
+
+        // Valida Cargo (agora é um select)
+        if (cargo.value === "") {
+            e.preventDefault();
+            alert('Por favor, selecione um cargo.');
+            cargo.focus();
             return;
         }
     });
