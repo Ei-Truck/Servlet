@@ -12,6 +12,7 @@ public class AnalistaDAO extends DAO {
         super();
     }
 
+    // Método inserir
     public boolean cadastrar(Analista analista) {
         String comando = """
             INSERT INTO analista (id_unidade, cpf, nome_completo, email, dt_contratacao, senha, cargo, telefone)
@@ -41,6 +42,7 @@ public class AnalistaDAO extends DAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idAnalista) {
         String comando = "DELETE FROM analista WHERE id = ?";
         Connection conn = null;
@@ -59,6 +61,7 @@ public class AnalistaDAO extends DAO {
         }
     }
 
+    // Método alterar
     public int alterarTodos(int id, int idUnidade, String cpf, String nomeCompleto, LocalDate dtContratacao, String email, String senha, String cargo, String telefone) {
         Connection conn = null;
         try {
@@ -92,7 +95,6 @@ public class AnalistaDAO extends DAO {
         return 0; // Nenhum registro alterado
     }
 
-    // Método de atualização consolidado
     public boolean atualizar(Analista analista, String novaSenha) {
         String comando;
         if (novaSenha != null && !novaSenha.isEmpty()) {
@@ -135,7 +137,7 @@ public class AnalistaDAO extends DAO {
         }
     }
 
-    // Método para buscar todos os analistas
+    // Método mostrar os registros
     public List<Analista> buscarTodos() {
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
@@ -177,6 +179,7 @@ public class AnalistaDAO extends DAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         String comando = "SELECT COUNT(*) AS total FROM analista";
         Connection conn = null;
@@ -198,6 +201,7 @@ public class AnalistaDAO extends DAO {
         }
     }
 
+    // Método filtrar
     public List<Analista> filtrarAnalistasMultiplos(String filtroId, String filtroNomeUnidade, String filtroNomeCompleto,
                                                     String filtroCpf, String filtroEmail, String filtroCargo) {
         ResultSet rs;

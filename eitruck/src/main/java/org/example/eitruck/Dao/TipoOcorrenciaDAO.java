@@ -12,6 +12,7 @@ public class TipoOcorrenciaDAO extends DAO {
         super();
     }
 
+    // Método inserir
     public boolean cadastrar(TipoOcorrencia tipoOcorrencia) {
         String comando = """
             INSERT INTO tipo_ocorrencia (tipo_evento, pontuacao, gravidade)
@@ -36,6 +37,7 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idOcorrencia) {
         String comando = "DELETE FROM tipo_ocorrencia WHERE id = ?";
         Connection conn = null;
@@ -54,17 +56,18 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    // Método buscar por ID
     public List<TipoOcorrencia> buscarPorId(int idTipoOcorrencia) {
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM tipo_ocorrencia WHERE id = ?";
-        Connection conn = null; // Adicionar esta linha
+        Connection conn = null;
 
         try {
             conn = conexao.conectar(); // Inicializar a conexão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idTipoOcorrencia);
-            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 TipoOcorrencia tipo = new TipoOcorrencia(
                         rs.getInt("id"),
@@ -81,10 +84,11 @@ public class TipoOcorrenciaDAO extends DAO {
             return null;
         }
         finally {
-            conexao.desconectar(conn); // Usar a variável local conn
+            conexao.desconectar(conn);
         }
     }
 
+    // Método alterar
     public int alterarTodos(int id, String tipoEvento, int pontuacao, String gravidade) {
         Connection conn = null;
         try {
@@ -113,6 +117,7 @@ public class TipoOcorrenciaDAO extends DAO {
         return 0; // Nenhum registro alterado
     }
 
+    // Método mostrar os registros
     public List<TipoOcorrencia> buscarTodos() {
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
@@ -138,6 +143,7 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         String comando = "SELECT COUNT(*) AS total FROM tipo_ocorrencia";
         Connection conn = null;
@@ -159,6 +165,7 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    // Método filtrar
     public List<TipoOcorrencia> filtrarTiposOcorrenciaMultiplos(String filtroId, String filtroTipoEvento,
                                                                 String filtroPontuacao, String filtroGravidade) {
         ResultSet rs;
@@ -234,6 +241,7 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarTipoEvento(TipoOcorrencia tipoOcorrencia, String novoTipoEvento) {
         String comando = "UPDATE tipo_ocorrencia SET tipo_evento = ? WHERE id = ?";
 
@@ -266,11 +274,11 @@ public class TipoOcorrenciaDAO extends DAO {
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, novaPontuacao); // Mudei para setInt
+            pstmt.setInt(1, novaPontuacao);
             pstmt.setInt(2, tipoOcorrencia.getId());
             int execucao = pstmt.executeUpdate();
             if (execucao > 0) {
-                tipoOcorrencia.setPontuacao(novaPontuacao); // Corrigido para setPontuacao
+                tipoOcorrencia.setPontuacao(novaPontuacao);
                 return 1;
             }
             else {
@@ -311,6 +319,7 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
+    // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<TipoOcorrencia> buscarPorTipoEvento(String tipoEvento) {
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();

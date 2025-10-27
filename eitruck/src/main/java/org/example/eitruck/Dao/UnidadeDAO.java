@@ -12,6 +12,7 @@ public class UnidadeDAO extends DAO {
         super();
     }
 
+    // Método inserir
     public boolean cadastrar(Unidade unidade) {
         String comando = """
             INSERT INTO unidade (id_segmento, id_endereco, nome)
@@ -36,6 +37,7 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idUnidade) {
         String comando = "DELETE FROM unidade WHERE id = ?";
         Connection conn = null;
@@ -43,27 +45,23 @@ public class UnidadeDAO extends DAO {
         try {
             conn = conexao.conectar();
 
-            // Primeiro, verifica se existe algum analista usando esta unidade
             String verificaAnalista = "SELECT COUNT(*) FROM analista WHERE id_unidade = ?";
             PreparedStatement pstmtVerifica = conn.prepareStatement(verificaAnalista);
             pstmtVerifica.setInt(1, idUnidade);
             ResultSet rs = pstmtVerifica.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
-                // Existem analistas usando esta unidade, não pode excluir
-                return -2; // Código especial para "em uso por analista"
+                return -2;
             }
 
-            // Se não há analistas usando, procede com a exclusão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idUnidade);
             int execucao = pstmt.executeUpdate();
             return execucao;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
-            // Verifica se é erro de restrição de chave estrangeira
-            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
-                return -2; // Também retorna -2 se houver violação de FK
+            if (sqle.getSQLState().equals("23503")) {
+                return -2;
             }
             return -1;
         } finally {
@@ -71,17 +69,18 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    // Buscar por ID
     public List<Unidade> buscarPorId(int idUnidade) {
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM unidade WHERE id = ?";
-        Connection conn = null; // Adicionar esta linha
+        Connection conn = null;
 
         try {
             conn = conexao.conectar(); // Inicializar a conexão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idUnidade);
-            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
+            rs = pstmt.executeQuery();
             while (rs.next()){
                 Unidade unidade = new Unidade(
                         rs.getInt("id"),
@@ -98,10 +97,11 @@ public class UnidadeDAO extends DAO {
             return null;
         }
         finally {
-            conexao.desconectar(conn); // Usar a variável local conn
+            conexao.desconectar(conn);
         }
     }
 
+    // Método alterar
     public int alterarTodos(int id, String nome, int idSegmento, int idEndereco) {
         Connection conn = null;
         try {
@@ -130,6 +130,7 @@ public class UnidadeDAO extends DAO {
         return 0; // Nenhum registro alterado
     }
 
+    // Método mostrar os registros
     public List<Unidade> buscarTodos() {
         String comando = """
         SELECT 
@@ -170,6 +171,7 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         String comando = "SELECT COUNT(*) AS total FROM unidade";
         Connection conn = null;
@@ -191,6 +193,7 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    // Método filtrar
     public List<Unidade> filtrarUnidadesMultiplos(String filtroId, String filtroNome, String filtroNomeSegmento, String filtroNomeEndereco) {
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
@@ -198,7 +201,6 @@ public class UnidadeDAO extends DAO {
 
         try {
             conn = conexao.conectar();
-            // Usando JOIN para buscar o nome do segmento e o nome do endereço (cidade)
             StringBuilder sql = new StringBuilder("""
             SELECT 
                 u.*,
@@ -270,6 +272,7 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarIdSegmento(Unidade unidade, int novoIdSegmento) {
         String comando = "UPDATE unidade SET id_segmento = ? WHERE id = ?";
 
@@ -345,6 +348,7 @@ public class UnidadeDAO extends DAO {
         }
     }
 
+    // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<Unidade> buscarPorIdSegmento(int idSegmento) {
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();

@@ -12,6 +12,7 @@ public class EnderecoDAO extends DAO {
         super();
     }
 
+    // Método inserir
     public boolean cadastrar(Endereco endereco) {
         String comando = """
             INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado, pais)
@@ -40,6 +41,7 @@ public class EnderecoDAO extends DAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idEndereco) {
         String comando = "DELETE FROM endereco WHERE id = ?";
         Connection conn = null;
@@ -47,27 +49,23 @@ public class EnderecoDAO extends DAO {
         try {
             conn = conexao.conectar();
 
-            // Primeiro, verifica se existe alguma unidade usando este endereço
             String verificaUnidade = "SELECT COUNT(*) FROM unidade WHERE id_endereco = ?";
             PreparedStatement pstmtVerifica = conn.prepareStatement(verificaUnidade);
             pstmtVerifica.setInt(1, idEndereco);
             ResultSet rs = pstmtVerifica.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
-                // Existem unidades usando este endereço, não pode excluir
-                return -2; // Código especial para "em uso por unidade"
+                return -2;
             }
 
-            // Se não há unidades usando, procede com a exclusão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idEndereco);
             int execucao = pstmt.executeUpdate();
             return execucao;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
-            // Verifica se é erro de restrição de chave estrangeira
-            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
-                return -2; // Também retorna -2 se houver violação de FK
+            if (sqle.getSQLState().equals("23503")) {
+                return -2;
             }
             return -1;
         } finally {
@@ -75,6 +73,7 @@ public class EnderecoDAO extends DAO {
         }
     }
 
+    // Método alterar
     public int alterarEndereco(int id, String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
         Connection conn = null;
 
@@ -108,6 +107,7 @@ public class EnderecoDAO extends DAO {
         return 0; // Nenhum registro alterado
     }
 
+    // Método mostrar os registros
     public List<Endereco> buscarTodos() {
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
@@ -133,6 +133,7 @@ public class EnderecoDAO extends DAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         String comando = "SELECT COUNT(*) AS total FROM endereco";
         Connection conn = null;
@@ -154,6 +155,7 @@ public class EnderecoDAO extends DAO {
         }
     }
 
+    // Método filtrar
     public List<Endereco> filtrarEnderecosMultiplos(String filtroId, String filtroCep, String filtroRua,
                                                     String filtroNumero, String filtroBairro, String filtroCidade,
                                                     String filtroEstado, String filtroPais) {
@@ -250,6 +252,7 @@ public class EnderecoDAO extends DAO {
         }
     }
 
+    // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarCep(Endereco endereco, String novoCep) {
         String comando = "UPDATE endereco SET cep = ? WHERE id = ?";
         Connection conn = null;
@@ -374,6 +377,7 @@ public class EnderecoDAO extends DAO {
         }
     }
 
+    // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<Endereco> buscarPorId(int idEndereco) {
         ResultSet rs = null;
         PreparedStatement pstmt = null;
@@ -403,14 +407,12 @@ public class EnderecoDAO extends DAO {
             sqle.printStackTrace();
             return null;
         } finally {
-            // Fecha apenas o ResultSet e PreparedStatement, NÃO a conexão
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            // REMOVA esta linha: conexao.desconectar(conn);
         }
     }
 

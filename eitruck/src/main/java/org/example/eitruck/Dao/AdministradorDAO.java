@@ -13,6 +13,7 @@ public class AdministradorDAO extends DAO {
         super();
     }
 
+    // Método inserir
     public boolean cadastrar(Administrador admin) {
         String comando = """
             INSERT INTO administrador (cpf, nome_completo, email, senha, telefone)
@@ -39,6 +40,7 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idAdmin) {
         String comando = "DELETE FROM administrador WHERE id = ?";
         Connection conn = null;
@@ -57,6 +59,7 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Método alterar
     public int alterarTodos(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
         Connection conn = null;
         try {
@@ -127,6 +130,7 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Método mostrar os registros
     public List<Administrador> buscarTodos() {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
@@ -157,6 +161,7 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         String comando = "SELECT COUNT(*) AS total FROM administrador";
         Connection conn = null;
@@ -178,6 +183,7 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Método filtrar
     public List<Administrador> filtrarAdministradoresMultiplos(String filtroId, String filtroNome, String filtroCpf,
                                                                String filtroEmail, String filtroTelefone) {
         ResultSet rs;
@@ -380,6 +386,7 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<Administrador> buscarPorCpf(String cpfAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
@@ -440,7 +447,6 @@ public class AdministradorDAO extends DAO {
         }
     }
 
-    // CORREÇÃO no método buscarPorEmail
     public List<Administrador> buscarPorEmail(String emailAdmin) {
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
@@ -471,6 +477,7 @@ public class AdministradorDAO extends DAO {
         }
     }
 
+    // Método para verificar se é administrador
     public String ehAdmin(String email, String senha){
         Connection conn = null;
         Hash hash = new Hash();
@@ -483,7 +490,7 @@ public class AdministradorDAO extends DAO {
             conn = conexao.conectar();
             pstmt = conn.prepareStatement(sql);
 
-//            Setando valores
+            // Setando valores
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
             if (rs.next()){

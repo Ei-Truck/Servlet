@@ -12,6 +12,7 @@ public class SegmentoDAO extends DAO {
         super();
     }
 
+    // Método inserir
     public boolean cadastrar(Segmento segmento) {
         String comando = """
             INSERT INTO segmento (nome, descricao)
@@ -35,6 +36,7 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idSegmento) {
         String comando = "DELETE FROM segmento WHERE id = ?";
         Connection conn = null;
@@ -42,27 +44,23 @@ public class SegmentoDAO extends DAO {
         try {
             conn = conexao.conectar();
 
-            // Primeiro, verifica se existe alguma unidade usando este segmento
             String verificaUnidade = "SELECT COUNT(*) FROM unidade WHERE id_segmento = ?";
             PreparedStatement pstmtVerifica = conn.prepareStatement(verificaUnidade);
             pstmtVerifica.setInt(1, idSegmento);
             ResultSet rs = pstmtVerifica.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
-                // Existem unidades usando este segmento, não pode excluir
-                return -2; // Código especial para "em uso por unidade"
+                return -2;
             }
 
-            // Se não há unidades usando, procede com a exclusão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idSegmento);
             int execucao = pstmt.executeUpdate();
             return execucao;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
-            // Verifica se é erro de restrição de chave estrangeira
-            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
-                return -2; // Também retorna -2 se houver violação de FK
+            if (sqle.getSQLState().equals("23503")) {
+                return -2;
             }
             return -1;
         } finally {
@@ -70,17 +68,18 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    // Método buscar por ID
     public List<Segmento> buscarPorId(int idSegmento) {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM segmento WHERE id = ?";
-        Connection conn = null; // Adicionar esta linha
+        Connection conn = null;
 
         try {
             conn = conexao.conectar(); // Inicializar a conexão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idSegmento);
-            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
+            rs = pstmt.executeQuery();
             while (rs.next()){
                 Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
                 listaRetorno.add(segmento);
@@ -92,10 +91,11 @@ public class SegmentoDAO extends DAO {
             return null;
         }
         finally {
-            conexao.desconectar(conn); // Usar a variável local conn
+            conexao.desconectar(conn);
         }
     }
 
+    // Método alterar
     public int alterarTodos(int id, String nome, String descricao) {
         Connection conn = null;
         try {
@@ -123,6 +123,7 @@ public class SegmentoDAO extends DAO {
         return 0; // Nenhum registro alterado
     }
 
+    // Método mostrar os registros
     public List<Segmento> buscarTodos() {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();
@@ -148,6 +149,7 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         String comando = "SELECT COUNT(*) AS total FROM segmento";
         Connection conn = null;
@@ -169,6 +171,7 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    // Método filtrar
     public List<Segmento> filtrarSegmentosMultiplos(String filtroId, String filtroNome, String filtroDescricao) {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();
@@ -236,7 +239,7 @@ public class SegmentoDAO extends DAO {
         }
     }
 
-
+    // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarNome(Segmento segmento, String novoNome) {
         String comando = "UPDATE segmento SET nome = ? WHERE id = ?";
 
@@ -287,6 +290,7 @@ public class SegmentoDAO extends DAO {
         }
     }
 
+    // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<Segmento> buscarPorNome(String nome) {
         ResultSet rs;
         List<Segmento> listaRetorno = new ArrayList<>();
