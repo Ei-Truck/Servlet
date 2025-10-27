@@ -301,7 +301,7 @@
 <script>
     // Redireciona após alguns segundos para o dashboard
     setTimeout(() => {
-        window.location.href = "${pageContext.request.contextPath}/html/Restricted-area/Pages/Dashboard/dashboard.jsp";
+        window.location.href = "/dashboard";
     }, 500);
 </script>
 </body>

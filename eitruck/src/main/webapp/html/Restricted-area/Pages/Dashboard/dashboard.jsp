@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="org.example.eitruck.Dao.*" %>
 <%@ page import="java.util.*" %>
 <%
     // Verifica se o usuário está logado
@@ -9,6 +8,24 @@
     }
 
     String nomeAdmin = (String) session.getAttribute("nomeAdimin");
+
+    // Obter os totais do request em vez de criar os DAOs
+    Integer totalAdministradores = (Integer) request.getAttribute("totalAdministradores");
+    Integer totalAnalistas = (Integer) request.getAttribute("totalAnalistas");
+    Integer totalSegmentos = (Integer) request.getAttribute("totalSegmentos");
+    Integer totalUnidades = (Integer) request.getAttribute("totalUnidades");
+    Integer totalEnderecos = (Integer) request.getAttribute("totalEnderecos");
+    Integer totalOcorrencias = (Integer) request.getAttribute("totalOcorrencias");
+
+    // Se for null (primeiro acesso sem servlet), usar valores padrão
+    if (totalAdministradores == null) totalAdministradores = 0;
+    if (totalAnalistas == null) totalAnalistas = 0;
+    if (totalSegmentos == null) totalSegmentos = 0;
+    if (totalUnidades == null) totalUnidades = 0;
+    if (totalEnderecos == null) totalEnderecos = 0;
+    if (totalOcorrencias == null) totalOcorrencias = 0;
+
+    String error = (String) request.getAttribute("error");
 %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -211,6 +228,16 @@
             display: contents;
         }
 
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #ef5350;
+            text-align: center;
+        }
+
         /* Responsividade */
         @media (max-width: 1200px) {
             .stats-grid {
@@ -270,23 +297,6 @@
     </style>
 </head>
 <body>
-<%
-    // Inicializar os DAOs e obter as contagens
-    AdministradorDAO administradorDAO = new AdministradorDAO();
-    AnalistaDAO analistaDAO = new AnalistaDAO();
-    SegmentoDAO segmentoDAO = new SegmentoDAO();
-    UnidadeDAO unidadeDAO = new UnidadeDAO();
-    EnderecoDAO enderecoDAO = new EnderecoDAO();
-    TipoOcorrenciaDAO tipoOcorrenciaDAO = new TipoOcorrenciaDAO();
-
-    int totalAdministradores = administradorDAO.numeroRegistros();
-    int totalAnalistas = analistaDAO.numeroRegistros();
-    int totalSegmentos = segmentoDAO.numeroRegistros();
-    int totalUnidades = unidadeDAO.numeroRegistros();
-    int totalEnderecos = enderecoDAO.numeroRegistros();
-    int totalOcorrencias = tipoOcorrenciaDAO.numeroRegistros();
-%>
-
 <div class="admin-container">
     <!-- Menu Lateral -->
     <div class="sidebar">
@@ -296,7 +306,7 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="../Dashboard/dashboard.jsp" class="nav-item active"><span>📊</span> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/dashboard" class="nav-item active"><span>📊</span> Dashboard</a></li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
@@ -354,6 +364,12 @@
         </header>
 
         <div class="page-content">
+            <% if (error != null) { %>
+            <div class="error-message">
+                <strong>Erro:</strong> <%= error %>
+            </div>
+            <% } %>
+
             <!-- Dashboard Content -->
             <div class="stats-grid top-row">
                 <!-- Administradores -->
@@ -365,7 +381,7 @@
                         <div class="stat-info">
                             <h3>Administradores</h3>
                             <span class="stat-number" id="total-administradores">
-                                <%= totalAdministradores >= 0 ? totalAdministradores : "Erro" %>
+                                <%= totalAdministradores %>
                             </span>
                         </div>
                     </button>
@@ -380,7 +396,7 @@
                         <div class="stat-info">
                             <h3>Analistas</h3>
                             <span class="stat-number" id="total-analistas">
-                                <%= totalAnalistas >= 0 ? totalAnalistas : "Erro" %>
+                                <%= totalAnalistas %>
                             </span>
                         </div>
                     </button>
@@ -395,7 +411,7 @@
                         <div class="stat-info">
                             <h3>Segmentos</h3>
                             <span class="stat-number" id="total-segmentos">
-                                <%= totalSegmentos >= 0 ? totalSegmentos : "Erro" %>
+                                <%= totalSegmentos %>
                             </span>
                         </div>
                     </button>
@@ -412,7 +428,7 @@
                         <div class="stat-info">
                             <h3>Unidades</h3>
                             <span class="stat-number" id="total-unidades">
-                                <%= totalUnidades >= 0 ? totalUnidades : "Erro" %>
+                                <%= totalUnidades %>
                             </span>
                         </div>
                     </button>
@@ -427,7 +443,7 @@
                         <div class="stat-info">
                             <h3>Endereços</h3>
                             <span class="stat-number" id="total-enderecos">
-                                <%= totalEnderecos >= 0 ? totalEnderecos : "Erro" %>
+                                <%= totalEnderecos %>
                             </span>
                         </div>
                     </button>
@@ -442,7 +458,7 @@
                         <div class="stat-info">
                             <h3>Tipos de Ocorrência</h3>
                             <span class="stat-number" id="total-ocorrencias">
-                                <%= totalOcorrencias >= 0 ? totalOcorrencias : "Erro" %>
+                                <%= totalOcorrencias %>
                             </span>
                         </div>
                     </button>
