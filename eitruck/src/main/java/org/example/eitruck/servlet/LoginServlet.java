@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
         HttpSession existingSession = req.getSession(false);
         if (existingSession != null && existingSession.getAttribute("nomeAdimin") != null) {
             // Já está logado, redireciona para o dashboard
-            resp.sendRedirect(req.getContextPath() + "/html/Restricted-area/Pages/Dashboard/dashboard.jsp");
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
             return;
         }
 
