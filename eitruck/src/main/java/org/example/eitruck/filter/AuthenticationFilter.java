@@ -23,11 +23,14 @@ public class AuthenticationFilter implements Filter {
 
         // URLs públicas que não precisam de autenticação
         boolean isPublicResource = requestURI.startsWith(contextPath + "/StyleCss/") ||
+                requestURI.startsWith(contextPath + "/html/Landing-page/") ||
+                requestURI.startsWith(contextPath + "/JS/") ||
                 requestURI.startsWith(contextPath + "/image/") ||
                 requestURI.startsWith(contextPath + "/js/") ||
                 requestURI.equals(contextPath + "/login.jsp") ||
                 requestURI.equals(contextPath + "/login") ||
                 requestURI.equals(contextPath + "/index.html") ||
+                requestURI.startsWith(contextPath + "/Erro.jsp/") ||
                 requestURI.equals(contextPath + "/");
 
         // Verifica se o usuário está logado
