@@ -45,6 +45,9 @@ public class Endereco {
     }
 
     public String getCep() {
+        return this.cep;
+    }
+    public String getCepFormatado() {
         Regex re = new Regex();
         String cepFormatado = re.formatarCep(this.cep);
         return cepFormatado;

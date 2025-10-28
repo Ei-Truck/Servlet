@@ -659,11 +659,11 @@
                             <td><%=analistas.get(i).getId()%></td>
                             <td><%=analistas.get(i).getNomeUnidade()%></td>
                             <td><%=analistas.get(i).getNomeCompleto()%></td>
-                            <td><%=analistas.get(i).getCpf()%></td>
+                            <td><%=analistas.get(i).getCpfFormatado()%></td>
                             <td><%=analistas.get(i).getEmail()%></td>
                             <td><%=analistas.get(i).getDtContratacaoFormatada()%></td>
                             <td><%=analistas.get(i).getCargo()%></td>
-                            <td><%=analistas.get(i).getTelefone()%></td>
+                            <td><%=analistas.get(i).getTelefoneFormatado()%></td>
                             <td>
                                 <div class="action-buttons">
                                     <form action="${pageContext.request.contextPath}/servlet-analista" method="get" style="display:inline;">

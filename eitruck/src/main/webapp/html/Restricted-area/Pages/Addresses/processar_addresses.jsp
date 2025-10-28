@@ -677,7 +677,7 @@
                         %>
                         <tr>
                             <td><%=enderecos.get(i).getId()%></td>
-                            <td><%=enderecos.get(i).getCep()%></td>
+                            <td><%=enderecos.get(i).getCepFormatado()%></td>
                             <td><%=enderecos.get(i).getRua()%></td>
                             <td><%=enderecos.get(i).getNumero()%></td>
                             <td><%=enderecos.get(i).getBairro()%></td>
