@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import org.example.eitruck.util.Hash;
 
 @WebServlet("/servlet-administrador")
 public class AdministradorServlet extends HttpServlet {
@@ -76,6 +77,7 @@ public class AdministradorServlet extends HttpServlet {
         String errorMessage = null;
         boolean success = false;
         boolean isFormSubmission = false;
+        Hash hash = new Hash();
 
         try {
             String cpf = request.getParameter("cpf");
@@ -90,7 +92,9 @@ public class AdministradorServlet extends HttpServlet {
             System.out.println("Senha: " + senha);
             System.out.println("Telefone: " + telefone);
 
-            Administrador administrador = new Administrador(telefone, cpf, nome, email, senha);
+            String senhaCriptografada = hash.criptografarSenha(senha);
+
+            Administrador administrador = new Administrador(telefone, cpf, nome, email, senhaCriptografada);
             success = administradorDAO.cadastrar(administrador);
 
             if (success) {

@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.eitruck.util.Hash;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -74,6 +75,7 @@ public class AnalistaServlet extends HttpServlet {
         String errorMessage = null;
         boolean success = false;
         boolean isFormSubmission = false;
+        Hash hash = new Hash();
 
         try {
             String idUnidade = request.getParameter("id_unidade");
@@ -105,7 +107,9 @@ public class AnalistaServlet extends HttpServlet {
             int id_unidade = Integer.parseInt(idUnidade);
             LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE); // Linha 113 agora segura contra null
 
-            Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senha, cargo, telefone);
+            String senhaCriptografada = hash.criptografarSenha(senha);
+
+            Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senhaCriptografada, cargo, telefone);
             success = analistaDAO.cadastrar(analista);
 
             if (success) {
