@@ -19,7 +19,7 @@ public class Uteis {
         String numeros = cpf.replaceAll("\\D", ""); // remove tudo que não é número
 
         // Verifica se todos os dígitos são iguais
-        if (numeros.chars().distinct().count() == 1) {
+        if (numeros.chars().distinct().count() == 1 || numeros.endsWith("00")) {
             throw new IllegalArgumentException("CPF inválido.");
         }
 
@@ -33,12 +33,12 @@ public class Uteis {
         return email; // email não precisa de limpeza de caracteres
     }
 
-    public static String validarSenha(String senha) {
-        if (senha == null || !senha.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
-            throw new IllegalArgumentException("Senha inválida. Mínimo 8 caracteres, incluindo letras e números.");
-        }
-        return senha; // senha não precisa de limpeza
-    }
+//    public static String validarSenha(String senha) {
+//        if (senha == null || !senha.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+//            throw new IllegalArgumentException("Senha inválida. Mínimo 8 caracteres, incluindo letras e números.");
+//        }
+//        return senha; // senha não precisa de limpeza
+//    }
 
 //    public static String validarTelefone(String telefone) {
 //        if (telefone == null || !telefone.matches("\\([0-9]{2}\\) ?[0-9]{5}-[0-9]{4}")) {

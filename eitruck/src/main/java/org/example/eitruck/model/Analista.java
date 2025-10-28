@@ -103,7 +103,7 @@ public class Analista {
         return senha;
     }
     public void setSenha(String senha) {
-        this.senha = Uteis.validarSenha(senha);
+        this.senha = senha; //Uteis.validarSenha(senha);
     }
 
     public String getCargo() {

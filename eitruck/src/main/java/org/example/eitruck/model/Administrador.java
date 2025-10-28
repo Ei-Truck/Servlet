@@ -69,7 +69,7 @@ public class Administrador {
         return senha;
     }
     public void setSenha(String senha) {
-        this.senha = Uteis.validarSenha(senha);
+        this.senha = senha; //Uteis.validarSenha(senha);
     }
 
     public String getTelefone() {
