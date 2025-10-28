@@ -1,5 +1,8 @@
 package org.example.eitruck.util;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 public class Regex {
@@ -71,5 +74,52 @@ public class Regex {
             return cep.substring(0,5) + "-" + cep.substring(5,8);
         }
         return cep;
+    }
+
+    // Método para formatar LocalDate para String no formato DD-MM-YYYY
+    public String formatarData(LocalDate data) {
+        if (data == null) {
+            return null;
+        }
+        return data.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    }
+
+    // Método para converter String para LocalDate
+    public LocalDate parseData(String data) {
+        if (data == null || data.trim().isEmpty()) {
+            return null;
+        }
+
+        data = data.trim();
+
+        try {
+            // Tenta parsear no formato yyyy-MM-dd (formato do banco de dados)
+            if (data.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                return LocalDate.parse(data, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+            // Tenta parsear no formato dd-MM-yyyy (formato brasileiro)
+            else if (data.matches("^\\d{2}-\\d{2}-\\d{4}$")) {
+                return LocalDate.parse(data, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            }
+        } catch (DateTimeParseException e) {
+            System.err.println("Erro ao parsear data: " + data);
+        }
+
+        return null;
+    }
+
+    // Método para converter de yyyy-MM-dd para dd-MM-yyyy
+    public String formatarDataBancoParaBR(String data) {
+        if (data == null || data.trim().isEmpty()) {
+            return data;
+        }
+
+        try {
+            LocalDate localDate = LocalDate.parse(data.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return localDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        } catch (DateTimeParseException e) {
+            System.err.println("Erro ao formatar data: " + data);
+            return data;
+        }
     }
 }

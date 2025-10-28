@@ -91,6 +91,13 @@ public class Analista {
     public LocalDate getDtContratacao() {
         return dtContratacao;
     }
+    public String getDtContratacaoFormatada() {
+        if (this.dtContratacao == null) {
+            return null;
+        }
+        Regex regex = new Regex();
+        return regex.formatarData(this.dtContratacao);
+    }
     public void setDtContratacao(LocalDate dtContratacao) {
         this.dtContratacao = dtContratacao;
     }
