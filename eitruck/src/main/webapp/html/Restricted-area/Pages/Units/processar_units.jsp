@@ -622,7 +622,7 @@
                             <th>ID</th>
                             <th>Nome</th>
                             <th>Nome Segmento</th>
-                            <th>Nome Endereço</th>
+                            <th>Cidade Endereço</th>
                             <th>Ações</th>
                         </tr>
                         </thead>

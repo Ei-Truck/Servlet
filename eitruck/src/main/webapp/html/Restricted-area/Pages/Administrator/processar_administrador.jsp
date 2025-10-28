@@ -645,9 +645,9 @@
                         <tr>
                             <td><%=administradores.get(i).getId()%></td>
                             <td><%=administradores.get(i).getNomeCompleto()%></td>
-                            <td><%=administradores.get(i).getCpf()%></td>
+                            <td><%=administradores.get(i).getCpfFormatado()%></td>
                             <td><%=administradores.get(i).getEmail()%></td>
-                            <td><%=administradores.get(i).getTelefone()%></td>
+                            <td><%=administradores.get(i).getTelefoneFormatado()%></td>
                             <td>
                                 <div class="action-buttons">
                                     <form action="${pageContext.request.contextPath}/servlet-administrador" method="get" style="display:inline;">

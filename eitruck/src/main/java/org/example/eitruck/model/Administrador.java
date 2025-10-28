@@ -46,6 +46,9 @@ public class Administrador {
     }
 
     public String getCpf() {
+        return this.cpf;
+    }
+    public String getCpfFormatado() {
         Regex re = new Regex();
         String cpfFormatado = re.formatarCpf(this.cpf);
         return cpfFormatado;
@@ -76,6 +79,9 @@ public class Administrador {
     }
 
     public String getTelefone() {
+        return this.telefone;
+    }
+    public String getTelefoneFormatado() {
         Regex re = new Regex();
         String telefoneFormatado = re.formatarTelefone(this.telefone);
         return telefoneFormatado;

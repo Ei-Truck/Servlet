@@ -107,7 +107,7 @@ public class EnderecoServlet extends HttpServlet {
                 }
                 return;
             } else {
-                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+                errorMessage = "Erro ao cadastrar endereço no banco de dados.";
             }
         } catch (NumberFormatException e) {
             errorMessage = "ID da unidade deve ser um número válido.";
@@ -120,7 +120,7 @@ public class EnderecoServlet extends HttpServlet {
         }
 
         if (errorMessage == null) {
-            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            errorMessage = "Erro ao cadastrar endereço no banco de dados.";
         }
 
         request.setAttribute("errorMessage", errorMessage);
