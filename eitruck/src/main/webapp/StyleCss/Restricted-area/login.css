@@ -93,6 +93,10 @@ body {
     transition: background 0.3s ease;
 }
 
+.login-btn:hover {
+    background: #009966;
+}
+
 .login-btn-autentication {
     width: 100%;
     padding: 14px;
@@ -102,12 +106,16 @@ body {
     border-radius: 8px;
     font-size: 16px;
     font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease;
+    cursor: not-allowed;
+    transition: none;
+    opacity: 0.9;
 }
 
-.login-btn:hover {
-    background: #009966;
+.login-btn-autentication:hover {
+    background: #00546B;
+    cursor: pointer;
+    transform: none;
+    box-shadow: none;
 }
 
 .error-message {
@@ -161,6 +169,7 @@ body {
     opacity: 0;
     z-index: 9999;
 }
+
 .error-toast.show {
     right: 20px;
     opacity: 1;
