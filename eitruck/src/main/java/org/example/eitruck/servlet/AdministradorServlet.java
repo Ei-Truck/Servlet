@@ -92,7 +92,7 @@ public class AdministradorServlet extends HttpServlet {
             System.out.println("Senha: " + senha);
             System.out.println("Telefone: " + telefone);
 
-            String senhaCriptografada = hash.criptografarSenha(senha);
+            String senhaCriptografada = hash.criptografar(senha);
 
             Administrador administrador = new Administrador(telefone, cpf, nome, email, senhaCriptografada);
             success = administradorDAO.cadastrar(administrador);

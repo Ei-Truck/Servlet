@@ -26,4 +26,4 @@ replay_pid*
 .idea/
 
 #ENV
-.env
+eitruck/src/main/resources/.env

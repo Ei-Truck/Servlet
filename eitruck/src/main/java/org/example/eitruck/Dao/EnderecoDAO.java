@@ -1,24 +1,22 @@
 package org.example.eitruck.Dao;
 
+import org.example.eitruck.Conexao.Conexao;
 import org.example.eitruck.model.Endereco;
-import org.example.eitruck.model.Unidade;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnderecoDAO extends DAO {
-    public EnderecoDAO() {
-        super();
-    }
-
+public class EnderecoDAO {
     // Método inserir
     public boolean cadastrar(Endereco endereco) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
             INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado, pais)
             VALUES (?, ?, ?, ?, ?, ?, ?)""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -43,8 +41,10 @@ public class EnderecoDAO extends DAO {
 
     // Método deletar
     public int apagar(int idEndereco) {
-        String comando = "DELETE FROM endereco WHERE id = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "DELETE FROM endereco WHERE id = ?";
 
         try {
             conn = conexao.conectar();
@@ -62,19 +62,22 @@ public class EnderecoDAO extends DAO {
             pstmt.setInt(1, idEndereco);
             int execucao = pstmt.executeUpdate();
             return execucao;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             if (sqle.getSQLState().equals("23503")) {
                 return -2;
             }
             return -1;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método alterar
     public int alterarEndereco(int id, String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
+        Conexao conexao = new Conexao();
         Connection conn = null;
 
         try {
@@ -98,10 +101,12 @@ public class EnderecoDAO extends DAO {
                 return 1; // Sucesso - registro alterado
             }
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             return -1; // Erro
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
         return 0; // Nenhum registro alterado
@@ -109,11 +114,13 @@ public class EnderecoDAO extends DAO {
 
     // Método mostrar os registros
     public List<Endereco> buscarTodos() {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco ORDER BY id";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -125,18 +132,22 @@ public class EnderecoDAO extends DAO {
                 listaRetorno.add(endereco);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método quantidade de registros
     public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM endereco";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "SELECT COUNT(*) AS total FROM endereco";
 
         try {
             conn = conexao.conectar();
@@ -147,21 +158,23 @@ public class EnderecoDAO extends DAO {
                 return rs.getInt("total");
             }
             return 0;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return -1;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método filtrar
-    public List<Endereco> filtrarEnderecosMultiplos(String filtroId, String filtroCep, String filtroRua,
-                                                    String filtroNumero, String filtroBairro, String filtroCidade,
-                                                    String filtroEstado, String filtroPais) {
+    public List<Endereco> filtrarEnderecosMultiplos(String filtroId, String filtroCep, String filtroRua, String filtroNumero, String filtroBairro, String filtroCidade, String filtroEstado, String filtroPais) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
-        Connection conn = null;
 
         try {
             conn = conexao.conectar();
@@ -244,18 +257,22 @@ public class EnderecoDAO extends DAO {
             }
             return listaRetorno;
 
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarCep(Endereco endereco, String novoCep) {
-        String comando = "UPDATE endereco SET cep = ? WHERE id = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "UPDATE endereco SET cep = ? WHERE id = ?";
 
         try {
             conn = conexao.conectar();
@@ -281,9 +298,13 @@ public class EnderecoDAO extends DAO {
     }
 
     public int alterarRua(Endereco endereco, String novaRua) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE endereco SET rua = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novaRua);
             pstmt.setInt(2, endereco.getId());
@@ -306,9 +327,13 @@ public class EnderecoDAO extends DAO {
     }
 
     public int alterarNumero(Endereco endereco, int novoNumero) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE endereco SET numero = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, novoNumero);
             pstmt.setInt(2, endereco.getId());
@@ -330,9 +355,13 @@ public class EnderecoDAO extends DAO {
         }
     }
     public int alterarBairro(Endereco endereco, String novoBairro) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE endereco SET bairro = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novoBairro);
             pstmt.setInt(2, endereco.getId());
@@ -353,9 +382,13 @@ public class EnderecoDAO extends DAO {
         }
     }
     public int alterarCidade(Endereco endereco, String novaCidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE endereco SET cidade = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novaCidade);
             pstmt.setInt(2, endereco.getId());
@@ -379,12 +412,16 @@ public class EnderecoDAO extends DAO {
 
     // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<Endereco> buscarPorId(int idEndereco) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs = null;
-        PreparedStatement pstmt = null;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco WHERE id = ?";
+        PreparedStatement pstmt = null;
 
         try {
+            conn = conexao.conectar();
             pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idEndereco);
             rs = pstmt.executeQuery();
@@ -403,10 +440,12 @@ public class EnderecoDAO extends DAO {
                 listaRetorno.add(endereco);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
@@ -417,11 +456,15 @@ public class EnderecoDAO extends DAO {
     }
 
     public List<Endereco> buscarPorCep(String cep) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco WHERE cep = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, cep);
             pstmt.executeQuery();
@@ -444,11 +487,15 @@ public class EnderecoDAO extends DAO {
     }
 
     public List<Endereco> buscarPorRua(String rua) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco WHERE rua = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, rua);
             pstmt.executeQuery();
@@ -470,11 +517,15 @@ public class EnderecoDAO extends DAO {
         }
     }
     public List<Endereco> buscarPorCidade(String cidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco WHERE cidade = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, cidade);
             pstmt.executeQuery();
@@ -496,11 +547,15 @@ public class EnderecoDAO extends DAO {
         }
     }
     public List<Endereco> buscarPorEstado(String estado) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco WHERE estado = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, estado);
             pstmt.executeQuery();
@@ -522,11 +577,15 @@ public class EnderecoDAO extends DAO {
         }
     }
     public List<Endereco> buscarPorPais(String pais) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Endereco> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM endereco WHERE pais = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, pais);
             pstmt.executeQuery();

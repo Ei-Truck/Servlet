@@ -1,5 +1,6 @@
 package org.example.eitruck.Dao;
 
+import org.example.eitruck.Conexao.Conexao;
 import org.example.eitruck.model.Segmento;
 import org.example.eitruck.model.TipoOcorrencia;
 
@@ -7,18 +8,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TipoOcorrenciaDAO extends DAO {
-    public TipoOcorrenciaDAO() {
-        super();
-    }
-
-    // Método inserir
+public class TipoOcorrenciaDAO {
     public boolean cadastrar(TipoOcorrencia tipoOcorrencia) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
             INSERT INTO tipo_ocorrencia (tipo_evento, pontuacao, gravidade)
             VALUES (?, ?, ?)""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -37,10 +35,11 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    // Método deletar
     public int apagar(int idOcorrencia) {
-        String comando = "DELETE FROM tipo_ocorrencia WHERE id = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "DELETE FROM tipo_ocorrencia WHERE id = ?";
 
         try {
             conn = conexao.conectar();
@@ -56,18 +55,20 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    // Método buscar por ID
     public List<TipoOcorrencia> buscarPorId(int idTipoOcorrencia) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM tipo_ocorrencia WHERE id = ?";
-        Connection conn = null;
+
 
         try {
             conn = conexao.conectar(); // Inicializar a conexão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idTipoOcorrencia);
-            rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
             while (rs.next()) {
                 TipoOcorrencia tipo = new TipoOcorrencia(
                         rs.getInt("id"),
@@ -84,13 +85,14 @@ public class TipoOcorrenciaDAO extends DAO {
             return null;
         }
         finally {
-            conexao.desconectar(conn);
+            conexao.desconectar(conn); // Usar a variável local conn
         }
     }
 
-    // Método alterar
     public int alterarTodos(int id, String tipoEvento, int pontuacao, String gravidade) {
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(
@@ -117,13 +119,14 @@ public class TipoOcorrenciaDAO extends DAO {
         return 0; // Nenhum registro alterado
     }
 
-    // Método mostrar os registros
     public List<TipoOcorrencia> buscarTodos() {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM tipo_ocorrencia ORDER BY id";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -143,10 +146,11 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    // Método quantidade de registros
     public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM tipo_ocorrencia";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "SELECT COUNT(*) AS total FROM tipo_ocorrencia";
 
         try {
             conn = conexao.conectar();
@@ -165,12 +169,12 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    // Método filtrar
-    public List<TipoOcorrencia> filtrarTiposOcorrenciaMultiplos(String filtroId, String filtroTipoEvento,
-                                                                String filtroPontuacao, String filtroGravidade) {
+    public List<TipoOcorrencia> filtrarTiposOcorrenciaMultiplos(String filtroId, String filtroTipoEvento, String filtroPontuacao, String filtroGravidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        Connection conn = null;
 
         try {
             conn = conexao.conectar();
@@ -241,8 +245,10 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarTipoEvento(TipoOcorrencia tipoOcorrencia, String novoTipoEvento) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE tipo_ocorrencia SET tipo_evento = ? WHERE id = ?";
 
         try {
@@ -267,18 +273,20 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    public int alterarPontuacao(TipoOcorrencia tipoOcorrencia, int novaPontuacao) { // Mudei para int
-        String comando = "UPDATE tipo_ocorrencia SET pontuacao = ? WHERE id = ?";
+    public int alterarPontuacao(TipoOcorrencia tipoOcorrencia, int novaPontuacao) {
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "UPDATE tipo_ocorrencia SET pontuacao = ? WHERE id = ?";
 
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, novaPontuacao);
+            pstmt.setInt(1, novaPontuacao); // Mudei para setInt
             pstmt.setInt(2, tipoOcorrencia.getId());
             int execucao = pstmt.executeUpdate();
             if (execucao > 0) {
-                tipoOcorrencia.setPontuacao(novaPontuacao);
+                tipoOcorrencia.setPontuacao(novaPontuacao); // Corrigido para setPontuacao
                 return 1;
             }
             else {
@@ -295,9 +303,13 @@ public class TipoOcorrenciaDAO extends DAO {
     }
 
     public int alterarGravidade(TipoOcorrencia tipoOcorrencia, String novaGravidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE tipo_ocorrencia SET gravidade = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novaGravidade);
             pstmt.setInt(2, tipoOcorrencia.getId());
@@ -319,13 +331,16 @@ public class TipoOcorrenciaDAO extends DAO {
         }
     }
 
-    // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<TipoOcorrencia> buscarPorTipoEvento(String tipoEvento) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM tipo_ocorrencia WHERE tipo_evento = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, tipoEvento);
             pstmt.executeQuery();
@@ -346,11 +361,15 @@ public class TipoOcorrenciaDAO extends DAO {
     }
 
     public List<TipoOcorrencia> buscarPorPontuacao(int pontuacaoTipoOcorrencia) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM tipo_ocorrencia WHERE pontuacao = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, pontuacaoTipoOcorrencia);
             pstmt.executeQuery();
@@ -371,11 +390,15 @@ public class TipoOcorrenciaDAO extends DAO {
     }
 
     public List<TipoOcorrencia> buscarPorGravidade(String gravidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<TipoOcorrencia> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM tipo_ocorrencia WHERE gravidade = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, gravidade);
             pstmt.executeQuery();

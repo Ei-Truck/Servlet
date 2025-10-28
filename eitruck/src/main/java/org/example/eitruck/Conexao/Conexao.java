@@ -27,7 +27,8 @@ public class Conexao {
         }
         catch (SQLException sqle) {
             sqle.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        }
+        catch (ClassNotFoundException e) {
             System.err.println("Driver JDBC não encontrado: " + e.getMessage());
         }
         return conn;

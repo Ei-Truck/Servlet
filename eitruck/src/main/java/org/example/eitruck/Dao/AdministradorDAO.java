@@ -1,25 +1,23 @@
 package org.example.eitruck.Dao;
 
+import org.example.eitruck.Conexao.Conexao;
 import org.example.eitruck.model.Administrador;
-import org.example.eitruck.model.Analista;
 import org.example.eitruck.util.Hash;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdministradorDAO extends DAO {
-    public AdministradorDAO() {
-        super();
-    }
-
+public class AdministradorDAO {
     // Método inserir
     public boolean cadastrar(Administrador admin) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
         String comando = """
             INSERT INTO administrador (cpf, nome_completo, email, senha, telefone)
             VALUES (?, ?, ?, ?, ?)""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -42,8 +40,9 @@ public class AdministradorDAO extends DAO {
 
     // Método deletar
     public int apagar(int idAdmin) {
-        String comando = "DELETE FROM administrador WHERE id = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+        String comando = "DELETE FROM administrador WHERE id = ?";
 
         try {
             conn = conexao.conectar();
@@ -61,7 +60,9 @@ public class AdministradorDAO extends DAO {
 
     // Método alterar
     public int alterarTodos(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(
@@ -92,6 +93,9 @@ public class AdministradorDAO extends DAO {
 
 
     public boolean atualizar(Administrador admin, String novaSenha) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando;
         if (novaSenha != null && !novaSenha.isEmpty()) {
             comando = """
@@ -105,7 +109,6 @@ public class AdministradorDAO extends DAO {
                 WHERE id = ?""";
         }
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -116,27 +119,32 @@ public class AdministradorDAO extends DAO {
             if (novaSenha != null && !novaSenha.isEmpty()) {
                 pstmt.setString(4, novaSenha);
                 pstmt.setInt(5, admin.getId());
-            } else {
+            }
+            else {
                 pstmt.setInt(4, admin.getId());
             }
 
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return false;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método mostrar os registros
     public List<Administrador> buscarTodos() {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM administrador ORDER BY id";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -153,18 +161,21 @@ public class AdministradorDAO extends DAO {
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método quantidade de registros
     public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM administrador";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+        String comando = "SELECT COUNT(*) AS total FROM administrador";
 
         try {
             conn = conexao.conectar();
@@ -175,20 +186,22 @@ public class AdministradorDAO extends DAO {
                 return rs.getInt("total");
             }
             return 0;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return -1;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método filtrar
-    public List<Administrador> filtrarAdministradoresMultiplos(String filtroId, String filtroNome, String filtroCpf,
-                                                               String filtroEmail, String filtroTelefone) {
+    public List<Administrador> filtrarAdministradoresMultiplos(String filtroId, String filtroNome, String filtroCpf, String filtroEmail, String filtroTelefone) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
-        Connection conn = null;
 
         try {
             conn = conexao.conectar();
@@ -251,22 +264,26 @@ public class AdministradorDAO extends DAO {
             }
             return listaRetorno;
 
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarNomeCompleto(Administrador admin, String novoNomeCompleto) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
             UPDATE administrador
             SET nome_completo = ?
             WHERE id = ?""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -291,12 +308,14 @@ public class AdministradorDAO extends DAO {
     }
 
     public int alterarEmail(Administrador admin, String novoEmail) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
             UPDATE administrador
             SET email = ?
             WHERE id = ?""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -321,12 +340,14 @@ public class AdministradorDAO extends DAO {
     }
 
     public int alterarSenha(Administrador admin, String novaSenha) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
             UPDATE administrador
             SET senha = ?
             WHERE id = ?""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -350,17 +371,14 @@ public class AdministradorDAO extends DAO {
         }
     }
 
-    // Método apagar antigo (mantido para compatibilidade)
-    public int apagar(Administrador admin, int idAdmin) {
-        return apagar(idAdmin);
-    }
-
     public List<Administrador> buscarPorId(int idAdmin) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM administrador WHERE id = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -378,21 +396,25 @@ public class AdministradorDAO extends DAO {
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<Administrador> buscarPorCpf(String cpfAdmin) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM administrador WHERE cpf = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -409,20 +431,24 @@ public class AdministradorDAO extends DAO {
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     public List<Administrador> buscarNomeCompleto(String nomeCompletoAdmin) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM administrador WHERE nome_completo = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -439,20 +465,24 @@ public class AdministradorDAO extends DAO {
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     public List<Administrador> buscarPorEmail(String emailAdmin) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM administrador WHERE email = ?"; // CORRIGIDO
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -469,17 +499,21 @@ public class AdministradorDAO extends DAO {
                 listaRetorno.add(admin);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método para verificar se é administrador
     public String ehAdmin(String email, String senha){
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
         Hash hash = new Hash();
         PreparedStatement pstmt;
         ResultSet rs;
@@ -496,16 +530,20 @@ public class AdministradorDAO extends DAO {
             if (rs.next()){
                 senhaBanco = rs.getString("senha");
                 nome = rs.getString("nome_completo");
-                senhaCriptografada = hash.criptografarSenha(senha);
 
-                if (senhaCriptografada.equals(senhaBanco)){
+
+                if (hash.verificarSenha(senha,senhaBanco)){
                     return nome;
                 }
-            } return null;
-        } catch (SQLException sqle){
+            }
+            return null;
+        }
+        catch (SQLException sqle){
             sqle.printStackTrace();
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
-        } return null;
+        }
+        return null;
     }
 }

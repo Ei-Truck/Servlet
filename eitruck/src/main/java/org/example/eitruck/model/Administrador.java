@@ -1,9 +1,6 @@
 package org.example.eitruck.model;
-
 import org.example.eitruck.util.Uteis;
 
-//Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models
-//ATENÇÃO, REVISAR O USO DE GET E DO TOSTRING NO CASO DE SENHAS (MANTER POR ENQUANTO)
 public class Administrador {
     // atributos
     private int id;

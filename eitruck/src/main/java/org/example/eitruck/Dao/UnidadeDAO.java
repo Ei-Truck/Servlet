@@ -1,24 +1,21 @@
 package org.example.eitruck.Dao;
 
-import org.example.eitruck.model.Administrador;
+import org.example.eitruck.Conexao.Conexao;
 import org.example.eitruck.model.Unidade;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnidadeDAO extends DAO {
-    public UnidadeDAO() {
-        super();
-    }
-
-    // Método inserir
+public class UnidadeDAO {
     public boolean cadastrar(Unidade unidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
             INSERT INTO unidade (id_segmento, id_endereco, nome)
             VALUES (?, ?, ?)""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -37,50 +34,58 @@ public class UnidadeDAO extends DAO {
         }
     }
 
-    // Método deletar
     public int apagar(int idUnidade) {
-        String comando = "DELETE FROM unidade WHERE id = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "DELETE FROM unidade WHERE id = ?";
 
         try {
             conn = conexao.conectar();
 
+            // Primeiro, verifica se existe algum analista usando esta unidade
             String verificaAnalista = "SELECT COUNT(*) FROM analista WHERE id_unidade = ?";
             PreparedStatement pstmtVerifica = conn.prepareStatement(verificaAnalista);
             pstmtVerifica.setInt(1, idUnidade);
             ResultSet rs = pstmtVerifica.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
-                return -2;
+                // Existem analistas usando esta unidade, não pode excluir
+                return -2; // Código especial para "em uso por analista"
             }
 
+            // Se não há analistas usando, procede com a exclusão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idUnidade);
             int execucao = pstmt.executeUpdate();
             return execucao;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
-            if (sqle.getSQLState().equals("23503")) {
-                return -2;
+            // Verifica se é erro de restrição de chave estrangeira
+            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
+                return -2; // Também retorna -2 se houver violação de FK
             }
             return -1;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
-    // Buscar por ID
     public List<Unidade> buscarPorId(int idUnidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM unidade WHERE id = ?";
-        Connection conn = null;
 
         try {
             conn = conexao.conectar(); // Inicializar a conexão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idUnidade);
-            rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
             while (rs.next()){
                 Unidade unidade = new Unidade(
                         rs.getInt("id"),
@@ -97,13 +102,14 @@ public class UnidadeDAO extends DAO {
             return null;
         }
         finally {
-            conexao.desconectar(conn);
+            conexao.desconectar(conn); // Usar a variável local conn
         }
     }
 
-    // Método alterar
     public int alterarTodos(int id, String nome, int idSegmento, int idEndereco) {
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(
@@ -121,17 +127,21 @@ public class UnidadeDAO extends DAO {
                 return 1; // Sucesso - registro alterado
             }
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             return -1; // Erro
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
         return 0; // Nenhum registro alterado
     }
 
-    // Método mostrar os registros
     public List<Unidade> buscarTodos() {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
         SELECT 
             u.*,
@@ -144,7 +154,7 @@ public class UnidadeDAO extends DAO {
         """;
 
         try {
-            Connection conn = conexao.conectar();
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             ResultSet rs = pstmt.executeQuery();
 
@@ -171,10 +181,11 @@ public class UnidadeDAO extends DAO {
         }
     }
 
-    // Método quantidade de registros
     public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM unidade";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "SELECT COUNT(*) AS total FROM unidade";
 
         try {
             conn = conexao.conectar();
@@ -193,14 +204,16 @@ public class UnidadeDAO extends DAO {
         }
     }
 
-    // Método filtrar
     public List<Unidade> filtrarUnidadesMultiplos(String filtroId, String filtroNome, String filtroNomeSegmento, String filtroNomeEndereco) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
-        Connection conn = null;
 
         try {
             conn = conexao.conectar();
+            // Usando JOIN para buscar o nome do segmento e o nome do endereço (cidade)
             StringBuilder sql = new StringBuilder("""
             SELECT 
                 u.*,
@@ -264,19 +277,24 @@ public class UnidadeDAO extends DAO {
             }
             return listaRetorno;
 
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
-    // Métodos individuais de alteração (mantidos para compatibilidade)
     public int alterarIdSegmento(Unidade unidade, int novoIdSegmento) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE unidade SET id_segmento = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, novoIdSegmento);
             pstmt.setInt(2, unidade.getId());
@@ -299,9 +317,13 @@ public class UnidadeDAO extends DAO {
     }
 
     public int alterarIdEndereco(Unidade unidade, int novoIdEndereco) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE unidade SET id_endereco = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, novoIdEndereco);
             pstmt.setInt(2, unidade.getId());
@@ -324,9 +346,13 @@ public class UnidadeDAO extends DAO {
     }
 
     public int alterarNome(Unidade unidade, String novoNome) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = "UPDATE unidade SET nome = ? WHERE id = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, novoNome);
             pstmt.setInt(2, unidade.getId());
@@ -348,13 +374,16 @@ public class UnidadeDAO extends DAO {
         }
     }
 
-    // Métodos individuais de buscar (mantidos para compatibilidade)
     public List<Unidade> buscarPorIdSegmento(int idSegmento) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM unidade WHERE id_segmento = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idSegmento);
             pstmt.executeQuery();
@@ -375,11 +404,15 @@ public class UnidadeDAO extends DAO {
     }
 
     public List<Unidade> buscarPorIdEndereco(int idEndereco) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM unidade WHERE id_endereco = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idEndereco);
             pstmt.executeQuery();
@@ -403,11 +436,15 @@ public class UnidadeDAO extends DAO {
     }
 
     public List<Unidade> buscarPorNome(String nome) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Unidade> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM unidade WHERE nome = ?";
 
         try {
+            conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setString(1, nome);
             pstmt.executeQuery();

@@ -9,7 +9,6 @@ import java.io.IOException;
 
 @WebFilter("/*")
 public class AuthenticationFilter implements Filter {
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -23,15 +22,15 @@ public class AuthenticationFilter implements Filter {
 
         // URLs públicas que não precisam de autenticação
         boolean isPublicResource = requestURI.startsWith(contextPath + "/StyleCss/") ||
-                requestURI.startsWith(contextPath + "/html/Landing-page/") ||
-                requestURI.startsWith(contextPath + "/JS/") ||
-                requestURI.startsWith(contextPath + "/image/") ||
-                requestURI.startsWith(contextPath + "/js/") ||
-                requestURI.equals(contextPath + "/login.jsp") ||
-                requestURI.equals(contextPath + "/login") ||
-                requestURI.equals(contextPath + "/index.html") ||
-                requestURI.startsWith(contextPath + "/Erro.jsp/") ||
-                requestURI.equals(contextPath + "/");
+            requestURI.startsWith(contextPath + "/html/Landing-page/") ||
+            requestURI.startsWith(contextPath + "/JS/") ||
+            requestURI.startsWith(contextPath + "/image/") ||
+            requestURI.startsWith(contextPath + "/js/") ||
+            requestURI.equals(contextPath + "/login.jsp") ||
+            requestURI.equals(contextPath + "/login") ||
+            requestURI.equals(contextPath + "/index.html") ||
+            requestURI.startsWith(contextPath + "/Erro.jsp/") ||
+            requestURI.equals(contextPath + "/");
 
         // Verifica se o usuário está logado
         boolean isLoggedIn = (session != null && session.getAttribute("nomeAdimin") != null);
@@ -39,19 +38,16 @@ public class AuthenticationFilter implements Filter {
         if (isPublicResource || isLoggedIn) {
             // Permite o acesso a recursos públicos ou usuários logados
             chain.doFilter(request, response);
-        } else {
+        }
+        else {
             // Redireciona para a página de login se não estiver autenticado
             httpResponse.sendRedirect(contextPath + "/login.jsp");
         }
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // Inicialização do filtro
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {} // Inicialização do filtro
 
     @Override
-    public void destroy() {
-        // Cleanup do filtro
-    }
+    public void destroy() {} // Cleanup do filtro
 }

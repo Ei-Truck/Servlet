@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.eitruck.util.Hash;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -107,7 +108,7 @@ public class AnalistaServlet extends HttpServlet {
             int id_unidade = Integer.parseInt(idUnidade);
             LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE); // Linha 113 agora segura contra null
 
-            String senhaCriptografada = hash.criptografarSenha(senha);
+            String senhaCriptografada = hash.criptografar(senha);
 
             Analista analista = new Analista(id_unidade, cpf, nome, email, data_contratacaoDate, senhaCriptografada, cargo, telefone);
             success = analistaDAO.cadastrar(analista);
@@ -157,7 +158,8 @@ public class AnalistaServlet extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/analista.jsp"); // substitua pelo nome do seu JSP atual
         if (dispatcher != null) {
             dispatcher.forward(request, response);
-        } else {
+        }
+        else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
         }
     }
@@ -170,7 +172,8 @@ public class AnalistaServlet extends HttpServlet {
             if (resultado > 0) {
                 // Sucesso: redireciona para a lista sem mensagem de erro
                 response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
-            } else {
+            }
+            else {
                 // Erro: redireciona com mensagem de erro codificada
                 String errorMessage = URLEncoder.encode("Erro ao excluir analista. Tente novamente.", "UTF-8");
                 response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos&error=" + errorMessage);

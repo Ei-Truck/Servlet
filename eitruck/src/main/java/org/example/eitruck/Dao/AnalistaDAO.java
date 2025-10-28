@@ -1,5 +1,6 @@
 package org.example.eitruck.Dao;
 
+import org.example.eitruck.Conexao.Conexao;
 import org.example.eitruck.model.Analista;
 
 import java.sql.*;
@@ -7,18 +8,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnalistaDAO extends DAO {
-    public AnalistaDAO() {
-        super();
-    }
-
+public class AnalistaDAO {
     // Método inserir
     public boolean cadastrar(Analista analista) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando = """
             INSERT INTO analista (id_unidade, cpf, nome_completo, email, dt_contratacao, senha, cargo, telefone)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)""";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -44,8 +43,10 @@ public class AnalistaDAO extends DAO {
 
     // Método deletar
     public int apagar(int idAnalista) {
-        String comando = "DELETE FROM analista WHERE id = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "DELETE FROM analista WHERE id = ?";
 
         try {
             conn = conexao.conectar();
@@ -53,17 +54,21 @@ public class AnalistaDAO extends DAO {
             pstmt.setInt(1, idAnalista);
             int execucao = pstmt.executeUpdate();
             return execucao;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return -1;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método alterar
     public int alterarTodos(int id, int idUnidade, String cpf, String nomeCompleto, LocalDate dtContratacao, String email, String senha, String cargo, String telefone) {
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(
@@ -96,20 +101,23 @@ public class AnalistaDAO extends DAO {
     }
 
     public boolean atualizar(Analista analista, String novaSenha) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         String comando;
         if (novaSenha != null && !novaSenha.isEmpty()) {
             comando = """
                 UPDATE analista 
                 SET id_unidade = ?, cpf = ?, nome = ?, email = ?, dt_contratacao = ?, senha = ?, cargo = ?
                 WHERE id = ?""";
-        } else {
+        }
+        else {
             comando = """
                 UPDATE analista 
                 SET id_unidade = ?, cpf = ?, nome = ?, email = ?, dt_contratacao = ?, cargo = ?
                 WHERE id = ?""";
         }
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -122,23 +130,29 @@ public class AnalistaDAO extends DAO {
                 pstmt.setString(6, novaSenha);
                 pstmt.setString(7, analista.getCargo());
                 pstmt.setInt(8, analista.getId());
-            } else {
+            }
+            else {
                 pstmt.setString(6, analista.getCargo());
                 pstmt.setInt(7, analista.getId());
             }
 
             int execucao = pstmt.executeUpdate();
             return execucao > 0;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return false;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método mostrar os registros
     public List<Analista> buscarTodos() {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = """
@@ -150,7 +164,6 @@ public class AnalistaDAO extends DAO {
         ORDER BY id
         """;
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -171,18 +184,22 @@ public class AnalistaDAO extends DAO {
                 listaRetorno.add(analista);
             }
             return listaRetorno;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método quantidade de registros
     public int numeroRegistros() {
-        String comando = "SELECT COUNT(*) AS total FROM analista";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "SELECT COUNT(*) AS total FROM analista";
 
         try {
             conn = conexao.conectar();
@@ -193,20 +210,23 @@ public class AnalistaDAO extends DAO {
                 return rs.getInt("total");
             }
             return 0;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return -1;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Método filtrar
-    public List<Analista> filtrarAnalistasMultiplos(String filtroId, String filtroNomeUnidade, String filtroNomeCompleto,
-                                                    String filtroCpf, String filtroEmail, String filtroCargo) {
+    public List<Analista> filtrarAnalistasMultiplos(String filtroId, String filtroNomeUnidade, String filtroNomeCompleto, String filtroCpf, String filtroEmail, String filtroCargo) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
-        Connection conn = null;
 
         try {
             conn = conexao.conectar();
@@ -287,22 +307,25 @@ public class AnalistaDAO extends DAO {
                 listaRetorno.add(analista);
             }
             return listaRetorno;
-
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     // Métodos de busca
     public List<Analista> buscarPorId(int idAnalista) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE id = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -334,11 +357,13 @@ public class AnalistaDAO extends DAO {
     }
 
     public List<Analista> buscarPorIdUnidade(int idUnidade) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE id_unidade = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -370,11 +395,13 @@ public class AnalistaDAO extends DAO {
     }
 
     public List<Analista> buscarPorCpf(String cpf) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE cpf = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -406,11 +433,13 @@ public class AnalistaDAO extends DAO {
     }
 
     public List<Analista> buscarPorNome(String nome) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE nome_completo = ?"; // CORRIGIDO: de "nome" para "nome_completo"
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -442,11 +471,13 @@ public class AnalistaDAO extends DAO {
     }
 
     public List<Analista> buscarPorEmail(String email) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE email = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -478,11 +509,13 @@ public class AnalistaDAO extends DAO {
     }
 
     public List<Analista> buscarPorCargo(String cargo) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
         String comando = "SELECT * FROM analista WHERE cargo = ?";
 
-        Connection conn = null;
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
@@ -514,8 +547,10 @@ public class AnalistaDAO extends DAO {
     }
 
     public boolean verificarEmailExistente(String email) {
-        String comando = "SELECT COUNT(*) FROM analista WHERE email = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "SELECT COUNT(*) FROM analista WHERE email = ?";
 
         try {
             conn = conexao.conectar();
@@ -527,17 +562,21 @@ public class AnalistaDAO extends DAO {
                 return rs.getInt(1) > 0;
             }
             return false;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return false;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
 
     public boolean verificarCpfExistente(String cpf) {
-        String comando = "SELECT COUNT(*) FROM analista WHERE cpf = ?";
+        Conexao conexao = new Conexao();
         Connection conn = null;
+
+        String comando = "SELECT COUNT(*) FROM analista WHERE cpf = ?";
 
         try {
             conn = conexao.conectar();
@@ -549,10 +588,12 @@ public class AnalistaDAO extends DAO {
                 return rs.getInt(1) > 0;
             }
             return false;
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             sqle.printStackTrace();
             return false;
-        } finally {
+        }
+        finally {
             conexao.desconectar(conn);
         }
     }
