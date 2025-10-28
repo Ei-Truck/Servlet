@@ -45,6 +45,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analistas - Ei Truck</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" type="image/png" href="../../../image/Group 36941.png">
     <style>
         :root {
@@ -670,10 +671,10 @@
                                             <span>✏️</span> Editar
                                         </button>
                                     </form>
-                                    <form action="${pageContext.request.contextPath}/servlet-analista" method="post" style="display:inline;">
+                                    <form action="${pageContext.request.contextPath}/servlet-analista" method="post" style="display:inline;" onsubmit="confirmarDeletar(event)">
                                         <input type="hidden" name="acao_principal" value="excluir">
                                         <input type="hidden" name="id" value="<%= analistas.get(i).getId() %>">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este analista?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">
                                             <span>🗑️</span> Excluir
                                         </button>
                                     </form>
@@ -707,6 +708,24 @@
 <script>
     function limparFiltro() {
         window.location.href = '${pageContext.request.contextPath}/servlet-analista?acao=buscar&sub_acao=buscar_todos';
+    }
+
+    function confirmarDeletar(event) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "Quer mesmo excluir?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "red",
+            cancelButtonColor: "#ababab",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.submit();
+            }
+        })
+
+        return false;
     }
 </script>
 <%
