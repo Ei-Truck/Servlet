@@ -1,4 +1,5 @@
 package org.example.eitruck.model;
+import org.example.eitruck.util.Regex;
 import org.example.eitruck.util.Uteis;
 
 public class Administrador {
@@ -45,7 +46,9 @@ public class Administrador {
     }
 
     public String getCpf() {
-        return cpf;
+        Regex re = new Regex();
+        String cpfFormatado = re.formatarCpf(this.cpf);
+        return cpfFormatado;
     }
     public void setCpf(String cpf) {
         this.cpf = Uteis.validarCpf(cpf);
@@ -73,7 +76,9 @@ public class Administrador {
     }
 
     public String getTelefone() {
-        return telefone;
+        Regex re = new Regex();
+        String telefoneFormatado = re.formatarTelefone(this.telefone);
+        return telefoneFormatado;
     }
     public void setTelefone(String telefone) {
         this.telefone = Uteis.validarTelefone(telefone);

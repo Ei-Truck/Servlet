@@ -1,5 +1,6 @@
 package org.example.eitruck.model;
 
+import org.example.eitruck.util.Regex;
 import org.example.eitruck.util.Uteis;
 
 public class Endereco {
@@ -44,7 +45,9 @@ public class Endereco {
     }
 
     public String getCep() {
-        return cep;
+        Regex re = new Regex();
+        String cepFormatado = re.formatarCep(this.cep);
+        return cepFormatado;
     }
     public void setCep(String cep) {
         this.cep = Uteis.validarCep(cep);

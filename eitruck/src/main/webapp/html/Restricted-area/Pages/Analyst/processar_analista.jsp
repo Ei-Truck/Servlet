@@ -327,6 +327,7 @@
         .btn-danger {
             background: #dc3545;
             color: white;
+            margin-top: 5px;
         }
 
         .btn-danger:hover {
@@ -339,7 +340,6 @@
         }
 
         .action-buttons {
-            display: flex;
             gap: 8px;
         }
 
@@ -646,6 +646,7 @@
                             <th>Email</th>
                             <th>Data Contratação</th>
                             <th>Cargo</th>
+                            <th>Telefone</th>
                             <th>Ações</th>
                         </tr>
                         </thead>
@@ -662,6 +663,7 @@
                             <td><%=analistas.get(i).getEmail()%></td>
                             <td><%=analistas.get(i).getDtContratacao()%></td>
                             <td><%=analistas.get(i).getCargo()%></td>
+                            <td><%=analistas.get(i).getTelefone()%></td>
                             <td>
                                 <div class="action-buttons">
                                     <form action="${pageContext.request.contextPath}/servlet-analista" method="get" style="display:inline;">
