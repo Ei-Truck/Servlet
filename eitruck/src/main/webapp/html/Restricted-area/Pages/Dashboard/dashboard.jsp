@@ -103,7 +103,6 @@
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
             background: none;
-            border: none;
             width: 100%;
             text-align: left;
             cursor: pointer;
@@ -125,7 +124,7 @@
         .nav-item.active {
             background: rgba(255,255,255,0.15);
             color: white;
-            border-left-color: var(--brand-green);
+            border-left: 4px solid var(--brand-green) !important;
         }
 
         .nav-item.logout {

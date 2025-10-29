@@ -83,7 +83,6 @@
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
             background: none;
-            border: none;
             width: 100%;
             text-align: left;
             cursor: pointer;
