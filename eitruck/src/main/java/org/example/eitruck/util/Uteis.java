@@ -46,6 +46,7 @@ public class Uteis {
 //        }
 //        return telefone.replaceAll("\\D", ""); // só números
 //    }
+
     public static String validarTelefone(String telefone) {
         if (telefone == null) {
             throw new IllegalArgumentException("Telefone não pode ser nulo.");

@@ -599,7 +599,7 @@
     function validarSenha(input) {
         const senha = input.value;
         // Regex: mínimo 8 caracteres, pelo menos uma letra e um número
-        const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]{8,}$/;
 
         if (senha && !senhaRegex.test(senha)) {
             input.setCustomValidity('Senha deve ter no mínimo 8 caracteres, incluindo pelo menos uma letra e um número.');
@@ -679,7 +679,8 @@
         }
 
         // Valida Senha
-        const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const senhaRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]{8,}$/;
+
         if (!senhaRegex.test(senha.value)) {
             e.preventDefault();
             alert('Senha deve ter no mínimo 8 caracteres, incluindo pelo menos uma letra e um número.');
