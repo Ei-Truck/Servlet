@@ -43,6 +43,7 @@
     <title>Tipos de Ocorrência - Ei Truck</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" type="image/png" href="../../../image/Group 36941.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --brand-blue: #022B3A;
@@ -445,6 +446,11 @@
                 padding: 15px;
             }
         }
+        .nav-item span i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -460,45 +466,45 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="/dashboard" class="nav-item"><span>📊</span> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/dashboard" class="nav-item"><span><i class="fas fa-chart-bar"></i></span> Dashboard</a></li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>👨‍💼</span> Gerenciar Administradores
+                        <span><i class="fas fa-user-shield"></i></span> Gerenciar Administradores
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-analista?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>👥</span> Gerenciar Analistas
+                        <span><i class="fas fa-users"></i></span> Gerenciar Analistas
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-segmentos?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>📁</span> Gerenciar Segmentos
+                        <span><i class="fas fa-folder"></i></span> Gerenciar Segmentos
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-unidade?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>🏢</span> Gerenciar Unidades
+                        <span><i class="fas fa-building"></i></span> Gerenciar Unidades
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-enderecos?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>📍</span> Gerenciar Endereços
+                        <span><i class="fas fa-map-marker-alt"></i></span> Gerenciar Endereços
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-ocorrencias?acao=buscar&sub_acao=buscar_todos" class="nav-item active">
-                        <span>⚠️</span> Gerenciar Tipos de Ocorrência
+                        <span><i class="fas fa-exclamation-triangle"></i></span> Gerenciar Tipos de Ocorrência
                     </a>
                 </li>
 
-                <li><a href="${pageContext.request.contextPath}/logout" class="nav-item logout"><span>🚪</span> Sair</a></li>
+                <li><a href="${pageContext.request.contextPath}/logout" class="nav-item logout"><span><i class="fas fa-sign-out-alt"></i></span> Sair</a></li>
             </ul>
         </nav>
     </div>
