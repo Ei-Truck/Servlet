@@ -1,9 +1,5 @@
 package org.example.eitruck.model;
 
-import org.example.eitruck.util.Uteis;
-
-//Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models
-//ATENÇÃO, REVISAR O USO DE GET E DO TOSTRING NO CASO DE SENHAS (MANTER POR ENQUANTO)
 public class Segmento {
     //atributos
     private int id;
@@ -12,34 +8,33 @@ public class Segmento {
 
     //método construtor
     public Segmento(int id, String nome, String descricao) {
-        setId(id);
+        this.id = id;
         this.nome = nome;
         this.descricao = descricao;
     }
 
     public Segmento(String nome, String descricao) {
-        setId(id);
         this.nome = nome;
         this.descricao = descricao;
     }
 
     //getters e setters
     public int getId() {
-        return id;
+        return this.id;
     }
     public void setId(int id) {
-        this.id = Uteis.validarId(id);
+        this.id = id;
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
     public void setNome(String nome) {
         this.nome = nome;
     }
 
     public String getDescricao() {
-        return descricao;
+        return this.descricao;
     }
     public void setDescricao(String descricao) {
         this.descricao = descricao;

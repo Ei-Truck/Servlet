@@ -1,6 +1,5 @@
 package org.example.eitruck.model;
 import org.example.eitruck.util.Regex;
-import org.example.eitruck.util.Uteis;
 
 public class Administrador {
     // atributos
@@ -13,36 +12,36 @@ public class Administrador {
 
     // método construtor
     public Administrador(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
-        setId(id);
-        setCpf(cpf);
+        this.id = id;
+        this.cpf = cpf;
         this.nomeCompleto = nomeCompleto;
-        setEmail(email);
-        setSenha(senha);
+        this.email = email;
+        this.senha = senha;
         this.telefone = telefone;
     }
 
     public Administrador(String telefone, String cpf, String nomeCompleto, String email, String senha) {
-        setCpf(cpf);
-        this.nomeCompleto = nomeCompleto;
-        setEmail(email);
-        setSenha(senha);
         this.telefone = telefone;
+        this.cpf = cpf;
+        this.nomeCompleto = nomeCompleto;
+        this.email = email;
+        this.senha = senha;
     }
 
     public Administrador(int id, String cpf, String nomeCompleto, String email, String senha) {
-        setId(id);
-        setCpf(cpf);
+        this.id = id;
+        this.cpf = cpf;
         this.nomeCompleto = nomeCompleto;
-        setEmail(email);
-        setSenha(senha);
+        this.email = email;
+        this.senha = senha;
     }
 
     // getters e setters
     public int getId() {
-        return id;
+        return this.id;
     }
     public void setId(int id) {
-        this.id = Uteis.validarId(id);
+        this.id = id;
     }
 
     public String getCpf() {
@@ -54,28 +53,28 @@ public class Administrador {
         return cpfFormatado;
     }
     public void setCpf(String cpf) {
-        this.cpf = Uteis.validarCpf(cpf);
+        this.cpf = cpf;
     }
 
     public String getNomeCompleto() {
-        return nomeCompleto;
+        return this.nomeCompleto;
     }
     public void setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
     public void setEmail(String email) {
-        this.email = Uteis.validarEmail(email);
+        this.email = email;
     }
 
     public String getSenha() {
-        return senha;
+        return this.senha;
     }
     public void setSenha(String senha) {
-        this.senha = senha; //Uteis.validarSenha(senha);
+        this.senha = senha;
     }
 
     public String getTelefone() {
@@ -87,7 +86,7 @@ public class Administrador {
         return telefoneFormatado;
     }
     public void setTelefone(String telefone) {
-        this.telefone = Uteis.validarTelefone(telefone);
+        this.telefone = telefone;
     }
 
     // toString
@@ -99,7 +98,7 @@ public class Administrador {
                 Cpf = %s
                 Nome = %s
                 Email = %s
-                Senha = %s""", this.id, this.cpf, this.nomeCompleto, this.email, this.senha);
+                Senha = %s
+                Telefone = %s""", this.id, this.cpf, this.nomeCompleto, this.email, this.senha, this.telefone);
     }
 }
-

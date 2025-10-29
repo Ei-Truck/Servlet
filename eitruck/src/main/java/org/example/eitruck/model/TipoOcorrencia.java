@@ -1,9 +1,5 @@
 package org.example.eitruck.model;
 
-import org.example.eitruck.util.Uteis;
-
-//Obs.: conversar com o Modolo sobre se a lógica de getters e setters é igual nos models
-//ATENÇÃO, REVISAR O USO DE GET E DO TOSTRING NO CASO DE SENHAS (MANTER POR ENQUANTO)
 public class TipoOcorrencia {
     //atributos
     private int id;
@@ -13,45 +9,45 @@ public class TipoOcorrencia {
 
     //método construtor
     public TipoOcorrencia(int id, String tipoEvento, int pontuacao, String gravidade) {
-        setId(id);
+        this.id = id;
         this.tipoEvento = tipoEvento;
-        setPontuacao(pontuacao);
+        this.pontuacao = pontuacao;
         this.gravidade = gravidade;
     }
 
     public TipoOcorrencia(String tipoEvento, int pontuacao, String gravidade) {
         this.tipoEvento = tipoEvento;
-        setPontuacao(pontuacao);
+        this.pontuacao = pontuacao;
         this.gravidade = gravidade;
     }
 
     //getters e setters
     public int getId() {
-        return id;
+        return this.id;
     }
     public void setId(int id) {
-        this.id = Uteis.validarId(id);
+        this.id = id;
     }
 
     public String getTipoEvento() {
-        return tipoEvento;
+        return this.tipoEvento;
     }
     public void setTipoEvento(String tipoEvento) {
-        this.tipoEvento = this.tipoEvento;
+        this.tipoEvento = tipoEvento;
     }
 
     public int getPontuacao() {
-        return pontuacao;
+        return this.pontuacao;
     }
     public void setPontuacao(int pontuacao) {
-        this.pontuacao = Uteis.validarPontuacao(pontuacao);
+        this.pontuacao = pontuacao;
     }
 
     public String getGravidade() {
-        return gravidade;
+        return this.gravidade;
     }
     public void setGravidade(String gravidade) {
-        this.gravidade = this.gravidade;
+        this.gravidade = gravidade;
     }
 
     //toString

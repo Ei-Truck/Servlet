@@ -1,9 +1,7 @@
 package org.example.eitruck.model;
 
 import org.example.eitruck.util.Regex;
-import org.example.eitruck.util.Uteis;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class Analista {
@@ -22,54 +20,53 @@ public class Analista {
 
     // construtor
     public Analista(int id, int idUnidade, String cpf, String nomeCompleto, LocalDate dtContratacao, String email, String senha, String cargo, String telefone) {
-        setId(id);
-        setIdUnidade(idUnidade);
-        setCpf(cpf);
+        this.id = id;
+        this.idUnidade = idUnidade;
+        this.cpf = cpf;
         this.nomeCompleto = nomeCompleto;
         this.dtContratacao = dtContratacao;
-        setEmail(email);
-        setSenha(senha);
+        this.email = email;
+        this.senha = senha;
         this.cargo = cargo;
-        setTelefone(telefone);
+        this.telefone = telefone;
 
     }
 
     public Analista(int idUnidade, String cpf, String nomeCompleto, LocalDate dtContratacao, String email, String senha, String cargo, String telefone) {
-        setIdUnidade(idUnidade);
-        setCpf(cpf);
+        this.idUnidade = idUnidade;
+        this.cpf = cpf;
         this.nomeCompleto = nomeCompleto;
         this.dtContratacao = dtContratacao;
-        setEmail(email);
-        setSenha(senha);
+        this.email = email;
+        this.senha = senha;
         this.cargo = cargo;
-        setTelefone(telefone);
-
+        this.telefone = telefone;
     }
 
     public Analista(int idUnidade, String cpf, String nome, String email, LocalDate dataContratacaoDate, String senha, String cargo, String telefone) {
-        setIdUnidade(idUnidade);
-        setCpf(cpf);
+        this.idUnidade = idUnidade;
+        this.cpf = cpf;
         this.nomeCompleto = nome;
         this.dtContratacao = dataContratacaoDate;
-        setEmail(email);
-        setSenha(senha);
+        this.email = email;
+        this.senha = senha;
         this.cargo = cargo;
         this.telefone = telefone;
     }
 
     // getters e setters
     public int getId() {
-        return id;
+        return this.id;
     }
     public void setId(int id) {
-        this.id = Uteis.validarId(id);
+        this.id = id;
     }
 
     public int getIdUnidade() {
-        return idUnidade;
+        return this.idUnidade;
     }
     public void setIdUnidade(int idUnidade) {
-        this.idUnidade = Uteis.validarId(idUnidade);
+        this.idUnidade = idUnidade;
     }
 
     public String getCpf() {
@@ -81,18 +78,18 @@ public class Analista {
         return cpfFormatado;
     }
     public void setCpf(String cpf) {
-        this.cpf = Uteis.validarCpf(cpf);
+        this.cpf = cpf;
     }
 
     public String getNomeCompleto() {
-        return nomeCompleto;
+        return this.nomeCompleto;
     }
     public void setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
     }
 
     public LocalDate getDtContratacao() {
-        return dtContratacao;
+        return this.dtContratacao;
     }
     public String getDtContratacaoFormatada() {
         if (this.dtContratacao == null) {
@@ -106,21 +103,21 @@ public class Analista {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
     public void setEmail(String email) {
-        this.email = Uteis.validarEmail(email);
+        this.email = email;
     }
 
     public String getSenha() {
-        return senha;
+        return this.senha;
     }
     public void setSenha(String senha) {
-        this.senha = senha; //Uteis.validarSenha(senha);
+        this.senha = senha;
     }
 
     public String getCargo() {
-        return cargo;
+        return this.cargo;
     }
     public void setCargo(String cargo) {
         this.cargo = cargo;
@@ -135,7 +132,7 @@ public class Analista {
         return telefoneFormatado;
     }
     public void setTelefone(String telefone) {
-        this.telefone = Uteis.validarTelefone(telefone);
+        this.telefone = telefone;
     }
 
     public String getNomeUnidade() {

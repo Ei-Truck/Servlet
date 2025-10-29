@@ -1,8 +1,5 @@
 package org.example.eitruck.model;
 
-
-import org.example.eitruck.util.Uteis;
-
 public class Unidade {
     // atributos
     private int id;
@@ -15,10 +12,10 @@ public class Unidade {
 
     // construtor
     public Unidade(int id, int idSegmento, int idEndereco, String nome) {
-        setId(id);
+        this.id = id;
+        this.idSegmento = idSegmento;
+        this.idEndereco = idEndereco;
         this.nome = nome;
-        setIdSegmento(idSegmento);
-        setIdEndereco(idEndereco);
     }
 
     public Unidade(int id, int idSegmento, int idEndereco, String nome, String nomeSegmento, String nomeEndereco) {
@@ -32,41 +29,41 @@ public class Unidade {
 
     public Unidade(int idSegmento, int idEndereco, String nome) {
         this.nome = nome;
-        setIdSegmento(idSegmento);
-        setIdEndereco(idEndereco);
+        this.idSegmento = idSegmento;
+        this.idEndereco = idEndereco;
     }
 
     // getters e setters
     public int getId() {
-        return id;
+        return this.id;
     }
     public void setId(int id) {
-        this.id = Uteis.validarId(id);
+        this.id = id;
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
     public void setNome(String nomeCompleto) {
         this.nome = nomeCompleto;
     }
 
     public int getIdSegmento() {
-        return idSegmento;
+        return this.idSegmento;
     }
     public void setIdSegmento(int idSegmento) {
-        this.idSegmento = Uteis.validarId(idSegmento);
+        this.idSegmento = idSegmento;
     }
 
     public int getIdEndereco() {
-        return idEndereco;
+        return this.idEndereco;
     }
     public void setIdEndereco(int idEndereco) {
-        this.idEndereco = Uteis.validarId(idEndereco);
+        this.idEndereco = idEndereco;
     }
 
     public String getNomeSegmento() {
-        return nomeSegmento;
+        return this.nomeSegmento;
     }
 
     public void setNomeSegmento(String nomeSegmento) {
@@ -93,4 +90,3 @@ public class Unidade {
                 this.id, this.nome, this.idSegmento, this.idEndereco);
     }
 }
-

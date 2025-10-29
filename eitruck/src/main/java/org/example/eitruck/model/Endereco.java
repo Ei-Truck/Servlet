@@ -1,7 +1,6 @@
 package org.example.eitruck.model;
 
 import org.example.eitruck.util.Regex;
-import org.example.eitruck.util.Uteis;
 
 public class Endereco {
     // atributos
@@ -16,8 +15,8 @@ public class Endereco {
 
     // construtor
     public Endereco(int id, String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
-        setId(id);
-        setCep(cep);
+        this.id = id;
+        this.cep = cep;
         this.rua = rua;
         this.numero = numero;
         this.bairro = bairro;
@@ -27,7 +26,7 @@ public class Endereco {
     }
 
     public Endereco(String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
-        setCep(cep);
+        this.cep = cep;
         this.rua = rua;
         this.numero = numero;
         this.bairro = bairro;
@@ -38,10 +37,10 @@ public class Endereco {
 
     // getters e setters
     public int getId() {
-        return id;
+        return this.id;
     }
     public void setId(int id) {
-        this.id = Uteis.validarId(id);
+        this.id = id;
     }
 
     public String getCep() {
@@ -53,46 +52,46 @@ public class Endereco {
         return cepFormatado;
     }
     public void setCep(String cep) {
-        this.cep = Uteis.validarCep(cep);
+        this.cep = cep;
     }
 
     public String getRua() {
-        return rua;
+        return this.rua;
     }
     public void setRua(String rua) {
         this.rua = rua;
     }
 
     public int getNumero() {
-        return numero;
+        return this.numero;
     }
     public void setNumero(int numero) {
         this.numero = numero;
     }
 
     public String getBairro() {
-        return bairro;
+        return this.bairro;
     }
     public void setBairro(String bairro) {
         this.bairro = bairro;
     }
 
     public String getCidade() {
-        return cidade;
+        return this.cidade;
     }
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
 
     public String getEstado() {
-        return estado;
+        return this.estado;
     }
     public void setEstado(String estado) {
         this.estado = estado;
     }
 
     public String getPais() {
-        return pais;
+        return this.pais;
     }
     public void setPais(String pais) {
         this.pais = pais;
@@ -113,5 +112,3 @@ public class Endereco {
                 Pais = %s""", this.id, this.cep, this.rua, this.numero, this.bairro, this.cidade, this.estado, this.pais);
     }
 }
-
-
