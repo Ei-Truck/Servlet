@@ -34,6 +34,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Ei Truck</title>
     <link rel="icon" type="image/png" href="<%= request.getContextPath() %>/image/Group%2036941.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --brand-blue: #022B3A;
@@ -293,6 +294,17 @@
                 width: 100%;
             }
         }
+        .stat-icon {
+            color: var(--brand-blue);
+            margin-right: 20px;
+            font-size: 22px;
+        }
+
+        .nav-item span i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -305,45 +317,45 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="${pageContext.request.contextPath}/dashboard" class="nav-item active"><span>📊</span> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/dashboard" class="nav-item active"><span><i class="fas fa-chart-bar"></i></span> Dashboard</a></li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-administrador?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>👨‍💼</span> Gerenciar Administradores
+                        <span><i class="fas fa-user-shield"></i></span> Gerenciar Administradores
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-analista?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>👥</span> Gerenciar Analistas
+                        <span><i class="fas fa-users"></i></span> Gerenciar Analistas
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-segmentos?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>📁</span> Gerenciar Segmentos
+                        <span><i class="fas fa-folder"></i></span> Gerenciar Segmentos
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-unidade?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>🏢</span> Gerenciar Unidades
+                        <span><i class="fas fa-building"></i></span> Gerenciar Unidades
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-enderecos?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>📍</span> Gerenciar Endereços
+                        <span><i class="fas fa-map-marker-alt"></i></span> Gerenciar Endereços
                     </a>
                 </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/servlet-ocorrencias?acao=buscar&sub_acao=buscar_todos" class="nav-item">
-                        <span>⚠️</span> Gerenciar Tipos de Ocorrência
+                        <span><i class="fas fa-exclamation-triangle"></i></span> Gerenciar Tipos de Ocorrência
                     </a>
                 </li>
 
-                <li><a href="${pageContext.request.contextPath}/logout" class="nav-item logout"><span>🚪</span> Sair</a></li>
+                <li><a href="${pageContext.request.contextPath}/logout" class="nav-item logout"><span><i class="fas fa-sign-out-alt"></i></span> Sair</a></li>
             </ul>
         </nav>
     </div>
@@ -376,7 +388,7 @@
                     <input type="hidden" name="acao_principal" value="buscar">
                     <input type="hidden" name="sub_acao" value="buscar_todos">
                     <button type="submit" class="stat-card">
-                        <div class="stat-icon">👨‍💼</div>
+                        <div class="stat-icon"><i class="fas fa-user-shield fa-2x"></i></div>
                         <div class="stat-info">
                             <h3>Administradores</h3>
                             <span class="stat-number" id="total-administradores">
@@ -391,7 +403,7 @@
                     <input type="hidden" name="acao_principal" value="buscar">
                     <input type="hidden" name="sub_acao" value="buscar_todos">
                     <button type="submit" class="stat-card">
-                        <div class="stat-icon">👥</div>
+                        <div class="stat-icon"><i class="fas fa-users fa-2x"></i></div>
                         <div class="stat-info">
                             <h3>Analistas</h3>
                             <span class="stat-number" id="total-analistas">
@@ -406,7 +418,7 @@
                     <input type="hidden" name="acao_principal" value="buscar">
                     <input type="hidden" name="sub_acao" value="buscar_todos">
                     <button type="submit" class="stat-card">
-                        <div class="stat-icon">📁</div>
+                        <div class="stat-icon"><i class="fas fa-folder fa-2x"></i></div>
                         <div class="stat-info">
                             <h3>Segmentos</h3>
                             <span class="stat-number" id="total-segmentos">
@@ -423,7 +435,7 @@
                     <input type="hidden" name="acao_principal" value="buscar">
                     <input type="hidden" name="sub_acao" value="buscar_todos">
                     <button type="submit" class="stat-card">
-                        <div class="stat-icon">🏢</div>
+                        <div class="stat-icon"><i class="fas fa-building fa-2x"></i></div>
                         <div class="stat-info">
                             <h3>Unidades</h3>
                             <span class="stat-number" id="total-unidades">
@@ -438,7 +450,7 @@
                     <input type="hidden" name="acao_principal" value="buscar">
                     <input type="hidden" name="sub_acao" value="buscar_todos">
                     <button type="submit" class="stat-card">
-                        <div class="stat-icon">📍</div>
+                        <div class="stat-icon"><i class="fas fa-map-marker-alt fa-2x"></i></div>
                         <div class="stat-info">
                             <h3>Endereços</h3>
                             <span class="stat-number" id="total-enderecos">
@@ -453,7 +465,7 @@
                     <input type="hidden" name="acao_principal" value="buscar">
                     <input type="hidden" name="sub_acao" value="buscar_todos">
                     <button type="submit" class="stat-card">
-                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-icon"><i class="fas fa-exclamation-triangle fa-2x"></i></div>
                         <div class="stat-info">
                             <h3>Tipos de Ocorrência</h3>
                             <span class="stat-number" id="total-ocorrencias">
