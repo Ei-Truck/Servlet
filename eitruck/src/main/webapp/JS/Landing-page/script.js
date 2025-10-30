@@ -45,7 +45,7 @@ function mudarPaginaNavTelemetria() {
     setTimeout(() => {
         const elemento = document.getElementById('como-funciona');
         if (elemento) {
-            const offset = elemento.offsetTop - 72; // 72 é a altura do header
+            const offset = elemento.offsetTop - 72;
             window.scrollTo({ top: offset, behavior: 'smooth' });
         }
     }, 100);
@@ -539,5 +539,4 @@ window.addEventListener('resize', function () {
 
 document.querySelector('.plan-cta').addEventListener('click', function() {
     alert('Ótima escolha! Redirecionando para o processo de contratação...');
-    // Aqui você adicionaria a lógica real de redirecionamento
 });
