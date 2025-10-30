@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Conexao {
-    //Carregar o .env
+    // Carregar o .env
     Dotenv dotenv = Dotenv.load();
 
     // Variáveis do .env
@@ -46,22 +46,5 @@ public class Conexao {
             sqle.printStackTrace();
         }
         return false;
-    }
-
-    // Método auxiliar para testar a conexão com feedback
-    public void testarConexaoComFeedback() {
-        Connection conn = null;
-        try {
-            conn = conectar();
-            if (conn != null) {
-                System.out.println("\n*** CONEXÃO COM O BANCO DE DADOS TESTADA E BEM-SUCEDIDA! *** ✅");
-            } else {
-                System.out.println("\n--- FALHA NA CONEXÃO --- ❌");
-            }
-        } finally {
-            // Garante que a conexão de teste será fechada
-            desconectar(conn);
-            System.out.println("--- TESTE DE CONEXÃO FINALIZADO ---");
-        }
     }
 }
