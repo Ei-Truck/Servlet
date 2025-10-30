@@ -1,7 +1,6 @@
 package org.example.eitruck.Dao;
 
 import org.example.eitruck.Conexao.Conexao;
-import org.example.eitruck.model.Endereco;
 import org.example.eitruck.model.Segmento;
 
 import java.sql.*;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SegmentoDAO {
+    // Método inserir
     public boolean cadastrar(Segmento segmento) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -34,38 +34,32 @@ public class SegmentoDAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idSegmento) {
-
         Conexao conexao = new Conexao();
         Connection conn = null;
-
-
         String comando = "DELETE FROM segmento WHERE id = ?";
 
         try {
             conn = conexao.conectar();
 
-            // Primeiro, verifica se existe alguma unidade usando este segmento
             String verificaUnidade = "SELECT COUNT(*) FROM unidade WHERE id_segmento = ?";
             PreparedStatement pstmtVerifica = conn.prepareStatement(verificaUnidade);
             pstmtVerifica.setInt(1, idSegmento);
             ResultSet rs = pstmtVerifica.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
-                // Existem unidades usando este segmento, não pode excluir
-                return -2; // Código especial para "em uso por unidade"
+                return -2;
             }
 
-            // Se não há unidades usando, procede com a exclusão
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idSegmento);
             int execucao = pstmt.executeUpdate();
             return execucao;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
-            // Verifica se é erro de restrição de chave estrangeira
-            if (sqle.getSQLState().equals("23503")) { // Código para violação de chave estrangeira no PostgreSQL
-                return -2; // Também retorna -2 se houver violação de FK
+            if (sqle.getSQLState().equals("23503")) {
+                return -2;
             }
             return -1;
         } finally {
@@ -73,34 +67,7 @@ public class SegmentoDAO {
         }
     }
 
-    public List<Segmento> buscarPorId(int idSegmento) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        ResultSet rs;
-        List<Segmento> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM segmento WHERE id = ?";
-
-        try {
-            conn = conexao.conectar(); // Inicializar a conexão
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idSegmento);
-            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
-            while (rs.next()){
-                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
-                listaRetorno.add(segmento);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn); // Usar a variável local conn
-        }
-    }
-
+    // Método alterar
     public int alterarTodos(int id, String nome, String descricao) {
 
         Conexao conexao = new Conexao();
@@ -133,6 +100,7 @@ public class SegmentoDAO {
         return 0; // Nenhum registro alterado
     }
 
+    // Método mostrar os registros
     public List<Segmento> buscarTodos() {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -160,6 +128,7 @@ public class SegmentoDAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -185,6 +154,7 @@ public class SegmentoDAO {
         }
     }
 
+    // Método filtrar
     public List<Segmento> filtrarSegmentosMultiplos(String filtroId, String filtroNome, String filtroDescricao) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -196,15 +166,12 @@ public class SegmentoDAO {
             StringBuilder sql = new StringBuilder("SELECT * FROM segmento WHERE 1=1");
             List<Object> parametros = new ArrayList<>();
 
-            // Filtro por ID (busca exata ou parcial)
             if (filtroId != null && !filtroId.trim().isEmpty()) {
-                // Tenta converter para número para busca exata, senão busca como texto
                 try {
                     int id = Integer.parseInt(filtroId.trim());
                     sql.append(" AND id = ?");
                     parametros.add(id);
                 } catch (NumberFormatException e) {
-                    // Se não é número, busca como texto parcial
                     sql.append(" AND id::text LIKE ?");
                     parametros.add("%" + filtroId.trim() + "%");
                 }
@@ -255,7 +222,36 @@ public class SegmentoDAO {
         }
     }
 
+    // Métodos buscar por ID
+    public List<Segmento> buscarPorId(int idSegmento) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
 
+        ResultSet rs;
+        List<Segmento> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM segmento WHERE id = ?";
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idSegmento);
+            rs = pstmt.executeQuery();
+            while (rs.next()){
+                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
+                listaRetorno.add(segmento);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle){
+            sqle.printStackTrace();
+            return null;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    // Métodos alterar individuais
     public int alterarNome(Segmento segmento, String novoNome) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -312,6 +308,7 @@ public class SegmentoDAO {
         }
     }
 
+    // Métodos buscar individuais
     public List<Segmento> buscarPorNome(String nome) {
         Conexao conexao = new Conexao();
         Connection conn = null;

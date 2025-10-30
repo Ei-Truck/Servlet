@@ -1,7 +1,6 @@
 package org.example.eitruck.Dao;
 
 import org.example.eitruck.Conexao.Conexao;
-import org.example.eitruck.model.Segmento;
 import org.example.eitruck.model.TipoOcorrencia;
 
 import java.sql.*;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TipoOcorrenciaDAO {
+    // Método inserir
     public boolean cadastrar(TipoOcorrencia tipoOcorrencia) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -35,6 +35,7 @@ public class TipoOcorrenciaDAO {
         }
     }
 
+    // Método deletar
     public int apagar(int idOcorrencia) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -55,40 +56,7 @@ public class TipoOcorrenciaDAO {
         }
     }
 
-    public List<TipoOcorrencia> buscarPorId(int idTipoOcorrencia) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        ResultSet rs;
-        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM tipo_ocorrencia WHERE id = ?";
-
-
-        try {
-            conn = conexao.conectar(); // Inicializar a conexão
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, idTipoOcorrencia);
-            rs = pstmt.executeQuery(); // Corrigir: usar executeQuery() diretamente
-            while (rs.next()) {
-                TipoOcorrencia tipo = new TipoOcorrencia(
-                        rs.getInt("id"),
-                        rs.getString("tipo_evento"),
-                        rs.getInt("pontuacao"),
-                        rs.getString("gravidade")
-                );
-                listaRetorno.add(tipo);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn); // Usar a variável local conn
-        }
-    }
-
+    // Método alterar
     public int alterarTodos(int id, String tipoEvento, int pontuacao, String gravidade) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -119,6 +87,7 @@ public class TipoOcorrenciaDAO {
         return 0; // Nenhum registro alterado
     }
 
+    // Método mostrar os registros
     public List<TipoOcorrencia> buscarTodos() {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -146,6 +115,7 @@ public class TipoOcorrenciaDAO {
         }
     }
 
+    // Método quantidade de registros
     public int numeroRegistros() {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -169,6 +139,7 @@ public class TipoOcorrenciaDAO {
         }
     }
 
+    // Método filtrar
     public List<TipoOcorrencia> filtrarTiposOcorrenciaMultiplos(String filtroId, String filtroTipoEvento, String filtroPontuacao, String filtroGravidade) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -195,19 +166,16 @@ public class TipoOcorrenciaDAO {
 
             // Filtro por Pontuação (busca parcial)
             if (filtroPontuacao != null && !filtroPontuacao.trim().isEmpty()) {
-                // Tenta converter para número para busca exata, senão busca como texto
                 try {
                     int pontuacao = Integer.parseInt(filtroPontuacao.trim());
                     sql.append(" AND pontuacao = ?");
                     parametros.add(pontuacao);
                 } catch (NumberFormatException e) {
-                    // Se não é número, busca como texto parcial
                     sql.append(" AND pontuacao::text LIKE ?");
                     parametros.add("%" + filtroPontuacao.trim() + "%");
                 }
             }
 
-            // Filtro por Gravidade (busca parcial case-insensitive)
             if (filtroGravidade != null && !filtroGravidade.trim().isEmpty()) {
                 sql.append(" AND gravidade ILIKE ?");
                 parametros.add("%" + filtroGravidade.trim() + "%");
@@ -245,6 +213,7 @@ public class TipoOcorrenciaDAO {
         }
     }
 
+    // Métodos alterar individuais
     public int alterarTipoEvento(TipoOcorrencia tipoOcorrencia, String novoTipoEvento) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -282,11 +251,11 @@ public class TipoOcorrenciaDAO {
         try {
             conn = conexao.conectar();
             PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, novaPontuacao); // Mudei para setInt
+            pstmt.setInt(1, novaPontuacao);
             pstmt.setInt(2, tipoOcorrencia.getId());
             int execucao = pstmt.executeUpdate();
             if (execucao > 0) {
-                tipoOcorrencia.setPontuacao(novaPontuacao); // Corrigido para setPontuacao
+                tipoOcorrencia.setPontuacao(novaPontuacao);
                 return 1;
             }
             else {
@@ -325,6 +294,41 @@ public class TipoOcorrenciaDAO {
         catch (SQLException sqle){
             sqle.printStackTrace();
             return -1;
+        }
+        finally {
+            conexao.desconectar(conn);
+        }
+    }
+
+    // Métodos buscar individuais
+    public List<TipoOcorrencia> buscarPorId(int idTipoOcorrencia) {
+        Conexao conexao = new Conexao();
+        Connection conn = null;
+
+        ResultSet rs;
+        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
+        String comando = "SELECT * FROM tipo_ocorrencia WHERE id = ?";
+
+
+        try {
+            conn = conexao.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(comando);
+            pstmt.setInt(1, idTipoOcorrencia);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                TipoOcorrencia tipo = new TipoOcorrencia(
+                        rs.getInt("id"),
+                        rs.getString("tipo_evento"),
+                        rs.getInt("pontuacao"),
+                        rs.getString("gravidade")
+                );
+                listaRetorno.add(tipo);
+            }
+            return listaRetorno;
+        }
+        catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return null;
         }
         finally {
             conexao.desconectar(conn);

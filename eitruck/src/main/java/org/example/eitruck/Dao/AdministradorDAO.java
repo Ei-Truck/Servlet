@@ -3,7 +3,6 @@ package org.example.eitruck.Dao;
 import org.example.eitruck.Conexao.Conexao;
 import org.example.eitruck.model.Administrador;
 import org.example.eitruck.util.Hash;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -391,7 +390,7 @@ public class AdministradorDAO {
                         rs.getString("nome_completo"),
                         rs.getString("email"),
                         rs.getString("senha"),
-                        rs.getString("telefone") // Adicionando o telefone
+                        rs.getString("telefone")
                 );
                 listaRetorno.add(admin);
             }
@@ -481,7 +480,7 @@ public class AdministradorDAO {
 
         ResultSet rs;
         List<Administrador> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM administrador WHERE email = ?"; // CORRIGIDO
+        String comando = "SELECT * FROM administrador WHERE email = ?";
 
         try {
             conn = conexao.conectar();

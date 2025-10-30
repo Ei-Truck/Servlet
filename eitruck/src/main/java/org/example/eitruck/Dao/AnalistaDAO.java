@@ -231,7 +231,6 @@ public class AnalistaDAO {
         try {
             conn = conexao.conectar();
 
-            // Usando JOIN para buscar o nome da unidade
             StringBuilder sql = new StringBuilder("""
             SELECT a.*, u.nome as nome_unidade 
             FROM analista a 
@@ -302,7 +301,6 @@ public class AnalistaDAO {
                         rs.getString("cargo"),
                         rs.getString("telefone")
                 );
-                // Define o nome da unidade no objeto Analista
                 analista.setNomeUnidade(rs.getString("nome_unidade"));
                 listaRetorno.add(analista);
             }
@@ -336,7 +334,7 @@ public class AnalistaDAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome_completo"), // Corrigido de "nome" para "nome_completo"
+                        rs.getString("nome_completo"),
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -374,7 +372,7 @@ public class AnalistaDAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
+                        rs.getString("nome_completo"),
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -412,7 +410,7 @@ public class AnalistaDAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
+                        rs.getString("nome_completo"),
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -438,7 +436,7 @@ public class AnalistaDAO {
 
         ResultSet rs;
         List<Analista> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM analista WHERE nome_completo = ?"; // CORRIGIDO: de "nome" para "nome_completo"
+        String comando = "SELECT * FROM analista WHERE nome_completo = ?";
 
         try {
             conn = conexao.conectar();
@@ -450,7 +448,7 @@ public class AnalistaDAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
+                        rs.getString("nome_completo"),
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -488,7 +486,7 @@ public class AnalistaDAO {
                         rs.getInt("id"),
                         rs.getInt("id_unidade"),
                         rs.getString("cpf"),
-                        rs.getString("nome_completo"), // CORRIGIDO: de "nome" para "nome_completo"
+                        rs.getString("nome_completo"),
                         rs.getDate("dt_contratacao").toLocalDate(),
                         rs.getString("email"),
                         rs.getString("senha"),
@@ -546,6 +544,7 @@ public class AnalistaDAO {
         }
     }
 
+    // Verificações de existência
     public boolean verificarEmailExistente(String email) {
         Conexao conexao = new Conexao();
         Connection conn = null;
