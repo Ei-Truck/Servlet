@@ -2,14 +2,14 @@ package org.example.eitruck.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.regex.Pattern;
 
 public class Regex {
+    // Metódo para verificar apenas números no campo
     private String apenasNumeros(String valor) {
         return valor.replaceAll("\\D", "");
     }
 
+    // Metódo para formatar o CPF
     public String formatarCpf(String cpf) {
         cpf = apenasNumeros(cpf);
         if (cpf.length() == 11) {
@@ -21,6 +21,7 @@ public class Regex {
         return cpf;
     }
 
+    // Metódo para formatar o telefone
     public String formatarTelefone(String tel) {
         tel = apenasNumeros(tel);
         if (tel.length() == 11) {
@@ -31,6 +32,7 @@ public class Regex {
         return tel;
     }
 
+    // Metódo para formatar o CEP
     public String formatarCep(String cep) {
         cep = apenasNumeros(cep);
         if (cep.length() == 8) {
@@ -39,7 +41,7 @@ public class Regex {
         return cep;
     }
 
-    // Método para formatar LocalDate para String no formato DD-MM-YYYY
+    // Método para formatar a data no formato DD-MM-YYYY
     public String formatarData(LocalDate data) {
         if (data == null) {
             return null;
