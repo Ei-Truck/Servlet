@@ -11,11 +11,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.eitruck.util.Hash;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -72,6 +70,7 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
+    // Método inserir
     private void inserirAnalista(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -97,16 +96,13 @@ public class AnalistaServlet extends HttpServlet {
             System.out.println("Cargo: " + cargo);
             System.out.println("Telefone: " + telefone);
 
-            // 1. ADICIONAR O NULL CHECK AQUI:
             if (data_contratacao == null || data_contratacao.trim().isEmpty()) {
-                // Se for nulo/vazio, trate como erro do cliente (Bad Request)
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Data de contratação é obrigatória.");
                 return;
             }
 
-            // 2. Tente fazer a conversão AGORA:
             int id_unidade = Integer.parseInt(idUnidade);
-            LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE); // Linha 113 agora segura contra null
+            LocalDate data_contratacaoDate = LocalDate.parse(data_contratacao, DateTimeFormatter.ISO_LOCAL_DATE);
 
             String senhaCriptografada = hash.criptografar(senha);
 
@@ -155,7 +151,7 @@ public class AnalistaServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/analista.jsp"); // substitua pelo nome do seu JSP atual
+        RequestDispatcher dispatcher = request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/analista.jsp");
         if (dispatcher != null) {
             dispatcher.forward(request, response);
         }
@@ -164,6 +160,7 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
+    // Método excluir
     private void excluirAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -188,6 +185,7 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
+    // Método para carregar o Analista para Edição
     private void carregarAnalistaParaEdicao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -213,6 +211,7 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
+    // Método atualizar
     private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         String errorMessage = null;
@@ -278,6 +277,7 @@ public class AnalistaServlet extends HttpServlet {
         carregarAnalistaParaEdicao(request, response);
     }
 
+    // Método para mostrar a tabela
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
         try {
@@ -298,6 +298,7 @@ public class AnalistaServlet extends HttpServlet {
         encaminhar(request, response, "Erro.jsp");
     }
 
+    // Método filtrar
     private void filtrarAnalistas(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -348,6 +349,7 @@ public class AnalistaServlet extends HttpServlet {
         }
     }
 
+    // Método encaminhar
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher(jspErro);
         if (rd != null) {

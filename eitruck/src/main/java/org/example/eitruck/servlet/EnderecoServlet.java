@@ -2,10 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.AnalistaDAO;
 import org.example.eitruck.Dao.EnderecoDAO;
-import org.example.eitruck.Dao.UnidadeDAO;
-import org.example.eitruck.model.Analista;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,13 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.eitruck.model.Endereco;
-import org.example.eitruck.model.Unidade;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -40,7 +33,7 @@ public class EnderecoServlet extends HttpServlet {
         String acao = request.getParameter("acao");
 
         switch (acao != null ? acao : "listar") {
-            case "editar": // ADICIONE ESTE CASO
+            case "editar":
                 carregarEnderecoParaEdicao(request, response);
                 break;
             case "buscar":
@@ -64,7 +57,7 @@ public class EnderecoServlet extends HttpServlet {
             case "inserir":
                 inserirEndereco(request, response, acao, sub_acao);
                 break;
-            case "atualizar": // ATUALIZE ESTE CASO
+            case "atualizar":
                 atualizarEndereco(request, response);
                 break;
             case "excluir":
@@ -73,6 +66,7 @@ public class EnderecoServlet extends HttpServlet {
         }
     }
 
+    // Método inserir
     private void inserirEndereco(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -148,6 +142,7 @@ public class EnderecoServlet extends HttpServlet {
         }
     }
 
+    // Método excluir
     private void excluirEndereco(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -175,6 +170,7 @@ public class EnderecoServlet extends HttpServlet {
         }
     }
 
+    // Método para carregar o Endereço para Edição
     private void carregarEnderecoParaEdicao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -206,6 +202,7 @@ public class EnderecoServlet extends HttpServlet {
         }
     }
 
+    // Método atualizar
     private void atualizarEndereco(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         String errorMessage = null;
@@ -290,6 +287,7 @@ public class EnderecoServlet extends HttpServlet {
         carregarEnderecoParaEdicao(request, response);
     }
 
+    // Método para mostrar a tabela
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
         try {
@@ -310,6 +308,7 @@ public class EnderecoServlet extends HttpServlet {
         encaminhar(request, response, "Erro.jsp");
     }
 
+    // Método filtrar
     private void filtrarEnderecos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -366,6 +365,7 @@ public class EnderecoServlet extends HttpServlet {
         }
     }
 
+    // Método encaminhar
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher(jspErro);
         if (rd != null) {
@@ -373,9 +373,5 @@ public class EnderecoServlet extends HttpServlet {
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
         }
-    }
-
-    private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     }
 }

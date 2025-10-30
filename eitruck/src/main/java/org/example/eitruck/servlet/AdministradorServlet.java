@@ -3,9 +3,7 @@ package org.example.eitruck.servlet;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import org.example.eitruck.Dao.AdministradorDAO;
-import org.example.eitruck.Dao.AnalistaDAO;
 import org.example.eitruck.model.Administrador;
-import org.example.eitruck.model.Analista;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,9 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import org.example.eitruck.util.Hash;
@@ -65,7 +60,7 @@ public class AdministradorServlet extends HttpServlet {
                 inserirAdministrador(request, response, acao, sub_acao);
                 break;
             case "atualizar":
-                atualizarAdministrador(request, response); // Alterado para atualizarAdministrador
+                atualizarAdministrador(request, response);
                 break;
             case "excluir":
                 excluirAdministrador(request, response);
@@ -73,6 +68,7 @@ public class AdministradorServlet extends HttpServlet {
         }
     }
 
+    // Método inserir
     private void inserirAdministrador(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -141,6 +137,7 @@ public class AdministradorServlet extends HttpServlet {
         }
     }
 
+    // Método excluir
     private void excluirAdministrador(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -164,6 +161,7 @@ public class AdministradorServlet extends HttpServlet {
         }
     }
 
+    // Método para carregar o Administrador para Edição
     private void carregarAdministradorParaEdicao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -189,6 +187,7 @@ public class AdministradorServlet extends HttpServlet {
         }
     }
 
+    // Método atualizar
     private void atualizarAdministrador(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         String errorMessage = null;
@@ -247,6 +246,7 @@ public class AdministradorServlet extends HttpServlet {
         carregarAdministradorParaEdicao(request, response);
     }
 
+    // Método para mostrar a tabela
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
         try {
@@ -267,6 +267,7 @@ public class AdministradorServlet extends HttpServlet {
         encaminhar(request, response, "Erro.jsp");
     }
 
+    // Método filtrar
     private void filtrarAdministradores(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -314,6 +315,7 @@ public class AdministradorServlet extends HttpServlet {
         }
     }
 
+    // Método encaminhar
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher(jspErro);
         if (rd != null) {
@@ -321,9 +323,5 @@ public class AdministradorServlet extends HttpServlet {
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
         }
-    }
-
-    private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     }
 }

@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.eitruck.model.Analista;
 import org.example.eitruck.model.Unidade;
 
 import java.io.IOException;
@@ -66,6 +65,7 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
+    // Método inserir
     private void inserirUnidade(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -75,7 +75,6 @@ public class UnidadeServlet extends HttpServlet {
             String idSegmento = request.getParameter("id_segmento");
             String idEndereco = request.getParameter("id_endereco");
             String nome = request.getParameter("nome");
-            //todo trocar tudo para os atributos de Unidade
 
             System.out.println("Id do segmento: " + idSegmento);
             System.out.println("Id do endereço: " + idEndereco);
@@ -87,7 +86,6 @@ public class UnidadeServlet extends HttpServlet {
 
 
             Unidade unidade = new Unidade(id_segmento, id_endereco, nome);
-            //todo ver os parametros do construtor
             success = unidadeDao.cadastrar(unidade);
 
             if (success) {
@@ -134,6 +132,7 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
+    // Método excluir
     private void excluirUnidade(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -161,6 +160,7 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
+    // Método para carregar a Unidade para Edição
     private void carregarUnidadeParaEdicao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -193,6 +193,7 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
+    // Método atualizar
     private void atualizarUnidade(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         String errorMessage = null;
@@ -225,6 +226,7 @@ public class UnidadeServlet extends HttpServlet {
         carregarUnidadeParaEdicao(request, response);
     }
 
+    // Método para mostrar a tabela
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
         try {
@@ -245,15 +247,7 @@ public class UnidadeServlet extends HttpServlet {
         encaminhar(request, response, "Erro.jsp");
     }
 
-    public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher(jspErro);
-        if (rd != null) {
-            rd.forward(request, response);
-        } else {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
-        }
-    }
-
+    // Método filtrar
     private void filtrarUnidades(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -297,4 +291,13 @@ public class UnidadeServlet extends HttpServlet {
         }
     }
 
+    // Método encaminhar
+    public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher(jspErro);
+        if (rd != null) {
+            rd.forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
+        }
+    }
 }

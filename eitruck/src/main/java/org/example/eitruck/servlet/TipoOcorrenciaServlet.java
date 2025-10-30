@@ -2,9 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.AnalistaDAO;
 import org.example.eitruck.Dao.TipoOcorrenciaDAO;
-import org.example.eitruck.model.Analista;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,9 +13,6 @@ import org.example.eitruck.model.TipoOcorrencia;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -70,6 +65,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
+    // Método inserir
     private void inserirTipoOcorrencia(HttpServletRequest request, HttpServletResponse response, String acao, String sub_acao) throws IOException, ServletException {
         String errorMessage = null;
         boolean success = false;
@@ -133,6 +129,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
+    // Método excluir
     private void excluirOcorrencia(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -156,6 +153,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
+    // Método para carregar o Tipo de Ocorrência para Edição
     private void carregarOcorrenciaParaEdicao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -188,6 +186,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
+    // Método atualizar
     private void atualizarOcorrencia(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         String errorMessage = null;
@@ -220,6 +219,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         carregarOcorrenciaParaEdicao(request, response);
     }
 
+    // Método para mostrar a tabela
     private void buscarTodos(HttpServletRequest request, HttpServletResponse response, String acao, String subAcao)
             throws IOException, ServletException {
         try {
@@ -240,6 +240,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         encaminhar(request, response, "Erro.jsp");
     }
 
+    // Método filtrar
     private void filtrarTiposOcorrencia(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -284,6 +285,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         }
     }
 
+    // Método encaminhar
     public void encaminhar(HttpServletRequest request, HttpServletResponse response, String jspErro) throws ServletException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher(jspErro);
         if (rd != null) {
@@ -291,9 +293,5 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao encaminhar");
         }
-    }
-
-    private void atualizarAnalista(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     }
 }
