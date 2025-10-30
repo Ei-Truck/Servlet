@@ -2,7 +2,7 @@ package org.example.eitruck.model;
 import org.example.eitruck.util.Regex;
 
 public class Administrador {
-    // atributos
+    // Atributos
     private int id;
     private String cpf;
     private String nomeCompleto;
@@ -10,7 +10,7 @@ public class Administrador {
     private String senha;
     private String telefone;
 
-    // método construtor
+    // Métodos construtores
     public Administrador(int id, String cpf, String nomeCompleto, String email, String senha, String telefone) {
         this.id = id;
         this.cpf = cpf;
@@ -19,7 +19,6 @@ public class Administrador {
         this.senha = senha;
         this.telefone = telefone;
     }
-
     public Administrador(String telefone, String cpf, String nomeCompleto, String email, String senha) {
         this.telefone = telefone;
         this.cpf = cpf;
@@ -27,7 +26,6 @@ public class Administrador {
         this.email = email;
         this.senha = senha;
     }
-
     public Administrador(int id, String cpf, String nomeCompleto, String email, String senha) {
         this.id = id;
         this.cpf = cpf;
@@ -36,7 +34,8 @@ public class Administrador {
         this.senha = senha;
     }
 
-    // getters e setters
+    // Getters e setters
+    // Campo ID
     public int getId() {
         return this.id;
     }
@@ -44,6 +43,7 @@ public class Administrador {
         this.id = id;
     }
 
+    // Campo CPF
     public String getCpf() {
         return this.cpf;
     }
@@ -51,11 +51,12 @@ public class Administrador {
         Regex re = new Regex();
         String cpfFormatado = re.formatarCpf(this.cpf);
         return cpfFormatado;
-    }
+    } // Formatar o CPF para mostrar na área restrita
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
+    // Campo nome completo
     public String getNomeCompleto() {
         return this.nomeCompleto;
     }
@@ -63,6 +64,7 @@ public class Administrador {
         this.nomeCompleto = nomeCompleto;
     }
 
+    // Campo e-mail
     public String getEmail() {
         return this.email;
     }
@@ -70,6 +72,7 @@ public class Administrador {
         this.email = email;
     }
 
+    // Campo senha
     public String getSenha() {
         return this.senha;
     }
@@ -77,6 +80,7 @@ public class Administrador {
         this.senha = senha;
     }
 
+    // Campo telefone
     public String getTelefone() {
         return this.telefone;
     }
@@ -84,13 +88,12 @@ public class Administrador {
         Regex re = new Regex();
         String telefoneFormatado = re.formatarTelefone(this.telefone);
         return telefoneFormatado;
-    }
+    } // Formatar o telefone para mostrar na área restrita
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
-    // toString
-    @Override
+    // Método toString
     public String toString() {
         return String.format("""
             Administrador:

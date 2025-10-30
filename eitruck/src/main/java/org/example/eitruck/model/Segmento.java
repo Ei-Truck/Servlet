@@ -1,24 +1,24 @@
 package org.example.eitruck.model;
 
 public class Segmento {
-    //atributos
+    // Atributos
     private int id;
     private String nome;
     private String descricao;
 
-    //método construtor
+    // Método construtores
     public Segmento(int id, String nome, String descricao) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
     }
-
     public Segmento(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
     }
 
-    //getters e setters
+    // Getters e setters
+    // Campo ID
     public int getId() {
         return this.id;
     }
@@ -26,6 +26,7 @@ public class Segmento {
         this.id = id;
     }
 
+    // Campo nome
     public String getNome() {
         return this.nome;
     }
@@ -33,6 +34,7 @@ public class Segmento {
         this.nome = nome;
     }
 
+    // Campo descrição
     public String getDescricao() {
         return this.descricao;
     }
@@ -40,7 +42,7 @@ public class Segmento {
         this.descricao = descricao;
     }
 
-    //toString
+    // Método toString
     public String toString() {
         return String.format("""
             Segmento:

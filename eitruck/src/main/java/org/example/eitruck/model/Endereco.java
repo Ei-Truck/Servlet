@@ -3,7 +3,7 @@ package org.example.eitruck.model;
 import org.example.eitruck.util.Regex;
 
 public class Endereco {
-    // atributos
+    // Atributos
     private int id;
     private String cep;
     private String rua;
@@ -13,7 +13,7 @@ public class Endereco {
     private String estado;
     private String pais;
 
-    // construtor
+    // Métodos construtores
     public Endereco(int id, String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
         this.id = id;
         this.cep = cep;
@@ -24,7 +24,6 @@ public class Endereco {
         this.estado = estado;
         this.pais = pais;
     }
-
     public Endereco(String cep, String rua, int numero, String bairro, String cidade, String estado, String pais) {
         this.cep = cep;
         this.rua = rua;
@@ -35,7 +34,8 @@ public class Endereco {
         this.pais = pais;
     }
 
-    // getters e setters
+    // Getters e setters
+    // Campo ID
     public int getId() {
         return this.id;
     }
@@ -43,6 +43,7 @@ public class Endereco {
         this.id = id;
     }
 
+    // Campo CEP
     public String getCep() {
         return this.cep;
     }
@@ -50,11 +51,12 @@ public class Endereco {
         Regex re = new Regex();
         String cepFormatado = re.formatarCep(this.cep);
         return cepFormatado;
-    }
+    } // Formatar o CEP para mostrar na área restrita
     public void setCep(String cep) {
         this.cep = cep;
     }
 
+    // Campo rua
     public String getRua() {
         return this.rua;
     }
@@ -62,6 +64,7 @@ public class Endereco {
         this.rua = rua;
     }
 
+    // Campo número
     public int getNumero() {
         return this.numero;
     }
@@ -69,6 +72,7 @@ public class Endereco {
         this.numero = numero;
     }
 
+    // Campo bairro
     public String getBairro() {
         return this.bairro;
     }
@@ -76,6 +80,7 @@ public class Endereco {
         this.bairro = bairro;
     }
 
+    // Campo cidade
     public String getCidade() {
         return this.cidade;
     }
@@ -83,6 +88,7 @@ public class Endereco {
         this.cidade = cidade;
     }
 
+    // Campo estado
     public String getEstado() {
         return this.estado;
     }
@@ -90,6 +96,7 @@ public class Endereco {
         this.estado = estado;
     }
 
+    // Campo país
     public String getPais() {
         return this.pais;
     }
@@ -97,8 +104,7 @@ public class Endereco {
         this.pais = pais;
     }
 
-    // toString
-    @Override
+    // Método toString
     public String toString() {
         return String.format("""
             Endereco:

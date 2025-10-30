@@ -1,23 +1,21 @@
 package org.example.eitruck.model;
 
 public class Unidade {
-    // atributos
+    // Atributos
     private int id;
     private String nome;
     private int idSegmento;
     private int idEndereco;
-    private String nomeSegmento;
-    private String nomeEndereco;
+    private String nomeSegmento; // Não é campo do banco (atributo auxiliar para mostrar na área restrita)
+    private String nomeEndereco; // Não é campo do banco (atributo auxiliar para mostrar na área restrita)
 
-
-    // construtor
+    // Métodos construtores
     public Unidade(int id, int idSegmento, int idEndereco, String nome) {
         this.id = id;
         this.idSegmento = idSegmento;
         this.idEndereco = idEndereco;
         this.nome = nome;
     }
-
     public Unidade(int id, int idSegmento, int idEndereco, String nome, String nomeSegmento, String nomeEndereco) {
         this.id = id;
         this.idSegmento = idSegmento;
@@ -26,14 +24,14 @@ public class Unidade {
         this.nomeSegmento = nomeSegmento;
         this.nomeEndereco = nomeEndereco;
     }
-
     public Unidade(int idSegmento, int idEndereco, String nome) {
         this.nome = nome;
         this.idSegmento = idSegmento;
         this.idEndereco = idEndereco;
     }
 
-    // getters e setters
+    // Getters e setters
+    // Campo ID
     public int getId() {
         return this.id;
     }
@@ -41,6 +39,7 @@ public class Unidade {
         this.id = id;
     }
 
+    // Campo nome
     public String getNome() {
         return this.nome;
     }
@@ -48,6 +47,7 @@ public class Unidade {
         this.nome = nomeCompleto;
     }
 
+    // Campo ID do segmento
     public int getIdSegmento() {
         return this.idSegmento;
     }
@@ -55,6 +55,7 @@ public class Unidade {
         this.idSegmento = idSegmento;
     }
 
+    // Campo ID do endereço
     public int getIdEndereco() {
         return this.idEndereco;
     }
@@ -62,24 +63,23 @@ public class Unidade {
         this.idEndereco = idEndereco;
     }
 
+    // Atritubo nome do segmento (auxiliar para mostrar na área restrita)
     public String getNomeSegmento() {
         return this.nomeSegmento;
     }
-
     public void setNomeSegmento(String nomeSegmento) {
         this.nomeSegmento = nomeSegmento;
     }
 
+    // Atritubo nome do endereco (auxiliar para mostrar na área restrita)
     public String getNomeEndereco() {
         return nomeEndereco;
     }
-
     public void setNomeEndereco(String nomeEndereco) {
         this.nomeEndereco = nomeEndereco;
     }
 
-    // toString
-    @Override
+    // Método toString
     public String toString() {
         return String.format("""
             Unidade:
