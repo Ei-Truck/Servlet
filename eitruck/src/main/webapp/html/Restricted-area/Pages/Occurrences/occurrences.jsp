@@ -267,6 +267,15 @@
       background: #00a366;
     }
 
+    .error-notification {
+      background-color: #ffebee;
+      border: 1px solid #f44336;
+      color: #c62828;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
     @media (max-width: 768px) {
       .sidebar {
         width: 70px;
@@ -423,8 +432,8 @@
 
             if (errorMessage != null) {
           %>
-          <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ef5350;">
-            <strong>Erro ao inserir pontuação</strong>
+          <div class="error-notification">
+            <strong>Erro:</strong> <%= errorMessage %>
           </div>
           <%
             }
@@ -435,18 +444,28 @@
 
             <div class="form-group">
               <label for="tipo_evento">Tipo de Evento:</label>
-              <input type="text" name="tipo_evento" id="tipo_evento" class="form-control" value="${tipo_evento != null ? tipo_evento : ''}" required>
+              <input type="text" name="tipo_evento" id="tipo_evento" class="form-control"
+                     value="${tipo_evento != null ? tipo_evento : ''}" required
+                     placeholder="Digite o tipo de evento">
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="pontuacao">Pontuação:</label>
-                <input type="number" name="pontuacao" id="pontuacao" class="form-control" value="${pontuacao != null ? pontuacao : ''}" min="0" max="10" step="1" required>
+                <input type="number" name="pontuacao" id="pontuacao" class="form-control"
+                       value="${pontuacao != null ? pontuacao : ''}" min="0" max="10" step="1" required
+                       placeholder="Pontuação numérica">
               </div>
 
               <div class="form-group">
                 <label for="gravidade">Gravidade:</label>
-                <input type="text" name="gravidade" id="gravidade" class="form-control" value="${gravidade != null ? gravidade : ''}" required>
+                <select name="gravidade" id="gravidade" class="form-control" required>
+                  <option value="">Selecione a gravidade</option>
+                  <option value="Leve" ${gravidade == 'Leve' ? 'selected' : ''}>Leve</option>
+                  <option value="Média" ${gravidade == 'Média' ? 'selected' : ''}>Média</option>
+                  <option value="Grave" ${gravidade == 'Grave' ? 'selected' : ''}>Grave</option>
+                  <option value="Gravíssima" ${gravidade == 'Gravíssima' ? 'selected' : ''}>Gravíssima</option>
+                </select>
               </div>
             </div>
 
@@ -459,5 +478,38 @@
     </div>
   </div>
 </div>
+
+<script>
+  // Validação no envio do formulário
+  document.querySelector('form').addEventListener('submit', function(e) {
+    const pontuacao = document.getElementById('pontuacao');
+    const tipoEvento = document.getElementById('tipo_evento');
+    const gravidade = document.getElementById('gravidade');
+
+    // Valida Pontuação
+    if (!pontuacao.value || pontuacao.value < 0) {
+      e.preventDefault();
+      alert('Pontuação deve ser um número válido maior ou igual a 0.');
+      pontuacao.focus();
+      return;
+    }
+
+    // Valida Tipo de Evento
+    if (!tipoEvento.value.trim()) {
+      e.preventDefault();
+      alert('Tipo de Evento é obrigatório.');
+      tipoEvento.focus();
+      return;
+    }
+
+    // Valida Gravidade
+    if (gravidade.value === "") {
+      e.preventDefault();
+      alert('Gravidade é obrigatória. Selecione uma opção.');
+      gravidade.focus();
+      return;
+    }
+  });
+</script>
 </body>
 </html>

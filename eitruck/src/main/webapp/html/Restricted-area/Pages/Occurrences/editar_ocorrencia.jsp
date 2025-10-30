@@ -456,9 +456,13 @@
 
                             <div class="form-group">
                                 <label for="gravidade">Gravidade:</label>
-                                <input type="text" name="gravidade" id="gravidade" class="form-control"
-                                       value="${ocorrencia.gravidade != null ? ocorrencia.gravidade : ''}" required
-                                       placeholder="Digite a gravidade">
+                                <select name="gravidade" id="gravidade" class="form-control" required>
+                                    <option value="">Selecione a gravidade</option>
+                                    <option value="Leve" ${ocorrencia.gravidade == 'Leve' ? 'selected' : ''}>Leve</option>
+                                    <option value="Média" ${ocorrencia.gravidade == 'Média' ? 'selected' : ''}>Média</option>
+                                    <option value="Grave" ${ocorrencia.gravidade == 'Grave' ? 'selected' : ''}>Grave</option>
+                                    <option value="Gravíssima" ${ocorrencia.gravidade == 'Gravíssima' ? 'selected' : ''}>Gravíssima</option>
+                                </select>
                             </div>
                         </div>
 
@@ -498,9 +502,9 @@
         }
 
         // Valida Gravidade
-        if (!gravidade.value.trim()) {
+        if (gravidade.value === "") {
             e.preventDefault();
-            alert('Gravidade é obrigatória.');
+            alert('Gravidade é obrigatória. Selecione uma opção.');
             gravidade.focus();
             return;
         }

@@ -6,34 +6,9 @@ import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 public class Regex {
-    //    ======================================================================================
     private String apenasNumeros(String valor) {
         return valor.replaceAll("\\D", "");
     }
-
-    //    ======================================================================================
-    public boolean checarCpf(String cpf){
-        String regexCpf = "^[0-9]{11}$";
-        return Pattern.matches(regexCpf, apenasNumeros(cpf));
-    }
-
-
-    public boolean checarCep(String cep){
-        String regexCep = "^[0-9]{8}$";
-        return Pattern.matches(regexCep, apenasNumeros(cep));
-    }
-
-    public boolean checarTelefone(String telefone){
-        String regexTelefone = "^[0-9]{10,11}$";
-        return Pattern.matches(regexTelefone, apenasNumeros(telefone));
-    }
-
-    public boolean checarEmail(String email){
-        String regexEmail = "[a-z0-9][a-z0-9_]@[a-z0-9-]\\.{1}[a-z]\\.?[a-z]";
-        return Pattern.matches(regexEmail, email);
-    }
-
-//    ======================================================================================
 
     public String formatarCpf(String cpf) {
         cpf = apenasNumeros(cpf);
