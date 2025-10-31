@@ -459,7 +459,8 @@
                             <div class="form-group">
                                 <label for="nome_completo">Nome Completo:</label>
                                 <input type="text" name="nome_completo" id="nome_completo" class="form-control"
-                                       value="${administrador.nomeCompleto != null ? administrador.nomeCompleto : ''}" required>
+                                       value="${administrador.nomeCompleto != null ? administrador.nomeCompleto : ''}" required
+                                       oninput="this.value = this.value.replace(/[0-9]/g, '')">
                             </div>
                         </div>
 
@@ -501,6 +502,18 @@
         // Validação básica de tamanho
         if (cpf.length < 8 && cpf.length > 0) {
             input.setCustomValidity('CPF deve ter pelo menos 8 dígitos numéricos.');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+
+    function validarNome(input) {
+        // Remove números do valor
+        input.value = input.value.replace(/[0-9]/g, '');
+
+        // Validação básica de nome (opcional)
+        if (input.value.trim().length < 2 && input.value.length > 0) {
+            input.setCustomValidity('Nome deve ter pelo menos 2 letras e não pode conter números.');
         } else {
             input.setCustomValidity('');
         }

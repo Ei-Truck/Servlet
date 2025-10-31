@@ -228,7 +228,7 @@ public class AdministradorServlet extends HttpServlet {
                         response.sendRedirect(request.getContextPath() + "/servlet-administrador?acao_principal=buscar&sub_acao=buscar_todos");
                         return;
                     } else {
-                        errorMessage = "Erro ao atualizar administrador no banco de dados.";
+                        errorMessage = "Erro ao atualizar administrador no banco de dados. CPF ou e-mail inválidos.";
                     }
                 } else {
                     errorMessage = "Administrador não encontrado.";
