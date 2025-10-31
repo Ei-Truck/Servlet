@@ -520,8 +520,14 @@
         // Remove caracteres não numéricos
         input.value = input.value.replace(/[^0-9]/g, '');
 
+        // Permite campo vazio durante a edição
+        if (input.value === '') {
+            return;
+        }
+
         // Garante que seja um número positivo
-        if (input.value < 1) {
+        let num = parseInt(input.value);
+        if (num < 1) {
             input.value = 1;
         }
     }
