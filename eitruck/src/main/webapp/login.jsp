@@ -1,4 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    // Se o usuário já está logado, faz logout automaticamente
+    if (session != null && session.getAttribute("nomeAdimin") != null) {
+        session.invalidate(); // Destrói a sessão atual
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

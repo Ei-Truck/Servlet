@@ -138,7 +138,7 @@ public class EnderecoServlet extends HttpServlet {
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar endereco");
         }
     }
 

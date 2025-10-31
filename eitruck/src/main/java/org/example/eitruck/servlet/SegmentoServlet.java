@@ -88,7 +88,7 @@ public class SegmentoServlet extends HttpServlet {
                 }
                 return;
             } else {
-                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+                errorMessage = "Erro ao cadastrar segmento no banco de dados.";
             }
         } catch (NumberFormatException e) {
             errorMessage = "ID da unidade deve ser um número válido.";
@@ -101,7 +101,7 @@ public class SegmentoServlet extends HttpServlet {
         }
 
         if (errorMessage == null) {
-            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            errorMessage = "Erro ao cadastrar segmento no banco de dados.";
         }
 
         request.setAttribute("errorMessage", errorMessage);
@@ -120,7 +120,7 @@ public class SegmentoServlet extends HttpServlet {
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar segmento");
         }
     }
 
