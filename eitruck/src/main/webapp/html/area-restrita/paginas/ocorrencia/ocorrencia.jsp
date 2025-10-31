@@ -426,12 +426,9 @@
                 <div class="crud-header">
                     <h2>Cadastrar Novo Tipo de Ocorrência</h2>
                     <div class="crud-actions">
-                        <form action="${pageContext.request.contextPath}/servlet-ocorrencias" method="get">
-                            <input type="hidden" name="acao_principal" value="buscar">
-                            <button type="submit" name="sub_acao" value="buscar_todos" class="btn btn-secondary">
-                                <span>←</span> Voltar para Lista
-                            </button>
-                        </form>
+                        <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/servlet-ocorrencias?acao_principal=buscar&sub_acao=buscar_todos'" class="btn btn-secondary">
+                            <span>←</span> Voltar para Lista
+                        </button>
                     </div>
                 </div>
 
