@@ -569,14 +569,16 @@
                             <label for="filtroId">ID</label>
                             <input type="text" id="filtroId" name="filtro_id" class="filter-input"
                                    value="<%= filtroId != null ? filtroId : "" %>"
-                                   placeholder="Ex: 1, 2">
+                                   placeholder="Ex: 1, 2"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
                             <label for="filtroCep">CEP</label>
                             <input type="text" id="filtroCep" name="filtro_cep" class="filter-input"
                                    value="<%= filtroCep != null ? filtroCep : "" %>"
-                                   placeholder="Ex: 12345678">
+                                   placeholder="Ex: 12345678"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
@@ -590,7 +592,8 @@
                             <label for="filtroNumero">Número</label>
                             <input type="text" id="filtroNumero" name="filtro_numero" class="filter-input"
                                    value="<%= filtroNumero != null ? filtroNumero : "" %>"
-                                   placeholder="Ex: 100">
+                                   placeholder="Ex: 100"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
