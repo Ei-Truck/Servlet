@@ -257,7 +257,7 @@ public class AnalistaServlet extends HttpServlet {
                         response.sendRedirect(request.getContextPath() + "/servlet-analista?acao_principal=buscar&sub_acao=buscar_todos");
                         return;
                     } else {
-                        errorMessage = "Erro ao atualizar analista no banco de dados.";
+                        errorMessage = "Erro ao atualizar analista no banco de dados. ID Unidade, CPF, e-mail ou data contratação incorreto.";
                     }
                 } else {
                     errorMessage = "Analista não encontrado.";

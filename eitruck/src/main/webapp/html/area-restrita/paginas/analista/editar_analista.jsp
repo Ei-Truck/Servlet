@@ -466,7 +466,8 @@
                         <div class="form-group">
                             <label for="nome_completo">Nome Completo:</label>
                             <input type="text" name="nome_completo" id="nome_completo" class="form-control"
-                                   value="${analista.nomeCompleto != null ? analista.nomeCompleto : ''}" required>
+                                   value="${analista.nomeCompleto != null ? analista.nomeCompleto : ''}" required
+                                   oninput="validarNomeCompleto(this)">
                         </div>
 
                         <div class="form-group">
@@ -530,6 +531,11 @@
         if (num < 1) {
             input.value = 1;
         }
+    }
+    function validarNomeCompleto(input) {
+        input.value = input.value.replace(/[^a-zA-ZÀ-ÿ\s\-']/g, '');
+
+        input.value = input.value.replace(/\s+/g, ' ');
     }
 
     function validarCPF(input) {
