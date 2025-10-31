@@ -563,21 +563,24 @@
                             <label for="filtroId">ID</label>
                             <input type="text" id="filtroId" name="filtro_id" class="filter-input"
                                    value="<%= filtroId != null ? filtroId : "" %>"
-                                   placeholder="Ex: 1, 2">
+                                   placeholder="Ex: 1, 2"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
                             <label for="filtroNome">Nome Completo</label>
                             <input type="text" id="filtroNome" name="filtro_nome" class="filter-input"
                                    value="<%= filtroNome != null ? filtroNome : "" %>"
-                                   placeholder="Ex: João Silva">
+                                   placeholder="Ex: João Silva"
+                                   oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '')">
                         </div>
 
                         <div class="filter-group">
                             <label for="filtroCpf">CPF</label>
                             <input type="text" id="filtroCpf" name="filtro_cpf" class="filter-input"
                                    value="<%= filtroCpf != null ? filtroCpf : "" %>"
-                                   placeholder="Ex: 12345678901">
+                                   placeholder="Ex: 12345678901"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
@@ -591,7 +594,8 @@
                             <label for="filtroTelefone">Telefone</label>
                             <input type="text" id="filtroTelefone" name="filtro_telefone" class="filter-input"
                                    value="<%= filtroTelefone != null ? filtroTelefone : "" %>"
-                                   placeholder="Ex: 11999999999">
+                                   placeholder="Ex: 11999999999"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group" style="flex-direction: row; align-items: end; gap: 10px;">
