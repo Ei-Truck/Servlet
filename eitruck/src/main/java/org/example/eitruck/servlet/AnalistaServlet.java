@@ -116,7 +116,7 @@ public class AnalistaServlet extends HttpServlet {
                 }
                 return;
             } else {
-                errorMessage = "Erro ao cadastrar analista no banco de dados.";
+                errorMessage = "Erro ao cadastrar analista no banco de dados. ID, CPF, e-mail ou data de contratação inválido.";
             }
 
         } catch (NumberFormatException e) {
@@ -130,7 +130,7 @@ public class AnalistaServlet extends HttpServlet {
         }
 
         if (errorMessage == null) {
-            errorMessage = "Erro ao cadastrar analista no banco de dados.";
+            errorMessage = "Erro ao cadastrar analista no banco de dados. ID, CPF, e-mail ou data de contratação inválido.";
         }
 
         request.setAttribute("errorMessage", errorMessage);
@@ -156,7 +156,7 @@ public class AnalistaServlet extends HttpServlet {
             dispatcher.forward(request, response);
         }
         else {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar analista no banco de dados. ID, CPF, e-mail ou data de contratação inválido.");
         }
     }
 
