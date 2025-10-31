@@ -43,6 +43,7 @@ public class Segmento {
     }
 
     // Método toString
+    @Override
     public String toString() {
         return String.format("""
             Segmento:

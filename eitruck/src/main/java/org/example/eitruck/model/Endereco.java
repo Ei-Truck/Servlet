@@ -105,6 +105,7 @@ public class Endereco {
     }
 
     // Método toString
+    @Override
     public String toString() {
         return String.format("""
             Endereco:

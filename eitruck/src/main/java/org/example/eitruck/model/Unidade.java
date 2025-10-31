@@ -80,6 +80,7 @@ public class Unidade {
     }
 
     // Método toString
+    @Override
     public String toString() {
         return String.format("""
             Unidade:

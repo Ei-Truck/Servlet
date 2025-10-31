@@ -149,6 +149,7 @@ public class Analista {
     }
 
     // Método toString
+    @Override
     public String toString() {
         return String.format("""
             Analista:

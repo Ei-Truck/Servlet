@@ -54,6 +54,7 @@ public class TipoOcorrencia {
     }
 
     // Método toString
+    @Override
     public String toString() {
         return String.format("""
             Tipo de Ocorrencia:
