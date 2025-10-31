@@ -2,7 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.SegmentoDAO;
+import org.example.eitruck.dao.SegmentoDAO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -116,7 +116,7 @@ public class SegmentoServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Segments/segments.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/area-restrita/paginas/segmento/segmento.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
@@ -162,7 +162,7 @@ public class SegmentoServlet extends HttpServlet {
             if (segmentos != null && !segmentos.isEmpty()) {
                 Segmento segmento = segmentos.get(0);
                 request.setAttribute("segmento", segmento);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Segments/editar_segmento.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/segmento/editar_segmento.jsp");
                 rd.forward(request, response);
             } else {
                 String errorMessage = URLEncoder.encode("Segmento não encontrado.", "UTF-8");
@@ -216,7 +216,7 @@ public class SegmentoServlet extends HttpServlet {
         try {
             List<Segmento> segmentos = segmentoDAO.buscarTodos();
             request.setAttribute("segmentos", segmentos);
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Segments/processar_segments.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/segmento/processar_segmento.jsp");
             rd.forward(request, response);
             return;
         } catch (Exception e) {
@@ -228,7 +228,7 @@ public class SegmentoServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        encaminhar(request, response, "Erro.jsp");
+        encaminhar(request, response, "erro.jsp");
     }
 
     // Método filtrar
@@ -261,7 +261,7 @@ public class SegmentoServlet extends HttpServlet {
             request.setAttribute("filtroNome", filtroNome);
             request.setAttribute("filtroDescricao", filtroDescricao);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Segments/processar_segments.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/segmento/processar_segmento.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {

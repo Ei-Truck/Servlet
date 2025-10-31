@@ -2,7 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.AnalistaDAO;
+import org.example.eitruck.dao.AnalistaDAO;
 import org.example.eitruck.model.Analista;
 
 import jakarta.servlet.ServletException;
@@ -151,7 +151,7 @@ public class AnalistaServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("html/Restricted-area/Pages/Analyst/analista.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("html/area-restrita/paginas/analista/analista.jsp");
         if (dispatcher != null) {
             dispatcher.forward(request, response);
         }
@@ -195,7 +195,7 @@ public class AnalistaServlet extends HttpServlet {
             if (analistas != null && !analistas.isEmpty()) {
                 Analista analista = analistas.get(0);
                 request.setAttribute("analista", analista);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/editar_analista.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/analista/editar_analista.jsp");
                 rd.forward(request, response);
             } else {
                 String errorMessage = URLEncoder.encode("Analista não encontrado.", "UTF-8");
@@ -283,7 +283,7 @@ public class AnalistaServlet extends HttpServlet {
         try {
             List<Analista> analistas = analistaDAO.buscarTodos();
             request.setAttribute("analistas", analistas);
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/analista/processar_analista.jsp");
             rd.forward(request, response);
             return;
         } catch (Exception e) {
@@ -295,7 +295,7 @@ public class AnalistaServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        encaminhar(request, response, "Erro.jsp");
+        encaminhar(request, response, "erro.jsp");
     }
 
     // Método filtrar
@@ -338,7 +338,7 @@ public class AnalistaServlet extends HttpServlet {
             request.setAttribute("filtroEmail", filtroEmail);
             request.setAttribute("filtroCargo", filtroCargo);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Analyst/processar_analista.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/analista/processar_analista.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {

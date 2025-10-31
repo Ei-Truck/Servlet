@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.eitruck.Dao.*;
+import org.example.eitruck.dao.*;
 
 import java.io.IOException;
 
@@ -50,7 +50,7 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("totalOcorrencias", totalOcorrencias);
 
             // Encaminhar para o JSP
-            request.getRequestDispatcher("/html/Restricted-area/Pages/Dashboard/dashboard.jsp")
+            request.getRequestDispatcher("/html/area-restrita/paginas/dashboard/dashboard.jsp")
                     .forward(request, response);
 
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("totalOcorrencias", 0);
             request.setAttribute("error", "Erro ao carregar dados do dashboard");
 
-            request.getRequestDispatcher("/html/Restricted-area/Pages/Dashboard/dashboard.jsp")
+            request.getRequestDispatcher("/html/area-restrita/paginas/dashboard/dashboard.jsp")
                     .forward(request, response);
         }
     }

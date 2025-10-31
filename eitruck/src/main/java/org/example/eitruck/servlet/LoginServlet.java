@@ -1,6 +1,6 @@
 package org.example.eitruck.servlet;
 
-import org.example.eitruck.Dao.AdministradorDAO;
+import org.example.eitruck.dao.AdministradorDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
         HttpSession existingSession = req.getSession(false);
         if (existingSession != null && existingSession.getAttribute("nomeAdimin") != null) {
             // Já está logado, redireciona para o dashboard
-            resp.sendRedirect(req.getContextPath() + "/dashboard");
+            resp.sendRedirect(req.getContextPath() + "/html/area-restrita/tela_carregamento.jsp");
             return;
         }
 
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
             session.setMaxInactiveInterval(30 * 60); // 30 minutos de inatividade
 
             // Redireciona para a tela de carregamento
-            resp.sendRedirect(req.getContextPath() + "/html/Restricted-area/loading-screen.jsp");
+            resp.sendRedirect(req.getContextPath() + "/html/area-restrita/tela_carregamento.jsp");
         } else {
             // Login inválido → volta para a mesma página de login
             req.setAttribute("erroLogin", "E-mail ou senha incorretos!");
@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
         // Se já estiver logado, redireciona para o dashboard
         HttpSession session = req.getSession(false);
         if (session != null && session.getAttribute("nomeAdimin") != null) {
-            resp.sendRedirect(req.getContextPath() + "/html/Restricted-area/Pages/Dashboard/dashboard.jsp");
+            resp.sendRedirect(req.getContextPath() + "/html/area-restrita/paginas/dashboard/dashboard.jsp");
             return;
         }
 

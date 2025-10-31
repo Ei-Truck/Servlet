@@ -2,7 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.UnidadeDAO;
+import org.example.eitruck.dao.UnidadeDAO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -124,7 +124,7 @@ public class UnidadeServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Units/units.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/area-restrita/paginas/unidade/unidade.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
@@ -175,7 +175,7 @@ public class UnidadeServlet extends HttpServlet {
                 Unidade unidade = unidades.get(0);
                 System.out.println("Unidade encontrada: " + unidade.getNome());
                 request.setAttribute("unidade", unidade);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Units/editar_unidade.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/unidade/editar_unidade.jsp");
                 rd.forward(request, response);
             } else {
                 System.out.println("Unidade não encontrada para o ID: " + id);
@@ -232,7 +232,7 @@ public class UnidadeServlet extends HttpServlet {
         try {
             List<Unidade> unidades = unidadeDao.buscarTodos();
             request.setAttribute("unidades", unidades);
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Units/processar_units.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/unidade/processar_unidade.jsp");
             rd.forward(request, response);
             return;
         } catch (Exception e) {
@@ -244,7 +244,7 @@ public class UnidadeServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        encaminhar(request, response, "Erro.jsp");
+        encaminhar(request, response, "erro.jsp");
     }
 
     // Método filtrar
@@ -280,7 +280,7 @@ public class UnidadeServlet extends HttpServlet {
             request.setAttribute("filtroNomeSegmento", filtroNomeSegmento);
             request.setAttribute("filtroNomeEndereco", filtroNomeEndereco);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Units/processar_units.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/unidade/processar_unidade.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {

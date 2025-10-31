@@ -2,7 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.EnderecoDAO;
+import org.example.eitruck.dao.EnderecoDAO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -134,7 +134,7 @@ public class EnderecoServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Addresses/addresses.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/area-restrita/paginas/endereco/endereco.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
@@ -184,7 +184,7 @@ public class EnderecoServlet extends HttpServlet {
                 Endereco endereco = enderecos.get(0);
                 System.out.println("Endereço encontrado: " + endereco.getRua() + ", " + endereco.getNumero());
                 request.setAttribute("endereco", endereco);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Addresses/editar_endereco.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/endereco/editar_endereco.jsp");
                 rd.forward(request, response);
             } else {
                 System.out.println("Nenhum endereço encontrado para ID: " + id);
@@ -293,7 +293,7 @@ public class EnderecoServlet extends HttpServlet {
         try {
             List<Endereco> enderecos = enderecoDAO.buscarTodos();
             request.setAttribute("enderecos", enderecos);
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Addresses/processar_addresses.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/endereco/processar_endereco.jsp");
             rd.forward(request, response);
             return;
         } catch (Exception e) {
@@ -305,7 +305,7 @@ public class EnderecoServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        encaminhar(request, response, "Erro.jsp");
+        encaminhar(request, response, "erro.jsp");
     }
 
     // Método filtrar
@@ -354,7 +354,7 @@ public class EnderecoServlet extends HttpServlet {
             request.setAttribute("filtroEstado", filtroEstado);
             request.setAttribute("filtroPais", filtroPais);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Addresses/processar_addresses.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/endereco/processar_endereco.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {

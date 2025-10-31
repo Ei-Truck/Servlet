@@ -2,7 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.TipoOcorrenciaDAO;
+import org.example.eitruck.dao.TipoOcorrenciaDAO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -121,7 +121,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Occurrences/occurrences.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/area-restrita/paginas/ocorrencia/ocorrencia.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
@@ -168,7 +168,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
                 TipoOcorrencia ocorrencia = ocorrencias.get(0);
                 System.out.println("Tipo de ocorrência encontrado: " + ocorrencia.getTipoEvento());
                 request.setAttribute("ocorrencia", ocorrencia);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/editar_ocorrencia.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/ocorrencia/editar_ocorrencia.jsp");
                 rd.forward(request, response);
             } else {
                 System.out.println("Tipo de ocorrência não encontrado para o ID: " + id);
@@ -225,7 +225,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
         try {
             List<TipoOcorrencia> tipoOcorrencia = tipoOcorrenciaDAO.buscarTodos();
             request.setAttribute("ocorrencias", tipoOcorrencia);
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/processar_occurrences.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/ocorrencia/processar_ocorrencia.jsp");
             rd.forward(request, response);
             return;
         } catch (Exception e) {
@@ -237,7 +237,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        encaminhar(request, response, "Erro.jsp");
+        encaminhar(request, response, "erro.jsp");
     }
 
     // Método filtrar
@@ -274,7 +274,7 @@ public class TipoOcorrenciaServlet extends HttpServlet {
             request.setAttribute("filtroPontuacao", filtroPontuacao);
             request.setAttribute("filtroGravidade", filtroGravidade);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Occurrences/processar_occurrences.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/ocorrencia/processar_ocorrencia.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {

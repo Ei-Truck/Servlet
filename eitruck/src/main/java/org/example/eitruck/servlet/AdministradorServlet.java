@@ -2,7 +2,7 @@ package org.example.eitruck.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
-import org.example.eitruck.Dao.AdministradorDAO;
+import org.example.eitruck.dao.AdministradorDAO;
 import org.example.eitruck.model.Administrador;
 
 import jakarta.servlet.ServletException;
@@ -129,7 +129,7 @@ public class AdministradorServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        RequestDispatcher respacher = request.getRequestDispatcher("html/Restricted-area/Pages/Administrator/administrator.jsp");
+        RequestDispatcher respacher = request.getRequestDispatcher("html/area-restrita/paginas/administrador/administrador.jsp");
         if (respacher != null) {
             respacher.forward(request, response);
         } else {
@@ -171,7 +171,7 @@ public class AdministradorServlet extends HttpServlet {
             if (administradores != null && !administradores.isEmpty()) {
                 Administrador administrador = administradores.get(0);
                 request.setAttribute("administrador", administrador);
-                RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Administrator/editar_administrador.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/html/area-restrita/paginas/administrador/editar_administrador.jsp");
                 rd.forward(request, response);
             } else {
                 String errorMessage = URLEncoder.encode("Administrador não encontrado.", "UTF-8");
@@ -252,7 +252,7 @@ public class AdministradorServlet extends HttpServlet {
         try {
             List<Administrador> administradores = administradorDAO.buscarTodos();
             request.setAttribute("administradores", administradores);
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Administrator/processar_administrador.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("html/area-restrita/paginas/administrador/processar_administrador.jsp");
             rd.forward(request, response);
             return;
         } catch (Exception e) {
@@ -264,7 +264,7 @@ public class AdministradorServlet extends HttpServlet {
             request.setAttribute("acao", acao);
         }
 
-        encaminhar(request, response, "Erro.jsp");
+        encaminhar(request, response, "erro.jsp");
     }
 
     // Método filtrar
@@ -304,7 +304,7 @@ public class AdministradorServlet extends HttpServlet {
             request.setAttribute("filtroEmail", filtroEmail);
             request.setAttribute("filtroTelefone", filtroTelefone);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/html/Restricted-area/Pages/Administrator/processar_administrador.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("html/area-restrita/paginas/administrador/processar_administrador.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {

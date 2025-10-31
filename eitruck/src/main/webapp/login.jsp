@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Administrativo - Ei Truck</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/StyleCss/Restricted-area/login.css">
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/image/Group%2036941.png">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/style/area-restrita/login.css">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/imagens/Group%2036941.png">
 </head>
 <body>
 <div class="login-container">
