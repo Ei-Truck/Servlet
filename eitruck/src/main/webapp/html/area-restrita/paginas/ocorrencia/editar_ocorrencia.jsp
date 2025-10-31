@@ -451,7 +451,7 @@
                                 <label for="pontuacao">Pontuação:</label>
                                 <input type="number" name="pontuacao" id="pontuacao" class="form-control"
                                        value="${ocorrencia.pontuacao != null ? ocorrencia.pontuacao : ''}" required
-                                       min="0" max="10" step="1" placeholder="Pontuação numérica">
+                                       min="1" max="1000" step="1" placeholder="Pontuação numérica">
                             </div>
 
                             <div class="form-group">
