@@ -561,7 +561,8 @@
                             <label for="filtroId">ID</label>
                             <input type="text" id="filtroId" name="filtro_id" class="filter-input"
                                    value="<%= filtroId != null ? filtroId : "" %>"
-                                   placeholder="Ex: 1, 2">
+                                   placeholder="Ex: 1, 2"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
@@ -575,7 +576,8 @@
                             <label for="filtroPontuacao">Pontuação</label>
                             <input type="text" id="filtroPontuacao" name="filtro_pontuacao" class="filter-input"
                                    value="<%= filtroPontuacao != null ? filtroPontuacao : "" %>"
-                                   placeholder="Ex: 5, 10">
+                                   placeholder="Ex: 10, 40"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
