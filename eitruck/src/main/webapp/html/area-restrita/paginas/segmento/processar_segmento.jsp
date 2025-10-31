@@ -542,7 +542,8 @@
                             <label for="filtroId">ID</label>
                             <input type="text" id="filtroId" name="filtro_id" class="filter-input"
                                    value="<%= filtroId != null ? filtroId : "" %>"
-                                   placeholder="Ex: 1, 2, 3">
+                                   placeholder="Ex: 1, 2, 3"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
 
                         <div class="filter-group">
