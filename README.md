@@ -1,4 +1,4 @@
-# Servlet Ei Truck
+# Servlet - Ei Truck
 
 Este módulo contém os **Servlets responsáveis pela camada de controle do sistema Ei Truck**, que fazem a **ponte entre o front-end (JSP/HTML)** e a **camada de persistência (DAOs e banco de dados PostgreSQL)**.  
 Os Servlets gerenciam requisições HTTP, validam dados, e encaminham as respostas adequadas para as views da aplicação.
@@ -57,7 +57,29 @@ As principais tabelas associadas incluem:
 
 ---
 
+## Dependências Principais
+
+- **Jakarta Servlet API 5.0+**
+- **PostgreSQL Driver (42.7+)**
+- **Apache Tomcat**
+- **Maven** (para build e dependências)
+- **.env** (para conectar a um BD)
+- **Java 23**
+
+---
+
 ## Como Executar
+
+### Instalação
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/Ei-Truck/Servlet.git
+    ```
+2.  **Entre no diretório do projeto:**
+    ```bash
+    cd Servlet
+    ```
 
 ### Configurar o ambiente
 - Instale o **Apache Tomcat** (versão 10+)
@@ -70,16 +92,6 @@ As principais tabelas associadas incluem:
 
 ---
 
-## Dependências Principais
-
-- **Jakarta Servlet API 5.0+**
-- **PostgreSQL Driver (42.7+)**
-- **Apache Tomcat**
-- **Maven** (para build e dependências)
-- **.env** (para conectar a um BD)
-- **Java 17+**
-
----
 
 ## Estrutura de Pastas
 
