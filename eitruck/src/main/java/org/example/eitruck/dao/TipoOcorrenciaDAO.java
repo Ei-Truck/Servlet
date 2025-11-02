@@ -208,99 +208,13 @@ public class TipoOcorrenciaDAO {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
             return null;
-        } finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Métodos alterar individuais
-    public int alterarTipoEvento(TipoOcorrencia tipoOcorrencia, String novoTipoEvento) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        String comando = "UPDATE tipo_ocorrencia SET tipo_evento = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novoTipoEvento);
-            pstmt.setInt(2, tipoOcorrencia.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0) {
-                tipoOcorrencia.setTipoEvento(novoTipoEvento);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
         }
         finally {
             conexao.desconectar(conn);
         }
     }
 
-    public int alterarPontuacao(TipoOcorrencia tipoOcorrencia, int novaPontuacao) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        String comando = "UPDATE tipo_ocorrencia SET pontuacao = ? WHERE id = ?";
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, novaPontuacao);
-            pstmt.setInt(2, tipoOcorrencia.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0) {
-                tipoOcorrencia.setPontuacao(novaPontuacao);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int alterarGravidade(TipoOcorrencia tipoOcorrencia, String novaGravidade) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        String comando = "UPDATE tipo_ocorrencia SET gravidade = ? WHERE id = ?";
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novaGravidade);
-            pstmt.setInt(2, tipoOcorrencia.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0) {
-                tipoOcorrencia.setGravidade(novaGravidade);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Métodos buscar individuais
+    // Método buscar por ID
     public List<TipoOcorrencia> buscarPorId(int idTipoOcorrencia) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -322,93 +236,6 @@ public class TipoOcorrenciaDAO {
                         rs.getInt("pontuacao"),
                         rs.getString("gravidade")
                 );
-                listaRetorno.add(tipo);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<TipoOcorrencia> buscarPorTipoEvento(String tipoEvento) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        ResultSet rs;
-        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM tipo_ocorrencia WHERE tipo_evento = ?";
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, tipoEvento);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()) {
-                TipoOcorrencia tipo = new TipoOcorrencia(rs.getInt("id"), rs.getString("tipo_evento"), rs.getInt("pontuacao"), rs.getString("gravidade"));
-                listaRetorno.add(tipo);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<TipoOcorrencia> buscarPorPontuacao(int pontuacaoTipoOcorrencia) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        ResultSet rs;
-        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM tipo_ocorrencia WHERE pontuacao = ?";
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setInt(1, pontuacaoTipoOcorrencia);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()) {
-                TipoOcorrencia tipo = new TipoOcorrencia(rs.getInt("id"), rs.getString("tipo_evento"), rs.getInt("pontuacao"), rs.getString("gravidade"));
-                listaRetorno.add(tipo);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle) {
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<TipoOcorrencia> buscarPorGravidade(String gravidade) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        ResultSet rs;
-        List<TipoOcorrencia> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM tipo_ocorrencia WHERE gravidade = ?";
-
-        try {
-            conn = conexao.conectar();
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, gravidade);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()) {
-                TipoOcorrencia tipo = new TipoOcorrencia(rs.getInt("id"), rs.getString("tipo_evento"), rs.getInt("pontuacao"), rs.getString("gravidade"));
                 listaRetorno.add(tipo);
             }
             return listaRetorno;

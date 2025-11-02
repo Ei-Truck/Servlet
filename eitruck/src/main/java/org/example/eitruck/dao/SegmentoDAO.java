@@ -222,7 +222,7 @@ public class SegmentoDAO {
         }
     }
 
-    // Métodos buscar por ID
+    // Método buscar por ID
     public List<Segmento> buscarPorId(int idSegmento) {
         Conexao conexao = new Conexao();
         Connection conn = null;
@@ -236,120 +236,6 @@ public class SegmentoDAO {
             PreparedStatement pstmt = conn.prepareStatement(comando);
             pstmt.setInt(1, idSegmento);
             rs = pstmt.executeQuery();
-            while (rs.next()){
-                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
-                listaRetorno.add(segmento);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Métodos alterar individuais
-    public int alterarNome(Segmento segmento, String novoNome) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        String comando = "UPDATE segmento SET nome = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novoNome);
-            pstmt.setInt(2, segmento.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                segmento.setNome(novoNome);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public int alterarDescricao(Segmento segmento, String novaDescricao) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        String comando = "UPDATE segmento SET descricao = ? WHERE id = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, novaDescricao);
-            pstmt.setInt(2, segmento.getId());
-            int execucao = pstmt.executeUpdate();
-            if (execucao > 0){
-                segmento.setDescricao(novaDescricao);
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return -1;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    // Métodos buscar individuais
-    public List<Segmento> buscarPorNome(String nome) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        ResultSet rs;
-        List<Segmento> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM segmento WHERE nome = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, nome);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
-            while (rs.next()){
-                Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
-                listaRetorno.add(segmento);
-            }
-            return listaRetorno;
-        }
-        catch (SQLException sqle){
-            sqle.printStackTrace();
-            return null;
-        }
-        finally {
-            conexao.desconectar(conn);
-        }
-    }
-
-    public List<Segmento> buscarPorDescricao(String descricao) {
-        Conexao conexao = new Conexao();
-        Connection conn = null;
-
-        ResultSet rs;
-        List<Segmento> listaRetorno = new ArrayList<>();
-        String comando = "SELECT * FROM segmento WHERE descricao = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(comando);
-            pstmt.setString(1, descricao);
-            pstmt.executeQuery();
-            rs = pstmt.getResultSet();
             while (rs.next()){
                 Segmento segmento = new Segmento(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"));
                 listaRetorno.add(segmento);
