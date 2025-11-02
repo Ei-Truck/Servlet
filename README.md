@@ -84,108 +84,109 @@ As principais tabelas associadas incluem:
 ## Estrutura de Pastas
 
 ```
-eitruck/
-├── .mvn/
-│   ├── wrapper/
-├── src/
-│   ├── main/
-│       ├── java/
-│       │   ├── org/
-│       │       ├── example/
-│       │           ├── eitruck/
-│       │               ├── conexao/
-│       │               │   └── Conexao.java
-│       │               ├── dao/
-│       │               │   ├── AdministradorDAO.java
-│       │               │   ├── AnalistaDAO.java
-│       │               │   ├── EnderecoDAO.java
-│       │               │   ├── SegmentoDAO.java
-│       │               │   ├── TipoOcorrenciaDAO.java
-│       │               │   └── UnidadeDAO.java
-│       │               ├── filter/
-│       │               │   └── FiltroAutenticador.java
-│       │               ├── model/
-│       │               │   ├── Administrador.java
-│       │               │   ├── Analista.java
-│       │               │   ├── Endereco.java
-│       │               │   ├── Segmento.java
-│       │               │   ├── TipoOcorrencia.java
-│       │               │   └── Unidade.java
-│       │               ├── servlet/
-│       │               │   ├── AdministradorServlet.java
-│       │               │   ├── AnalistaServlet.java
-│       │               │   ├── DashboardServlet.java
-│       │               │   ├── EnderecoServlet.java
-│       │               │   ├── LoginServlet.java
-│       │               │   ├── LogoutServlet.java
-│       │               │   ├── SegmentoServlet.java
-│       │               │   ├── TipoOcorrenciaServlet.java
-│       │               │   └── UnidadeServlet.java
-│       │               ├── util/
-│       │                   ├── Hash.java
-│       │                   └── Regex.java
-│       ├── resources/
-│       ├── webapp/
-│           ├── WEB-INF/
-│           │   └── web.xml
-│           ├── html/
-│           │   ├── area-restrita/
-│           │   │   ├── paginas/
-│           │   │   │   ├── administrador/
-│           │   │   │   │   ├── administrador.jsp
-│           │   │   │   │   ├── editar_administrador.jsp
-│           │   │   │   │   └── processar_administrador.jsp
-│           │   │   │   ├── analista/
-│           │   │   │   │   ├── analista.jsp
-│           │   │   │   │   ├── editar_analista.jsp
-│           │   │   │   │   └── processar_analista.jsp
-│           │   │   │   ├── dashboard/
-│           │   │   │   │   └── dashboard.jsp
-│           │   │   │   ├── endereco/
-│           │   │   │   │   ├── editar_endereco.jsp
-│           │   │   │   │   ├── endereco.jsp
-│           │   │   │   │   └── processar_endereco.jsp
-│           │   │   │   ├── ocorrencia/
-│           │   │   │   │   ├── editar_ocorrencia.jsp
-│           │   │   │   │   ├── ocorrencia.jsp
-│           │   │   │   │   └── processar_ocorrencia.jsp
-│           │   │   │   ├── segmento/
-│           │   │   │   │   ├── editar_segmento.jsp
-│           │   │   │   │   ├── processar_segmento.jsp
-│           │   │   │   │   └── segmento.jsp
-│           │   │   │   ├── unidade/
-│           │   │   │       ├── editar_unidade.jsp
-│           │   │   │       ├── processar_unidade.jsp
-│           │   │   │       └── unidade.jsp
-│           │   │   └── tela_carregamento.jsp
-│           │   ├── landing-page/
-│           │       └── politica_privacidade.html
-│           ├── imagens/
-│           ├── js/
-│           │   ├── landing-page/
-│           │       └── script.js
-│           ├── style/
-│           │   ├── area-restrita/
-│           │   │   ├── paginas/
-│           │   │   │   ├── administrador.css
-│           │   │   │   ├── analista.css
-│           │   │   │   ├── dashboard.css
-│           │   │   │   ├── endereco.css
-│           │   │   │   ├── ocorrencia.css
-│           │   │   │   ├── segmento.css
-│           │   │   │   └── unidade.css
-│           │   │   ├── login.css
-│           │   │   └── tela_carregamento.css
-│           │   ├── landing-page/
-│           │       ├── politica_privacidade.css
-│           │       └── style.css
-│           ├── erro.jsp
-│           ├── index.html
-│           └── login.jsp
+Servlet/
+├── eitruck/
+│   ├── src/
+│   │   ├── main/
+│   │       ├── java/
+│   │       │   ├── org/
+│   │       │       ├── example/
+│   │       │           ├── eitruck/
+│   │       │               ├── conexao/
+│   │       │               │   └── Conexao.java
+│   │       │               ├── dao/
+│   │       │               │   ├── AdministradorDAO.java
+│   │       │               │   ├── AnalistaDAO.java
+│   │       │               │   ├── EnderecoDAO.java
+│   │       │               │   ├── SegmentoDAO.java
+│   │       │               │   ├── TipoOcorrenciaDAO.java
+│   │       │               │   └── UnidadeDAO.java
+│   │       │               ├── filter/
+│   │       │               │   └── FiltroAutenticador.java
+│   │       │               ├── model/
+│   │       │               │   ├── Administrador.java
+│   │       │               │   ├── Analista.java
+│   │       │               │   ├── Endereco.java
+│   │       │               │   ├── Segmento.java
+│   │       │               │   ├── TipoOcorrencia.java
+│   │       │               │   └── Unidade.java
+│   │       │               ├── servlet/
+│   │       │               │   ├── AdministradorServlet.java
+│   │       │               │   ├── AnalistaServlet.java
+│   │       │               │   ├── DashboardServlet.java
+│   │       │               │   ├── EnderecoServlet.java
+│   │       │               │   ├── LoginServlet.java
+│   │       │               │   ├── LogoutServlet.java
+│   │       │               │   ├── SegmentoServlet.java
+│   │       │               │   ├── TipoOcorrenciaServlet.java
+│   │       │               │   └── UnidadeServlet.java
+│   │       │               ├── util/
+│   │       │                   ├── Hash.java
+│   │       │                   └── Regex.java
+│   │       ├── resources/
+│   │       │   └── .env
+│   │       ├── webapp/
+│   │           ├── WEB-INF/
+│   │           │   └── web.xml
+│   │           ├── html/
+│   │           │   ├── area-restrita/
+│   │           │   │   ├── paginas/
+│   │           │   │   │   ├── administrador/
+│   │           │   │   │   │   ├── administrador.jsp
+│   │           │   │   │   │   ├── editar_administrador.jsp
+│   │           │   │   │   │   └── processar_administrador.jsp
+│   │           │   │   │   ├── analista/
+│   │           │   │   │   │   ├── analista.jsp
+│   │           │   │   │   │   ├── editar_analista.jsp
+│   │           │   │   │   │   └── processar_analista.jsp
+│   │           │   │   │   ├── dashboard/
+│   │           │   │   │   │   └── dashboard.jsp
+│   │           │   │   │   ├── endereco/
+│   │           │   │   │   │   ├── editar_endereco.jsp
+│   │           │   │   │   │   ├── endereco.jsp
+│   │           │   │   │   │   └── processar_endereco.jsp
+│   │           │   │   │   ├── ocorrencia/
+│   │           │   │   │   │   ├── editar_ocorrencia.jsp
+│   │           │   │   │   │   ├── ocorrencia.jsp
+│   │           │   │   │   │   └── processar_ocorrencia.jsp
+│   │           │   │   │   ├── segmento/
+│   │           │   │   │   │   ├── editar_segmento.jsp
+│   │           │   │   │   │   ├── processar_segmento.jsp
+│   │           │   │   │   │   └── segmento.jsp
+│   │           │   │   │   ├── unidade/
+│   │           │   │   │       ├── editar_unidade.jsp
+│   │           │   │   │       ├── processar_unidade.jsp
+│   │           │   │   │       └── unidade.jsp
+│   │           │   │   └── tela_carregamento.jsp
+│   │           │   ├── landing-page/
+│   │           │       └── politica_privacidade.html
+│   │           ├── imagens/
+│   │           ├── js/
+│   │           │   ├── landing-page/
+│   │           │       └── script.js
+│   │           ├── style/
+│   │           │   ├── area-restrita/
+│   │           │   │   ├── paginas/
+│   │           │   │   │   ├── administrador.css
+│   │           │   │   │   ├── analista.css
+│   │           │   │   │   ├── dashboard.css
+│   │           │   │   │   ├── endereco.css
+│   │           │   │   │   ├── ocorrencia.css
+│   │           │   │   │   ├── segmento.css
+│   │           │   │   │   └── unidade.css
+│   │           │   │   ├── login.css
+│   │           │   │   └── tela_carregamento.css
+│   │           │   ├── landing-page/
+│   │           │       ├── politica_privacidade.css
+│   │           │       └── style.css
+│   │           ├── erro.jsp
+│   │           ├── index.html
+│   │           └── login.jsp
+│   ├── mvnw
+│   ├── mvnw.cmd
+│   └── pom.xml
 ├── .gitignore
-├── mvnw
-├── mvnw.cmd
-└── pom.xml
+└── README.md
 ```
 
 ---
