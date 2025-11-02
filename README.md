@@ -1,11 +1,11 @@
-# 🛰️ Servlet Ei Truck – Controladores e Lógica de Integração do Sistema Ei Truck
+# Servlet Ei Truck
 
 Este módulo contém os **Servlets responsáveis pela camada de controle do sistema Ei Truck**, que fazem a **ponte entre o front-end (JSP/HTML)** e a **camada de persistência (DAOs e banco de dados PostgreSQL)**.  
 Os Servlets gerenciam requisições HTTP, validam dados, e encaminham as respostas adequadas para as views da aplicação.
 
 ---
 
-## ⚙️ Estrutura Geral do Projeto
+## Estrutura Geral do Projeto
 
 O projeto está organizado segundo o padrão **MVC (Model–View–Controller)**:
 
@@ -18,7 +18,7 @@ O projeto está organizado segundo o padrão **MVC (Model–View–Controller)**
 
 ---
 
-## 🧩 Principais Servlets
+## Principais Servlets
 
 | Servlet | Descrição                                                                            | Principais Ações |
 |----------|--------------------------------------------------------------------------------------|------------------|
@@ -31,9 +31,9 @@ O projeto está organizado segundo o padrão **MVC (Model–View–Controller)**
 
 ---
 
-## 🔗 Integração com o Banco de Dados
+## Integração com o Banco de Dados
 
-Os Servlets se comunicam com o **banco PostgreSQL**, cujo modelo está documentado no repositório [`dbEiTruck`](../dbEiTruck/).
+Os Servlets se comunicam com o **banco PostgreSQL**.
 
 As principais tabelas associadas incluem:
 
@@ -48,7 +48,7 @@ As principais tabelas associadas incluem:
 
 ---
 
-## 🧠 Fluxo de Requisição (MVC)
+## Fluxo de Requisição (MVC)
 
 1. O usuário envia uma requisição HTTP através de um formulário ou link (`.jsp`).
 2. O **Servlet** correspondente recebe a requisição (`doGet` ou `doPost`).
@@ -57,20 +57,20 @@ As principais tabelas associadas incluem:
 
 ---
 
-## 🚀 Como Executar
+## Como Executar
 
-### 1️⃣ Configurar o ambiente
+### Configurar o ambiente
 - Instale o **Apache Tomcat** (versão 10+)
 - Configure no IntelliJ IDEA ou Eclipse EE
 - Certifique-se de ter o PostgreSQL em execução e o banco do `dbEiTruck` configurado
 
-### 2️⃣ Implantar o projeto
+### Implantar o projeto
 - Execute com o Tomcat no modo **Run/Debug**
 - Acesse no navegador
 
 ---
 
-## 🧱 Dependências Principais
+## Dependências Principais
 
 - **Jakarta Servlet API 5.0+**
 - **PostgreSQL Driver (42.7+)**
@@ -81,7 +81,7 @@ As principais tabelas associadas incluem:
 
 ---
 
-## 📁 Estrutura de Pastas (Servlet.zip)
+## Estrutura de Pastas
 
 ```
 eitruck/
@@ -190,7 +190,7 @@ eitruck/
 
 ---
 
-## ✨ Autores
+## Autores
 
 Equipe **Ei Truck**  
 Desenvolvido como parte do **projeto interdisciplinar de análise e automação de telemetria de transportes**.
